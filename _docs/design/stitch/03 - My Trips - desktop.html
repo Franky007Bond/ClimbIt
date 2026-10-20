@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-primary-container":"#00422b","on-primary-fixed-variant":"#005236","primary-fixed":"#6ffbbe","on-primary-fixed":"#002113","tertiary":"#ffb95f","error":"#ffb4ab","primary-fixed-dim":"#4edea3","on-surface-variant":"#bbcabf","on-primary":"#003824","surface-dim":"#0b1326","inverse-on-surface":"#283044","surface-tint":"#4edea3","primary":"#4edea3","surface-bright":"#31394d","surface-container-lowest":"#060e20","surface-container":"#171f33","on-tertiary-fixed-variant":"#653e00","on-error":"#690005","secondary-fixed-dim":"#4ae176","outline":"#86948a","on-secondary-container":"#004119","error-container":"#93000a","tertiary-fixed":"#ffddb8","primary-container":"#10b981","tertiary-container":"#e29100","outline-variant":"#3c4a42","surface-container-highest":"#2d3449","secondary-container":"#00b954","surface-container-high":"#222a3d","inverse-surface":"#dae2fd","on-secondary":"#003915","surface-container-low":"#131b2e","on-tertiary-fixed":"#2a1700","inverse-primary":"#006c49","on-secondary-fixed-variant":"#005321","surface-variant":"#2d3449","on-tertiary-container":"#523200","secondary":"#4ae176","background":"#0b1326","on-tertiary":"#472a00","on-error-container":"#ffdad6","tertiary-fixed-dim":"#ffb95f","on-surface":"#dae2fd","on-background":"#dae2fd","secondary-fixed":"#6bff8f","surface":"#0b1326","on-secondary-fixed":"#002109"},borderRadius:{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},spacing:{"margin":"2rem","margin-mobile":"1rem","space-sm":"0.5rem","space-xl":"2.5rem","space-lg":"1.5rem","space-md":"1rem","gutter-mobile":"0.75rem","gutter":"1.25rem","space-xs":"0.25rem"},fontFamily:{"badge-technical":["JetBrains Mono"],"telemetry-md":["JetBrains Mono"],"headline-md":["Plus Jakarta Sans"],"body-lg":["Inter"],"headline-sm":["Plus Jakarta Sans"],"display-hero-mobile":["Plus Jakarta Sans"],"telemetry-lg":["JetBrains Mono"],"body-sm":["Inter"],"headline-lg-mobile":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"body-md":["Inter"],"display-hero":["Plus Jakarta Sans"],"label-ui":["Inter"]},fontSize:{"badge-technical":["11px",{"lineHeight":"14px","letterSpacing":"0.06em","fontWeight":"700"}],"telemetry-md":["14px",{"lineHeight":"20px","fontWeight":"500"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"26px","fontWeight":"400"}],"headline-sm":["18px",{"lineHeight":"26px","fontWeight":"600"}],"display-hero-mobile":["36px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"800"}],"telemetry-lg":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"headline-lg-mobile":["26px",{"lineHeight":"34px","letterSpacing":"-0.015em","fontWeight":"700"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"700"}],"body-md":["14px",{"lineHeight":"22px","fontWeight":"400"}],"display-hero":["56px",{"lineHeight":"64px","letterSpacing":"-0.03em","fontWeight":"800"}],"label-ui":["13px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"600"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.45)]"><div class="w-full bg-surface-container-lowest px-gutter py-1"><div class="w-full flex items-center justify-between font-badge-technical text-badge-technical text-on-surface-variant"><div class="flex items-center gap-space-sm"><span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span><span class="text-primary font-bold tracking-wider uppercase">Telemetry Live</span><span class="text-outline">|</span><span>Live Alpine Sync: 48 Routes Verified • EAWS Bulletins Active</span></div><div class="hidden md:flex items-center gap-space-md"><span class="text-on-surface-variant font-telemetry-md text-body-sm">GRID: <span class="text-primary">CH1903+ / LV95</span></span><span class="text-outline">|</span><span class="text-tertiary font-telemetry-md text-body-sm">AVALANCHE LVL 2 (MODERATE)</span></div></div></div><div class="h-16 w-full px-gutter flex items-center justify-between gap-gutter"><div class="flex items-center gap-space-lg flex-shrink-0"><a class="flex items-center gap-space-sm focus:outline-none" data-path="explore-routes" href="#"><img alt="ClimbIt Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XfuwNcgEDpawbHobifjsK1o7lEfrhkd4CfG1YOHbPIFlxVKIGdm748IBKeWIvu_zodPzdPTcmeJdvBZJNYSiVjp3nvajLyw0PRyIKZVup9XwmAQtTfc-QLABa9zGI21MdoVsSmfAD0iGHqCY96-Ja2oRCTlm3h0W3taLgNyrjxJIRJUnWaQ0MQkrz53Gnlm3tbU_nV8l7O4d-8RQcrQkQWGr70AMWoAzz6nYaEEkyajgZn5uFakqgrWHs"/><span class="font-headline-sm text-headline-sm font-bold tracking-tight text-on-surface uppercase">Climb<span class="text-primary">It</span></span></a><div class="hidden 2xl:flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1 rounded"><span class="material-symbols-outlined text-primary text-[14px]">landscape</span><span class="font-badge-technical text-badge-technical uppercase tracking-wider text-on-surface-variant">ALPINE CAD v4.2</span></div></div><nav class="hidden xl:flex items-center gap-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-bold rounded-lg shadow-sm"><a class="px-space-md py-space-sm rounded font-label-ui text-label-ui text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="explore-routes" href="#">Explore Routes</a><a class="px-space-md py-space-sm rounded font-label-ui text-label-ui text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="route-detail" href="#">Route Detail</a><a class="px-space-md py-space-sm rounded font-label-ui text-label-ui text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="trip-planner-assessment" href="#">Trip Planner &amp; Assessment</a><a aria-current="page" class="px-space-md py-space-sm transition-all bg-primary-container text-on-primary-container font-bold rounded-lg shadow-sm" data-path="my-trips" href="#">My Trips</a><a class="px-space-md py-space-sm rounded font-label-ui text-label-ui text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="route-wiki-edits" href="#">Route Wiki &amp; Edits</a></nav><div class="flex items-center gap-space-md justify-end flex-1 max-w-xl"><div class="relative flex-1 max-w-sm hidden sm:block"><span class="material-symbols-outlined absolute left-space-sm top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span><input class="w-full bg-surface-container-low pl-9 pr-space-md py-1.5 rounded font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-high transition-colors" placeholder="Search Bavarian Alps, Tyrol, Dolomites..." type="text"/></div><div class="hidden lg:flex items-center gap-space-xs bg-surface-container-high px-space-sm py-1 rounded text-on-surface-variant"><span class="material-symbols-outlined text-secondary text-[16px]">near_me</span><span class="font-badge-technical text-badge-technical uppercase text-on-surface">Allgäu &amp; Bavarian Alps</span></div><div class="flex items-center gap-space-sm pl-space-xs"><button class="p-1.5 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all relative" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1 right-1 w-1.5 h-1.5 bg-tertiary rounded-full"></span></button><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQx3MoQixbg58kvYe3mvVhfbJqk5NMf8Tt8tRcd8H2ikERwFlupoBt3S7tr6vJMz_kMnTSmN8i18vsZO4xQYBiVDaCcRg7QMV_5JwEQzLnNp5dPWMZwo-SZ6Hjg8h1NMWTwHT1x8aUAJC4YQT815xFeGCsaF7voRyGxQwhM9i3QdsBpK4vr0pf2A1bECZ3hZ1kUwWbSj8k2FdGB1mtmNRLaosimzqX5I_QJZha-EhusNHfRCc29sgX"/></div></div></div></header><main class="w-full pt-[88px] bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- Interactive Toast Notification Center -->
+<div class="fixed bottom-space-lg right-space-lg z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-space-sm bg-surface-container-highest px-space-md py-space-sm rounded shadow-2xl" id="toastNotification">
+<span class="material-symbols-outlined text-primary text-[20px]" id="toastIcon">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface" id="toastMessage">Capability token copied to clipboard</span>
+</div>
+<!-- Sanitized Share Link Modal Overlay (Tier 3 Elevation) -->
+<div class="fixed inset-0 z-50 hidden bg-surface-container-lowest/80 backdrop-blur-md flex items-center justify-center p-space-md" id="sharePreviewModal">
+<div class="w-full max-w-2xl bg-surface-container border-0 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.85)] p-space-lg flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[22px]">share</span>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Sanitized Share Snapshot</h3>
+<span class="font-badge-technical text-badge-technical text-on-surface-variant uppercase">Unguessable Capability-Isolated Token</span>
+</div>
+</div>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" onclick="toggleShareModal(false)">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="bg-surface-container-low p-space-md rounded flex flex-col gap-space-sm">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-badge-technical text-badge-technical text-primary uppercase">Snapshot Security Filter Applied</span>
+<span class="font-telemetry-md text-body-sm">Redaction Policy: Strict v1.2</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm font-body-sm text-body-sm">
+<div class="flex items-center gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-primary text-[16px]">check</span>
+<span>Route &amp; Elevation profile included</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-primary text-[16px]">check</span>
+<span>Live EAWS bulletin &amp; warnings</span>
+</div>
+<div class="flex items-center gap-space-xs text-tertiary">
+<span class="material-symbols-outlined text-[16px]">shield</span>
+<span>Origin coarsened: <span class="font-mono text-on-surface">München Region</span></span>
+</div>
+<div class="flex items-center gap-space-xs text-error">
+<span class="material-symbols-outlined text-[16px]">block</span>
+<span>Exact GPS coordinates stripped</span>
+</div>
+<div class="flex items-center gap-space-xs text-error sm:col-span-2">
+<span class="material-symbols-outlined text-[16px]">lock_reset</span>
+<span>Browser master capability key <strong>omitted entirely</strong></span>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-ui text-label-ui text-on-surface-variant">Current Shareable Live Endpoint</label>
+<div class="flex items-center gap-space-sm">
+<input class="w-full bg-surface-container-lowest px-space-md py-2 rounded font-badge-technical text-badge-technical text-primary focus:outline-none" id="shareUrlInput" readonly="" type="text" value="https://climbit.app/s/x9q7-k29p-m4zt"/>
+<button class="px-space-md py-2 bg-primary-container text-on-primary-container rounded font-label-ui text-label-ui hover:bg-secondary-container transition-colors flex items-center gap-space-xs flex-shrink-0" onclick="copyToClipboard('https://climbit.app/s/x9q7-k29p-m4zt', 'Sanitized Share Link Copied')">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+<span>Copy</span>
+</button>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<button class="px-space-md py-2 rounded bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors font-label-ui text-label-ui flex items-center gap-space-xs" onclick="rotateShareLink()">
+<span class="material-symbols-outlined text-[18px]">cached</span>
+<span>Rotate Link (Revoke Previous)</span>
+</button>
+<button class="px-space-md py-2 rounded bg-error-container text-error hover:opacity-90 transition-opacity font-label-ui text-label-ui flex items-center gap-space-xs" onclick="revokeShareLink()">
+<span class="material-symbols-outlined text-[18px]">delete_forever</span>
+<span>Revoke Access</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Primary Viewport Container -->
+<div class="w-full px-gutter py-space-lg flex flex-col gap-space-xl max-w-7xl mx-auto">
+<!-- Browser Capability & Scope Banner (Section 3.3 / 10 Specification) -->
+<section class="w-full bg-surface-container-low rounded-xl p-space-lg shadow-lg relative overflow-hidden">
+<div class="absolute -right-8 -top-8 w-48 h-48 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+<div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-space-lg relative z-10">
+<div class="flex flex-col gap-space-xs max-w-3xl">
+<div class="flex flex-wrap items-center gap-space-sm">
+<span class="px-space-xs py-0.5 rounded bg-primary-container/20 text-primary font-badge-technical text-badge-technical uppercase">
+              Local Authority Active
+            </span>
+<span class="text-outline">·</span>
+<span class="font-badge-technical text-badge-technical text-on-surface-variant">Capability Hash: <span class="text-on-surface font-mono">c8f1..7e90</span></span>
+<span class="text-outline">·</span>
+<span class="font-badge-technical text-badge-technical text-secondary">TTL: 90 Days Dynamic Rolling</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg font-bold tracking-tight text-on-surface">
+            Private Alpine Itineraries
+          </h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            Browser-Scoped Private Trips: Stored securely in your current browser session. No personal account or email needed. Trips expire after 90 days of inactivity. Exact origins are scrubbed prior to cryptographic storage.
+          </p>
+</div>
+<!-- Capability Management Actions -->
+<div class="flex flex-wrap items-center gap-space-sm flex-shrink-0">
+<button class="px-space-md py-2.5 rounded bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-all flex items-center gap-space-xs font-label-ui text-label-ui shadow-sm" onclick="exportBackupToken()">
+<span class="material-symbols-outlined text-primary text-[18px]">key</span>
+<span>Export Backup Token</span>
+</button>
+<button class="px-space-md py-2.5 rounded bg-surface-container-highest text-error hover:bg-error-container hover:text-on-error-container transition-all flex items-center gap-space-xs font-label-ui text-label-ui shadow-sm" onclick="clearCapability()">
+<span class="material-symbols-outlined text-[18px]">delete_sweep</span>
+<span>Clear Local Capability</span>
+</button>
+</div>
+</div>
+<!-- Quick Telemetry Tele-strip -->
+<div class="mt-space-md pt-space-md grid grid-cols-2 sm:grid-cols-4 gap-space-md font-badge-technical text-badge-technical text-on-surface-variant">
+<div>
+<span class="block text-outline uppercase">Active Trips</span>
+<span class="font-telemetry-lg text-telemetry-lg text-on-surface font-bold">2 <span class="text-body-sm text-outline font-normal">/ 1 Archived</span></span>
+</div>
+<div>
+<span class="block text-outline uppercase">Next Ascent Window</span>
+<span class="font-telemetry-lg text-telemetry-lg text-primary font-bold">Sat, 24 Oct</span>
+</div>
+<div>
+<span class="block text-outline uppercase">Last Transit Poll</span>
+<span class="font-telemetry-lg text-telemetry-lg text-secondary font-bold">14:10 <span class="text-body-sm text-outline font-normal">UTC+2</span></span>
+</div>
+<div>
+<span class="block text-outline uppercase">Master Key Scope</span>
+<span class="font-telemetry-lg text-telemetry-lg text-on-surface font-bold">L-ONLY</span>
+</div>
+</div>
+</section>
+<!-- Main Workspace: Asymmetric 2-Column Desktop Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- Trips List (Col 8) -->
+<div class="lg:col-span-8 flex flex-col gap-space-lg">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Registered Plans</h2>
+<span class="px-space-xs py-0.5 rounded-full bg-surface-container-high font-badge-technical text-badge-technical text-primary">3 Records</span>
+</div>
+<div class="flex items-center gap-space-xs text-outline font-label-ui text-label-ui">
+<span class="material-symbols-outlined text-[16px]">sync</span>
+<span>EAWS &amp; MOTIS Synchronized</span>
+</div>
+</div>
+<!-- TRIP 1: Mittenwalder Höhenweg Klettersteig (GREEN RECOMMENDATION) -->
+<article class="bg-surface-container rounded-xl shadow-lg p-space-lg flex flex-col gap-space-md relative transition-transform hover:-translate-y-0.5">
+<!-- Card Top Bar: Meta & Badge -->
+<div class="flex flex-wrap items-start justify-between gap-space-sm">
+<div class="flex flex-col gap-space-xs">
+<div class="flex flex-wrap items-center gap-space-sm">
+<span class="px-space-xs py-0.5 rounded bg-primary-container text-on-primary-container font-badge-technical text-badge-technical uppercase flex items-center gap-1 font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-surface-container-lowest animate-ping"></span>
+                  RECOMMENDATION: GREEN
+                </span>
+<span class="px-space-xs py-0.5 rounded bg-surface-container-highest font-badge-technical text-badge-technical text-on-surface-variant uppercase">
+                  Via Ferrata: B / K3
+                </span>
+<span class="font-badge-technical text-badge-technical text-secondary">
+                  Fresh Run 15m ago
+                </span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold tracking-tight mt-1">
+                Mittenwalder Höhenweg Klettersteig
+              </h3>
+<div class="flex flex-wrap items-center gap-space-md font-body-sm text-body-sm text-on-surface-variant">
+<span class="flex items-center gap-1 text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-primary">calendar_today</span>
+                  Sat, 24 Oct 2026
+                </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">train</span>
+                  Origin: München Hbf (Transitous Verified)
+                </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">timer</span>
+                  Est. 06h 45m · D+ 980m
+                </span>
+</div>
+</div>
+<!-- Route Quick Visual Thumbnail -->
+<div class="w-24 h-16 rounded overflow-hidden flex-shrink-0 bg-surface-container-low relative">
+<img class="w-full h-full object-cover" data-alt="Rugged alpine ridge route of Mittenwalder Höhenweg showing sharp limestone pinnacles against a crisp clear autumn mountain sky with high contrast dark slate shadows and luminous rock faces." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmuo-Xq-qj9kZTbHimTOHzreuWIvK0LtizcZ6Ouank9EJneOYIRRGdhED3IADd7QDW050CJijRtJf5QEA2duto_f64H7RjU0G06vhDtcgKs8Ghgqo9XEXR8RsuAReoH9VcaRd9cC3buR6D0TbuUrX255MileIoXsDQsGo0mYkjDWwPiS2qVTGDR1DC38Cy_t4CfHPXTRwzWGij2y-lKPxI8iYCn-inQCoJT5PmtGd7Q7_Jw3zDXAHH"/>
+<span class="absolute bottom-1 right-1 px-1 bg-surface-container-lowest/80 rounded font-badge-technical text-[9px] text-primary">2,385m</span>
+</div>
+</div>
+<!-- Status Tracker & Telemetry Delta -->
+<div class="bg-surface-container-low p-space-sm rounded flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-sm font-body-sm text-body-sm">
+<div class="flex items-center gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[18px]">verified</span>
+<span><strong>Status:</strong> Unchanged since yesterday. Transit timetable verified with return buffer (+50m).</span>
+</div>
+<span class="font-badge-technical text-badge-technical text-outline flex-shrink-0">EAWS L1 (Low)</span>
+</div>
+<!-- Elevation Sparkline Visual -->
+<div class="w-full bg-surface-container-lowest/60 p-space-sm rounded flex flex-col gap-1">
+<div class="flex items-center justify-between font-badge-technical text-[10px] text-on-surface-variant">
+<span>Karwendelbahn Top (2,244m)</span>
+<span>Westliche Karwendelspitze</span>
+<span>Mittenwald Bahnhof (920m)</span>
+</div>
+<div class="h-10 w-full relative">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 300 40">
+<defs>
+<lineargradient id="elevationGrad1" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#4edea3" stop-opacity="0.35"></stop>
+<stop offset="100%" stop-color="#4edea3" stop-opacity="0.0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,25 Q40,5 90,8 T160,18 T230,28 L300,38 L300,40 L0,40 Z" fill="url(#elevationGrad1)"></path>
+<path d="M0,25 Q40,5 90,8 T160,18 T230,28 L300,38" fill="none" stroke="#4edea3" stroke-width="2"></path>
+<circle cx="90" cy="8" fill="#4edea3" r="3"></circle>
+<circle cx="160" cy="18" fill="#4edea3" r="3"></circle>
+</svg>
+</div>
+</div>
+<!-- Plan Runs History Accordion Component -->
+<div class="flex flex-col gap-space-xs">
+<button class="flex items-center justify-between w-full font-label-ui text-label-ui text-on-surface-variant hover:text-on-surface py-1" onclick="toggleRunHistory('runHistory1')">
+<span class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[16px]">history</span>
+<span>Deterministic Plan Runs History (3 Executions)</span>
+</span>
+<span class="material-symbols-outlined text-[18px]" id="runHistoryIcon1">expand_more</span>
+</button>
+<div class="flex flex-col gap-1.5 pt-1" id="runHistory1">
+<div class="flex items-center justify-between bg-surface-container-high/40 px-space-sm py-1.5 rounded font-badge-technical text-badge-technical text-on-surface">
+<div class="flex items-center gap-space-sm">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-bold">Run #3: Today 14:10</span>
+<span class="text-outline">|</span>
+<span class="text-primary font-normal">GREEN · Zero hazard threshold delta</span>
+</div>
+<span class="text-outline font-telemetry-md">Trace #a903c</span>
+</div>
+<div class="flex items-center justify-between bg-surface-container-high/20 px-space-sm py-1.5 rounded font-badge-technical text-badge-technical text-on-surface-variant">
+<div class="flex items-center gap-space-sm">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span>Run #2: Yesterday 09:20</span>
+<span class="text-outline">|</span>
+<span class="text-tertiary">YELLOW: CAPE thunderstorm heuristic spike</span>
+</div>
+<span class="text-outline font-telemetry-md">Trace #88db1</span>
+</div>
+<div class="flex items-center justify-between bg-surface-container-high/10 px-space-sm py-1.5 rounded font-badge-technical text-badge-technical text-outline">
+<div class="flex items-center gap-space-sm">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+<span>Run #1: Initial Snapshot 21 Oct</span>
+<span class="text-outline">|</span>
+<span>Base route ingestion (OSM/DAV seed)</span>
+</div>
+<span class="text-outline font-telemetry-md">Trace #71ea0</span>
+</div>
+</div>
+</div>
+<!-- Share Link Box with Live Actions -->
+<div class="bg-surface-container-lowest p-space-sm rounded flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs font-badge-technical text-badge-technical text-on-surface-variant truncate max-w-md">
+<span class="material-symbols-outlined text-secondary text-[16px]">link</span>
+<span>SHARE LINK:</span>
+<span class="text-primary truncate font-mono">https://climbit.app/s/x9q7-k29p-m4zt</span>
+</div>
+<div class="flex items-center gap-space-xs flex-shrink-0 font-label-ui text-label-ui">
+<button class="px-space-sm py-1 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface transition-colors flex items-center gap-1" onclick="toggleShareModal(true)">
+<span class="material-symbols-outlined text-[14px]">tune</span>
+<span>Configure</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface transition-colors flex items-center gap-1" onclick="copyToClipboard('https://climbit.app/s/x9q7-k29p-m4zt', 'Snapshot Link Copied')">
+<span class="material-symbols-outlined text-[14px]">content_copy</span>
+<span>Copy</span>
+</button>
+</div>
+</div>
+<!-- Primary Actions Footer -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm pt-space-xs">
+<div class="flex items-center gap-space-sm">
+<button class="px-space-md py-2 rounded bg-primary-container text-on-primary-container hover:bg-secondary-container transition-all font-label-ui text-label-ui flex items-center gap-space-xs shadow-sm font-bold" onclick="reEvaluatePlan(this, 'Mittenwalder Höhenweg')">
+<span class="material-symbols-outlined text-[18px]">autorenew</span>
+<span>Re-evaluate Live Plan</span>
+</button>
+<button class="px-space-md py-2 rounded bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors font-label-ui text-label-ui flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px]">map</span>
+<span>Open Live View</span>
+</button>
+</div>
+<button class="px-space-sm py-2 rounded text-outline hover:text-error hover:bg-error-container/20 transition-all font-label-ui text-label-ui flex items-center gap-space-xs" onclick="deleteTrip(this)">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+<span>Delete Trip</span>
+</button>
+</div>
+</article>
+<!-- TRIP 2: Tre Cime di Lavaredo & Paternkofel (YELLOW CAUTIONARY) -->
+<article class="bg-surface-container rounded-xl shadow-lg p-space-lg flex flex-col gap-space-md relative transition-transform hover:-translate-y-0.5">
+<div class="flex flex-wrap items-start justify-between gap-space-sm">
+<div class="flex flex-col gap-space-xs">
+<div class="flex flex-wrap items-center gap-space-sm">
+<span class="px-space-xs py-0.5 rounded bg-tertiary-container text-on-tertiary-container font-badge-technical text-badge-technical uppercase flex items-center gap-1 font-bold">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+                  RECOMMENDATION: YELLOW
+                </span>
+<span class="px-space-xs py-0.5 rounded bg-surface-container-highest font-badge-technical text-badge-technical text-on-surface-variant uppercase">
+                  SAC T4 / Ferrata De Luca (B)
+                </span>
+<span class="font-badge-technical text-badge-technical text-tertiary">
+                  Evaluated 1h ago
+                </span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold tracking-tight mt-1">
+                Tre Cime di Lavaredo &amp; Paternkofel
+              </h3>
+<div class="flex flex-wrap items-center gap-space-md font-body-sm text-body-sm text-on-surface-variant">
+<span class="flex items-center gap-1 text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-tertiary">calendar_today</span>
+                  Fri, 06 Nov 2026
+                </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">directions_bus</span>
+                  Origin: Bolzano / Bozen (SAD Bus Line 445)
+                </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">timer</span>
+                  Est. 05h 30m · D+ 740m
+                </span>
+</div>
+</div>
+<!-- Route Quick Visual Thumbnail -->
+<div class="w-24 h-16 rounded overflow-hidden flex-shrink-0 bg-surface-container-low relative">
+<img class="w-full h-full object-cover" data-alt="Dramatic sheer limestone towers of Tre Cime di Lavaredo dusted in light fresh early season snow, gloomy alpine atmosphere with deep slate shadows and pale amber late afternoon highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAn3HVFqurK_lBYXT2jxQu8IExYi20p-lT5Vkr1gQWGZG5ZBFPUi9KAK5S4MD9turOJGDXQGX9UM5Qv08TAvSz4f15FRqVn--9V0shNBvm49a0urAR-MZzJ5At2tMZVvzy-8RFD5KZHySgOwCB2oedBjHwVW6aTM62T30Wbl9ysZPT0M9LYHSOeWWKSqEv7unyxHT9vs3kFCgi390Wj_o2RTjvyQAi2uozVOUaT5EcjTr9QtlWEe06A"/>
+<span class="absolute bottom-1 right-1 px-1 bg-surface-container-lowest/80 rounded font-badge-technical text-[9px] text-tertiary">2,744m</span>
+</div>
+</div>
+<!-- Cautionary Hazard Callout (Left Border Architecture) -->
+<div class="bg-surface-container-low p-space-md rounded border-l-4 border-l-tertiary flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-badge-technical text-badge-technical text-tertiary uppercase font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">ac_unit</span>
+                Advisory Notice: Freezing Level Inversion
+              </span>
+<span class="font-badge-technical text-badge-technical text-on-surface-variant">EAWS Level 2 (Moderate)</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface">
+              Early season snow flurries verified above 2,200m on northern ledges of Paternkofel tunnel galleries. Headlamp required; microspikes recommended for scree descent towards Rifugio Locatelli.
+            </p>
+</div>
+<!-- Share Snapshot URL -->
+<div class="bg-surface-container-lowest p-space-sm rounded flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs font-badge-technical text-badge-technical text-on-surface-variant truncate max-w-md">
+<span class="material-symbols-outlined text-secondary text-[16px]">link</span>
+<span>SHARE LINK:</span>
+<span class="text-primary truncate font-mono">https://climbit.app/s/p98w-tr71-d0la</span>
+</div>
+<div class="flex items-center gap-space-xs flex-shrink-0 font-label-ui text-label-ui">
+<button class="px-space-sm py-1 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface transition-colors flex items-center gap-1" onclick="copyToClipboard('https://climbit.app/s/p98w-tr71-d0la', 'Tre Cime Share Link Copied')">
+<span class="material-symbols-outlined text-[14px]">content_copy</span>
+<span>Copy</span>
+</button>
+</div>
+</div>
+<!-- Primary Actions Footer -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm pt-space-xs">
+<div class="flex items-center gap-space-sm">
+<button class="px-space-md py-2 rounded bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-all font-label-ui text-label-ui flex items-center gap-space-xs" onclick="reEvaluatePlan(this, 'Tre Cime di Lavaredo')">
+<span class="material-symbols-outlined text-[18px]">autorenew</span>
+<span>Re-evaluate Live Plan</span>
+</button>
+<button class="px-space-md py-2 rounded bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors font-label-ui text-label-ui flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px]">map</span>
+<span>Open Live View</span>
+</button>
+</div>
+<button class="px-space-sm py-2 rounded text-outline hover:text-error hover:bg-error-container/20 transition-all font-label-ui text-label-ui flex items-center gap-space-xs" onclick="deleteTrip(this)">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+<span>Delete Trip</span>
+</button>
+</div>
+</article>
+<!-- TRIP 3: Hindelanger Klettersteig (EXPIRED ARCHIVE) -->
+<article class="bg-surface-container/60 rounded-xl p-space-lg flex flex-col gap-space-md opacity-75 hover:opacity-100 transition-opacity">
+<div class="flex flex-wrap items-start justify-between gap-space-sm">
+<div class="flex flex-col gap-space-xs">
+<div class="flex flex-wrap items-center gap-space-sm">
+<span class="px-space-xs py-0.5 rounded bg-surface-container-highest font-badge-technical text-badge-technical text-outline uppercase">
+                  Archived / Completed
+                </span>
+<span class="font-badge-technical text-badge-technical text-outline">
+                  Concluded 12 Aug 2026
+                </span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface-variant font-bold tracking-tight line-through">
+                Hindelanger Klettersteig (Nebelhorn - Großer Daumen)
+              </h3>
+<div class="flex flex-wrap items-center gap-space-md font-body-sm text-body-sm text-outline">
+<span>Allgäuer Alpen</span>
+<span>·</span>
+<span>Origin: Oberstdorf</span>
+<span>·</span>
+<span>SAC T4-T5 / Grade B/C</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-sm py-1.5 rounded bg-surface-container-high text-outline hover:text-error transition-colors font-label-ui text-label-ui flex items-center gap-1" onclick="deleteTrip(this)">
+<span class="material-symbols-outlined text-[16px]">delete</span>
+<span>Purge Archive</span>
+</button>
+</div>
+</div>
+<div class="bg-surface-container-lowest/40 p-space-sm rounded font-body-sm text-body-sm text-outline flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[16px]">inventory_2</span>
+<span>Historical run log archived. Public share link automatically terminated upon 90-day expiry threshold.</span>
+</div>
+</article>
+</div>
+<!-- Side Panels & Widgets (Col 4) -->
+<aside class="lg:col-span-4 flex flex-col gap-space-lg">
+<!-- Widget 1: Trip Privacy & Data Transparency (Section 4.4 & 10) -->
+<div class="bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-space-sm">
+<div class="flex items-center gap-space-xs text-primary">
+<span class="material-symbols-outlined text-[20px]">security</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Data Transparency</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            ClimbIt maintains strict zero-knowledge telemetry. Your exact start coordinates are computed purely in memory for transit connection and never touch persistent logs.
+          </p>
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<div class="flex items-start gap-space-xs font-body-sm text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[16px] mt-0.5">check_circle</span>
+<span><strong>Coarse Origin Only:</strong> Saved plans note broad regions like "München" or "Bolzano".</span>
+</div>
+<div class="flex items-start gap-space-xs font-body-sm text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[16px] mt-0.5">check_circle</span>
+<span><strong>No Central Account:</strong> No email, password, or third-party OAuth profile linkage.</span>
+</div>
+<div class="flex items-start gap-space-xs font-body-sm text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[16px] mt-0.5">check_circle</span>
+<span><strong>Auto Scrubbing:</strong> Disused capabilities vanish after 90 days.</span>
+</div>
+</div>
+</div>
+<!-- Widget 2: Sync / Capability Status (Section 3.3) -->
+<div class="bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">cookie</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Browser Capability</h3>
+</div>
+<span class="w-2.5 h-2.5 rounded-full bg-secondary animate-pulse" title="Cookie active"></span>
+</div>
+<div class="bg-surface-container-low p-space-sm rounded flex flex-col gap-1 font-badge-technical text-badge-technical">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span>ACTIVE TOKEN:</span>
+<span class="text-primary font-mono">climbit_cap_v1</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span>STORAGE ENGINE:</span>
+<span class="text-on-surface">Secure / SameSite=Strict</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span>EXPIRES:</span>
+<span class="text-tertiary">22 Jan 2027</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Trips are tied exclusively to this client context. If you switch to another browser or clear website cache, your saved plans will become inaccessible unless exported.
+          </p>
+<button class="w-full mt-space-xs py-2 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-ui text-label-ui transition-colors flex items-center justify-center gap-space-xs" onclick="exportBackupToken()">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+<span>Download Capability Backup JSON</span>
+</button>
+</div>
+<!-- Widget 3: Live Mountain Telemetry Nodes -->
+<div class="bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary text-[20px]">satellite_alt</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Alpine Data Adapters</h3>
+</div>
+<div class="flex flex-col gap-space-xs font-badge-technical text-badge-technical">
+<div class="flex items-center justify-between py-1 bg-surface-container-low px-space-sm rounded">
+<span class="text-on-surface-variant">EAWS Bulletin Tyrol</span>
+<span class="text-primary">OK (Sync 12m)</span>
+</div>
+<div class="flex items-center justify-between py-1 bg-surface-container-low px-space-sm rounded">
+<span class="text-on-surface-variant">DAV Avalanche Bayern</span>
+<span class="text-primary">OK (Sync 8m)</span>
+</div>
+<div class="flex items-center justify-between py-1 bg-surface-container-low px-space-sm rounded">
+<span class="text-on-surface-variant">MOTIS Transitous Engine</span>
+<span class="text-secondary">OK (Live API)</span>
+</div>
+<div class="flex items-center justify-between py-1 bg-surface-container-low px-space-sm rounded">
+<span class="text-on-surface-variant">Dolomiti Meteo S.r.l.</span>
+<span class="text-tertiary">Degraded (Cached)</span>
+</div>
+</div>
+<span class="font-badge-technical text-[10px] text-outline mt-1">
+            Deterministic fallback heuristics active for degraded nodes.
+          </span>
+</div>
+</aside>
+</div>
+</div>
+</div>
+<script>
+  function showToast(message, iconName = 'check_circle') {
+    const toast = document.getElementById('toastNotification');
+    const toastMessage = document.getElementById('toastMessage');
+    const toastIcon = document.getElementById('toastIcon');
+    
+    if (!toast) return;
+    toastMessage.textContent = message;
+    toastIcon.textContent = iconName;
+    
+    toast.classList.remove('opacity-0', 'translate-y-24', 'pointer-events-none');
+    toast.classList.add('opacity-100', 'translate-y-0');
+    
+    setTimeout(() => {
+      toast.classList.remove('opacity-100', 'translate-y-0');
+      toast.classList.add('opacity-0', 'translate-y-24', 'pointer-events-none');
+    }, 3200);
+  }
+
+  function copyToClipboard(text, successMsg) {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(successMsg || 'Copied to clipboard');
+      }).catch(() => {
+        fallbackCopy(text, successMsg);
+      });
+    } else {
+      fallbackCopy(text, successMsg);
+    }
+  }
+
+  function fallbackCopy(text, successMsg) {
+    const tempInput = document.createElement('input');
+    tempInput.value = text;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempInput);
+    showToast(successMsg || 'Copied to clipboard');
+  }
+
+  function toggleShareModal(open) {
+    const modal = document.getElementById('sharePreviewModal');
+    if (!modal) return;
+    if (open) {
+      modal.classList.remove('hidden');
+    } else {
+      modal.classList.add('hidden');
+    }
+  }
+
+  function rotateShareLink() {
+    const input = document.getElementById('shareUrlInput');
+    const randomSuffix = Math.random().toString(36).substring(2, 6) + '-' + Math.random().toString(36).substring(2, 6) + '-' + Math.random().toString(36).substring(2, 6);
+    const newUrl = 'https://climbit.app/s/' + randomSuffix;
+    if (input) input.value = newUrl;
+    showToast('New snapshot key rotated! Old link revoked', 'cached');
+  }
+
+  function revokeShareLink() {
+    toggleShareModal(false);
+    showToast('Snapshot access revoked and unindexed', 'lock_reset');
+  }
+
+  function toggleRunHistory(historyId) {
+    const history = document.getElementById(historyId);
+    const icon = document.getElementById(historyId.replace('runHistory', 'runHistoryIcon'));
+    if (!history) return;
+    
+    if (history.classList.contains('hidden')) {
+      history.classList.remove('hidden');
+      if (icon) icon.textContent = 'expand_more';
+    } else {
+      history.classList.add('hidden');
+      if (icon) icon.textContent = 'chevron_right';
+    }
+  }
+
+  function reEvaluatePlan(btn, tripName) {
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">sync</span><span>Re-evaluating...</span>';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+      showToast('Plan run re-evaluated against latest EAWS & Transitous', 'verified');
+    }, 1200);
+  }
+
+  function deleteTrip(btn) {
+    const card = btn.closest('article');
+    if (confirm('Permanently remove this plan from your current browser session?')) {
+      if (card) {
+        card.style.transition = 'all 0.3s ease';
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.95)';
+        setTimeout(() => card.remove(), 300);
+      }
+      showToast('Trip record purged from browser capability', 'delete');
+    }
+  }
+
+  function exportBackupToken() {
+    const dummyToken = {
+      capability: "climbit_cap_v1",
+      fingerprint: "c8f1e90b41aa892",
+      issued: new Date().toISOString(),
+      expires: "2027-01-22T00:00:00.000Z",
+      trip_count: 3
+    };
+    const blob = new Blob([JSON.stringify(dummyToken, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'climbit-capability-backup.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Capability backup downloaded', 'key');
+  }
+
+  function clearCapability() {
+    if (confirm('Warning: This will clear your browser capability key. All saved trips will be disconnected. Continue?')) {
+      showToast('Capability cleared. Session reset.', 'warning');
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }
+  }
+</script></main><footer class="w-full bg-surface-container-lowest mt-margin"><div class="w-full px-gutter py-space-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-space-lg"><div class="flex flex-col gap-space-xs"><div class="flex items-center gap-space-sm"><span class="font-headline-sm text-headline-sm font-bold tracking-tight text-on-surface uppercase">Climb<span class="text-primary">It</span></span><span class="font-badge-technical text-badge-technical bg-surface-container-high text-primary px-space-xs py-0.5 rounded">FIELD CAD SYSTEM</span></div><p class="font-body-sm text-body-sm text-on-surface-variant max-w-md">Alpine journey assessment, high-resolution route cartography, SAC scale classifications, and unified transit intelligence for the European Alps.</p></div><div class="flex flex-wrap items-center gap-space-lg text-on-surface-variant font-label-ui text-label-ui"><span class="flex items-center gap-space-xs text-on-surface font-telemetry-md text-body-sm"><span class="material-symbols-outlined text-primary text-[18px]">verified</span>SWISSTOPO / BEV / BKG VALIDATED</span><span class="flex items-center gap-space-xs text-on-surface font-telemetry-md text-body-sm"><span class="material-symbols-outlined text-secondary text-[18px]">directions_transit</span>SBB &amp; ÖBB REALTIME SYNC</span></div></div><div class="w-full px-gutter py-space-sm bg-surface-container-low flex flex-col sm:flex-row items-center justify-between gap-space-sm font-badge-technical text-badge-technical text-outline"><span>© 2025 CLIMBIT ALPINE GEOSPATIAL. LIFE-SAFETY RESPONSIBILITY REMAINS WITH THE NAVIGATOR.</span><div class="flex items-center gap-space-md"><span>DATUM: WGS84</span><span>SLOPE RISK PROTOCOL ACTIVE</span></div></div></footer></body></html>

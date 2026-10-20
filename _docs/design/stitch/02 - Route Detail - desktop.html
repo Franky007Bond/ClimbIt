@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-primary-container":"#00422b","on-primary-fixed-variant":"#005236","primary-fixed":"#6ffbbe","on-primary-fixed":"#002113","tertiary":"#ffb95f","error":"#ffb4ab","primary-fixed-dim":"#4edea3","on-surface-variant":"#bbcabf","on-primary":"#003824","surface-dim":"#0b1326","inverse-on-surface":"#283044","surface-tint":"#4edea3","primary":"#4edea3","surface-bright":"#31394d","surface-container-lowest":"#060e20","surface-container":"#171f33","on-tertiary-fixed-variant":"#653e00","on-error":"#690005","secondary-fixed-dim":"#4ae176","outline":"#86948a","on-secondary-container":"#004119","error-container":"#93000a","tertiary-fixed":"#ffddb8","primary-container":"#10b981","tertiary-container":"#e29100","outline-variant":"#3c4a42","surface-container-highest":"#2d3449","secondary-container":"#00b954","surface-container-high":"#222a3d","inverse-surface":"#dae2fd","on-secondary":"#003915","surface-container-low":"#131b2e","on-tertiary-fixed":"#2a1700","inverse-primary":"#006c49","on-secondary-fixed-variant":"#005321","surface-variant":"#2d3449","on-tertiary-container":"#523200","secondary":"#4ae176","background":"#0b1326","on-tertiary":"#472a00","on-error-container":"#ffdad6","tertiary-fixed-dim":"#ffb95f","on-surface":"#dae2fd","on-background":"#dae2fd","secondary-fixed":"#6bff8f","surface":"#0b1326","on-secondary-fixed":"#002109"},borderRadius:{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},spacing:{"margin":"2rem","margin-mobile":"1rem","space-sm":"0.5rem","space-xl":"2.5rem","space-lg":"1.5rem","space-md":"1rem","gutter-mobile":"0.75rem","gutter":"1.25rem","space-xs":"0.25rem"},fontFamily:{"badge-technical":["JetBrains Mono"],"telemetry-md":["JetBrains Mono"],"headline-md":["Plus Jakarta Sans"],"body-lg":["Inter"],"headline-sm":["Plus Jakarta Sans"],"display-hero-mobile":["Plus Jakarta Sans"],"telemetry-lg":["JetBrains Mono"],"body-sm":["Inter"],"headline-lg-mobile":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"body-md":["Inter"],"display-hero":["Plus Jakarta Sans"],"label-ui":["Inter"]},fontSize:{"badge-technical":["11px",{"lineHeight":"14px","letterSpacing":"0.06em","fontWeight":"700"}],"telemetry-md":["14px",{"lineHeight":"20px","fontWeight":"500"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"26px","fontWeight":"400"}],"headline-sm":["18px",{"lineHeight":"26px","fontWeight":"600"}],"display-hero-mobile":["36px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"800"}],"telemetry-lg":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"headline-lg-mobile":["26px",{"lineHeight":"34px","letterSpacing":"-0.015em","fontWeight":"700"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"700"}],"body-md":["14px",{"lineHeight":"22px","fontWeight":"400"}],"display-hero":["56px",{"lineHeight":"64px","letterSpacing":"-0.03em","fontWeight":"800"}],"label-ui":["13px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"600"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.45)]"><div class="w-full bg-surface-container-lowest px-gutter py-1"><div class="w-full flex items-center justify-between font-badge-technical text-badge-technical text-on-surface-variant"><div class="flex items-center gap-space-sm"><span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span><span class="text-primary font-bold tracking-wider uppercase">Telemetry Live</span><span class="text-outline">|</span><span>Live Alpine Sync: 48 Routes Verified • EAWS Bulletins Active</span></div><div class="hidden md:flex items-center gap-space-md"><span class="text-on-surface-variant font-telemetry-md text-body-sm">GRID: <span class="text-primary">CH1903+ / LV95</span></span><span class="text-outline">|</span><span class="text-tertiary font-telemetry-md text-body-sm">AVALANCHE LVL 2 (MODERATE)</span></div></div></div><div class="h-16 w-full px-gutter flex items-center justify-between gap-gutter"><div class="flex items-center gap-space-lg flex-shrink-0"><a class="flex items-center gap-space-sm focus:outline-none" data-path="explore-routes" href="#"><img alt="ClimbIt Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XfuwNcgEDpawbHobifjsK1o7lEfrhkd4CfG1YOHbPIFlxVKIGdm748IBKeWIvu_zodPzdPTcmeJdvBZJNYSiVjp3nvajLyw0PRyIKZVup9XwmAQtTfc-QLABa9zGI21MdoVsSmfAD0iGHqCY96-Ja2oRCTlm3h0W3taLgNyrjxJIRJUnWaQ0MQkrz53Gnlm3tbU_nV8l7O4d-8RQcrQkQWGr70AMWoAzz6nYaEEkyajgZn5uFakqgrWHs"/><span class="font-headline-sm text-headline-sm font-bold tracking-tight text-on-surface uppercase">Climb<span class="text-primary">It</span></span></a><div class="hidden 2xl:flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1 rounded"><span class="material-symbols-outlined text-primary text-[14px]">landscape</span><span class="font-badge-technical text-badge-technical uppercase tracking-wider text-on-surface-variant">ALPINE CAD v4.2</span></div></div><nav class="hidden xl:flex items-center gap-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-bold rounded-lg shadow-sm"><a class="px-space-md py-space-sm rounded font-label-ui text-label-ui text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="explore-routes" href="#">Explore Routes</a><a aria-current="page" class="px-space-md py-space-sm transition-all bg-primary-container text-on-primary-container font-bold rounded-lg shadow-sm" data-path="route-detail" href="#">Route Detail</a><a class="px-space-md py-space-sm rounded font-label-ui text-label-ui text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="trip-planner-assessment" href="#">Trip Planner &amp; Assessment</a><a class="px-space-md py-space-sm rounded font-label-ui text-label-ui text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="my-trips" href="#">My Trips</a><a class="px-space-md py-space-sm rounded font-label-ui text-label-ui text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="route-wiki-edits" href="#">Route Wiki &amp; Edits</a></nav><div class="flex items-center gap-space-md justify-end flex-1 max-w-xl"><div class="relative flex-1 max-w-sm hidden sm:block"><span class="material-symbols-outlined absolute left-space-sm top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span><input class="w-full bg-surface-container-low pl-9 pr-space-md py-1.5 rounded font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-high transition-colors" placeholder="Search Bavarian Alps, Tyrol, Dolomites..." type="text"/></div><div class="hidden lg:flex items-center gap-space-xs bg-surface-container-high px-space-sm py-1 rounded text-on-surface-variant"><span class="material-symbols-outlined text-secondary text-[16px]">near_me</span><span class="font-badge-technical text-badge-technical uppercase text-on-surface">Allgäu &amp; Bavarian Alps</span></div><div class="flex items-center gap-space-sm pl-space-xs"><button class="p-1.5 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all relative" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1 right-1 w-1.5 h-1.5 bg-tertiary rounded-full"></span></button><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQx3MoQixbg58kvYe3mvVhfbJqk5NMf8Tt8tRcd8H2ikERwFlupoBt3S7tr6vJMz_kMnTSmN8i18vsZO4xQYBiVDaCcRg7QMV_5JwEQzLnNp5dPWMZwo-SZ6Hjg8h1NMWTwHT1x8aUAJC4YQT815xFeGCsaF7voRyGxQwhM9i3QdsBpK4vr0pf2A1bECZ3hZ1kUwWbSj8k2FdGB1mtmNRLaosimzqX5I_QJZha-EhusNHfRCc29sgX"/></div></div></div></header><main class="w-full pt-[88px] bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- Interactive Top Action / Quick Context Bar -->
+<div class="w-full bg-surface-container-low px-gutter py-space-sm flex flex-wrap items-center justify-between gap-space-md shadow-sm">
+<div class="flex items-center gap-space-md text-on-surface-variant font-badge-technical text-badge-technical overflow-x-auto">
+<span class="text-primary flex items-center gap-1 font-bold">
+<span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+        PROVENANCE: SEED / DAV KARWENDEL
+      </span>
+<span class="text-outline">/</span>
+<span class="text-on-surface">REV 4 (CHECKED 18 OCT 2026)</span>
+<span class="text-outline">/</span>
+<span class="bg-surface-container-highest px-space-xs py-0.5 rounded text-secondary-fixed">SAC / SCHALL HYBRID</span>
+<span class="text-outline">/</span>
+<span class="text-outline">DATUM WGS84: 47.4372° N, 11.2811° E</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<a class="px-space-md py-1 bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface rounded font-label-ui text-label-ui flex items-center gap-1.5 transition-colors" data-path="route-wiki-edits" href="#">
+<span class="material-symbols-outlined text-[16px]">history_edu</span>
+<span>Edit Route Wiki (Rev History)</span>
+</a>
+<button class="px-space-md py-1 bg-primary text-on-primary-container font-label-ui text-label-ui font-bold rounded flex items-center gap-1.5 hover:bg-secondary-fixed transition-all shadow-sm" onclick="document.getElementById('plan-modal').classList.toggle('hidden')">
+<span class="material-symbols-outlined text-[16px]">bolt</span>
+<span>Plan Assessment</span>
+</button>
+</div>
+</div>
+<!-- Hero Header Split Panel: Deep Visual & Route Identity -->
+<div class="relative w-full overflow-hidden bg-surface-container-lowest">
+<div class="grid grid-cols-1 lg:grid-cols-12 min-h-[460px]">
+<!-- Left Column: Title & Mountain Telemetry Meta (7 cols) -->
+<div class="lg:col-span-7 p-gutter lg:p-space-xl flex flex-col justify-between z-10">
+<div class="space-y-space-md">
+<!-- Region taxonomy breadcrumb & badges -->
+<div class="flex flex-wrap items-center gap-space-xs font-badge-technical text-badge-technical">
+<span class="bg-surface-container px-space-sm py-1 rounded text-on-surface-variant uppercase tracking-wider">Eastern Alps</span>
+<span class="text-outline">&gt;</span>
+<span class="bg-surface-container px-space-sm py-1 rounded text-on-surface-variant uppercase tracking-wider">Karwendelgebirge</span>
+<span class="text-outline">&gt;</span>
+<span class="bg-surface-container-high text-primary px-space-sm py-1 rounded uppercase tracking-wider font-bold">Bavaria / Tyrol Border</span>
+</div>
+<!-- Main Technical Title -->
+<div>
+<div class="flex items-center gap-space-sm mb-1">
+<span class="inline-flex items-center gap-1 bg-primary-container text-on-primary-container font-badge-technical text-badge-technical px-space-sm py-0.5 rounded font-bold">
+<span class="material-symbols-outlined text-[14px]">terrain</span>
+                KLETTERSTEIG (VIA FERRATA)
+              </span>
+<span class="bg-surface-container-highest text-tertiary-fixed font-badge-technical text-badge-technical px-space-sm py-0.5 rounded font-bold">
+                DIFFICULTY C · K3
+              </span>
+</div>
+<h1 class="font-display-hero text-headline-lg lg:text-display-hero font-extrabold text-on-surface tracking-tight leading-none mt-2">
+              Mittenwalder Höhenweg
+            </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-space-sm max-w-2xl">
+              High-ridge traverse across the Northern Karwendel Chain between Westliche Karwendelspitze (2,385 m) and Brunnsteinspitze. Marked by classic jagged limestone pinnacles, continuous cable protection, and massive vertical drop-offs toward the Isar Valley.
+            </p>
+</div>
+</div>
+<!-- Inline Quick Provenance & Verification Stamp -->
+<div class="pt-space-lg flex flex-wrap items-center gap-space-md">
+<div class="flex items-center gap-space-sm bg-surface-container px-space-md py-space-sm rounded-xl">
+<span class="material-symbols-outlined text-primary text-[24px]">verified_user</span>
+<div class="flex flex-col">
+<span class="font-label-ui text-label-ui text-on-surface font-bold">Maintainer Verified Route</span>
+<span class="font-badge-technical text-badge-technical text-on-surface-variant">Last field inspection: 18 Oct 2026 · Rev #4</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm bg-surface-container px-space-md py-space-sm rounded-xl">
+<span class="material-symbols-outlined text-secondary text-[24px]">shield_with_heart</span>
+<div class="flex flex-col">
+<span class="font-label-ui text-label-ui text-on-surface font-bold">GPX Quarantine Clearance</span>
+<span class="font-badge-technical text-badge-technical text-secondary font-bold">100% VALIDATED (0 ERRORS)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Visual Splendor & Terrain Context (5 cols) -->
+<div class="lg:col-span-5 relative min-h-[300px] lg:min-h-full">
+<div class="w-full h-full bg-cover bg-center min-h-[320px]" data-alt="Dramatic high-angle mountain view of the Mittenwalder Höhenweg ridge in the Karwendel mountains. Razor-sharp limestone pinnacles, steel via ferrata cables, dramatic drop-offs into deep alpine valleys, atmospheric misty light with warm golden sunlight clipping rocky peaks, moody alpine slate colors." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCB8W96Z2J0Cus5bm39PZCs4JpVwaAHuoKtZyd--2f0CUKRNkt545g804ZQXSw2uYu7YQi0z-hrK8bFjR1t0GyWnoaZQNh9Y7taSt2-fTQcWMyZppF40Ge3v1q4WqPkhTzabGDgSc1MkqYk-wJP281bn1bZ1ukJHe7U3pM8qHfe6vFvwE1AuRpsyBHvdkiC7NvAoXH4d5RQj9ycWs1d3W1D95VOqpK5HJagOte8O2hWsGz_K5pgH8Az')">
+<!-- Gradient Scrim for contrast -->
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/30 to-transparent lg:bg-gradient-to-r lg:from-surface-container-lowest lg:via-transparent lg:to-transparent"></div>
+<!-- Live Mountain Topo Floating Pill -->
+<div class="absolute bottom-space-md right-space-md bg-surface-container-highest/90 backdrop-blur-md p-space-md rounded-xl shadow-xl max-w-xs">
+<div class="flex items-center justify-between text-on-surface font-badge-technical text-badge-technical mb-1">
+<span class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[16px]">satellite_alt</span>
+                SUMMIT CAMERA
+              </span>
+<span class="text-on-surface-variant">2,244 M MSL</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface font-medium">Karwendelbahn Bergstation live view clear. No cloud inversion detected on southern scree flanks.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Key Metrics Bar: Technical Specification Bento Strip -->
+<div class="w-full px-gutter py-space-md bg-surface-container">
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-space-md">
+<!-- Metric 1: Route Type & System -->
+<div class="flex flex-col bg-surface-container-low p-space-md rounded-xl">
+<div class="flex items-center justify-between text-outline mb-1">
+<span class="font-badge-technical text-badge-technical uppercase">Route Type</span>
+<span class="material-symbols-outlined text-[18px] text-primary">cable</span>
+</div>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">Klettersteig</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Schall Scale 'C' / K3</span>
+</div>
+<!-- Metric 2: Total Duration -->
+<div class="flex flex-col bg-surface-container-low p-space-md rounded-xl">
+<div class="flex items-center justify-between text-outline mb-1">
+<span class="font-badge-technical text-badge-technical uppercase">Total Time</span>
+<span class="material-symbols-outlined text-[18px] text-secondary">timer</span>
+</div>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">7h 10m</span>
+<span class="font-body-sm text-body-sm text-secondary font-medium">Incl. 45m buffer</span>
+</div>
+<!-- Metric 3: Total Distance -->
+<div class="flex flex-col bg-surface-container-low p-space-md rounded-xl">
+<div class="flex items-center justify-between text-outline mb-1">
+<span class="font-badge-technical text-badge-technical uppercase">Distance</span>
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">straighten</span>
+</div>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">11.4 km</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Trailhead to Station</span>
+</div>
+<!-- Metric 4: Vertical Ascent -->
+<div class="flex flex-col bg-surface-container-low p-space-md rounded-xl">
+<div class="flex items-center justify-between text-outline mb-1">
+<span class="font-badge-technical text-badge-technical uppercase">Ascent (D+)</span>
+<span class="material-symbols-outlined text-[18px] text-primary">trending_up</span>
+</div>
+<span class="font-headline-sm text-headline-sm font-bold text-primary">+1,120 m</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">(w/o lift: +1,460m)</span>
+</div>
+<!-- Metric 5: Vertical Descent -->
+<div class="flex flex-col bg-surface-container-low p-space-md rounded-xl">
+<div class="flex items-center justify-between text-outline mb-1">
+<span class="font-badge-technical text-badge-technical uppercase">Descent (D-)</span>
+<span class="material-symbols-outlined text-[18px] text-tertiary">trending_down</span>
+</div>
+<span class="font-headline-sm text-headline-sm font-bold text-tertiary">-1,380 m</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Via Brunnsteinsteig</span>
+</div>
+<!-- Metric 6: Max Peak Alt -->
+<div class="flex flex-col bg-surface-container-low p-space-md rounded-xl">
+<div class="flex items-center justify-between text-outline mb-1">
+<span class="font-badge-technical text-badge-technical uppercase">Max Altitude</span>
+<span class="material-symbols-outlined text-[18px] text-on-surface">altitude</span>
+</div>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">2,385 m</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Westl. Karwendelspitze</span>
+</div>
+</div>
+</div>
+<!-- Duration Timeline Decomposition (Accordion-Style Visual Bar) -->
+<div class="w-full px-gutter py-space-sm bg-surface-container-lowest">
+<div class="bg-surface-container-low p-space-md rounded-xl space-y-space-xs">
+<div class="flex flex-wrap items-center justify-between gap-2 text-on-surface-variant font-badge-technical text-badge-technical">
+<span class="uppercase tracking-wider text-on-surface font-bold">Duration Decomposition · Deterministic Pace Model</span>
+<span class="text-outline">Calculated for Alpine Grade C / 350m/h Ascent Norm</span>
+</div>
+<!-- Multi-segment visual bar -->
+<div class="w-full h-3 rounded-full bg-surface-container-highest overflow-hidden flex">
+<div class="h-full bg-surface-bright" style="width: 17%;" title="1h 15m Approach"></div>
+<div class="h-full bg-primary" style="width: 52%;" title="3h 45m Technical Klettersteig"></div>
+<div class="h-full bg-tertiary" style="width: 21%;" title="1h 30m Descent"></div>
+<div class="h-full bg-secondary-container" style="width: 10%;" title="45m Safety Buffer"></div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-sm pt-space-xs font-badge-technical text-badge-technical">
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded bg-surface-bright"></span>
+<span class="text-on-surface-variant">Approach: <strong class="text-on-surface">1h 15m</strong></span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded bg-primary"></span>
+<span class="text-on-surface-variant">Via Ferrata: <strong class="text-primary font-bold">3h 45m</strong></span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded bg-tertiary"></span>
+<span class="text-on-surface-variant">Descent: <strong class="text-on-surface">1h 30m</strong></span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded bg-secondary-container"></span>
+<span class="text-on-surface-variant">Buffer: <strong class="text-secondary font-bold">45m</strong></span>
+</div>
+</div>
+</div>
+</div>
+<!-- Primary Workspace: Interactive Map, Elevation CAD & Hazard Grid -->
+<div class="w-full px-gutter py-space-md grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left / Center Content: Interactive Elevation & Route Topography (8 cols) -->
+<div class="lg:col-span-8 space-y-space-md">
+<!-- Elevation Profile Instrument Card -->
+<div class="bg-surface-container p-space-md lg:p-space-lg rounded-xl shadow-md space-y-space-md">
+<div class="flex flex-wrap items-center justify-between gap-space-sm">
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">show_chart</span>
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface">Interactive Elevation &amp; Ridge Topo Profile</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Altitude progression from Mittenwald Talstation (920m) through ridge peaks to valley exit.</p>
+</div>
+<div class="flex items-center gap-space-xs font-badge-technical text-badge-technical bg-surface-container-high px-space-sm py-1 rounded">
+<span class="text-primary font-bold">CURSOR: 2,340 M</span>
+<span class="text-outline">|</span>
+<span class="text-on-surface-variant">KM 4.8</span>
+<span class="text-outline">|</span>
+<span class="text-tertiary">SLOPE 32° (EXPOSED)</span>
+</div>
+</div>
+<!-- Inline High-Precision Elevation Profile SVG -->
+<div class="w-full bg-surface-container-lowest rounded-lg p-space-md overflow-hidden relative">
+<svg class="w-full h-48 lg:h-56 select-none" preserveaspectratio="none" viewbox="0 0 900 240">
+<defs>
+<lineargradient id="elevationGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#4edea3" stop-opacity="0.45"></stop>
+<stop offset="60%" stop-color="#10b981" stop-opacity="0.15"></stop>
+<stop offset="100%" stop-color="#10b981" stop-opacity="0.0"></stop>
+</lineargradient>
+<pattern height="8" id="steepPattern" patterntransform="rotate(45 0 0)" patternunits="userSpaceOnUse" width="8">
+<line opacity="0.4" stroke="#ffb95f" stroke-width="1.5" x1="0" x2="0" y1="0" y2="8"></line>
+</pattern>
+</defs>
+<!-- Horizontal Elevation Grid Lines -->
+<line stroke="#2d3449" stroke-dasharray="3,3" stroke-width="1" x1="40" x2="880" y1="30" y2="30"></line>
+<text fill="#86948a" font-family="JetBrains Mono" font-size="10" x="10" y="34">2400m</text>
+<line stroke="#2d3449" stroke-dasharray="3,3" stroke-width="1" x1="40" x2="880" y1="80" y2="80"></line>
+<text fill="#86948a" font-family="JetBrains Mono" font-size="10" x="10" y="84">2000m</text>
+<line stroke="#2d3449" stroke-dasharray="3,3" stroke-width="1" x1="40" x2="880" y1="130" y2="130"></line>
+<text fill="#86948a" font-family="JetBrains Mono" font-size="10" x="10" y="134">1600m</text>
+<line stroke="#2d3449" stroke-dasharray="3,3" stroke-width="1" x1="40" x2="880" y1="180" y2="180"></line>
+<text fill="#86948a" font-family="JetBrains Mono" font-size="10" x="10" y="184">1200m</text>
+<!-- Technical Klettersteig High Ridge Polyline Fill -->
+<polygon fill="url(#elevationGrad)" points="50,210 120,70 190,40 260,35 340,55 420,45 500,60 580,50 670,120 760,170 860,210 860,225 50,225"></polygon>
+<!-- Steep Hazard Section Overlay (Ridge Pinnacle Segment) -->
+<polygon fill="url(#steepPattern)" points="260,35 340,55 420,45 500,60 580,50 580,225 260,225"></polygon>
+<!-- Solid Main Ridge Outline -->
+<polyline fill="none" points="50,210 120,70 190,40 260,35 340,55 420,45 500,60 580,50 670,120 760,170 860,210" stroke="#4edea3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></polyline>
+<!-- Key Elevation Pinpoints -->
+<!-- Mittenwald Talstation -->
+<circle cx="50" cy="210" fill="#dae2fd" r="4"></circle>
+<text fill="#86948a" font-family="JetBrains Mono" font-size="9" x="45" y="235">Talstation (920m)</text>
+<!-- Karwendelbahn Bergstation (Cable Car option or top of Dammkar) -->
+<circle cx="120" cy="70" fill="#4edea3" r="4"></circle>
+<text fill="#4edea3" font-family="JetBrains Mono" font-size="10" font-weight="bold" x="95" y="62">Bergstation 2,244m</text>
+<!-- Peak 1: Westliche Karwendelspitze -->
+<circle cx="260" cy="35" fill="#ffb95f" r="5"></circle>
+<text fill="#ffb95f" font-family="JetBrains Mono" font-size="10" font-weight="bold" x="220" y="24">Westl. Karwendelspitze (2,385m)</text>
+<!-- Peak 2: Rotwandlspitze -->
+<circle cx="420" cy="45" fill="#4edea3" r="4"></circle>
+<text fill="#dae2fd" font-family="JetBrains Mono" font-size="9" x="395" y="38">Rotwandlspitze 2,192m</text>
+<!-- Peak 3: Brunnsteinspitze -->
+<circle cx="580" cy="50" fill="#4edea3" r="4"></circle>
+<text fill="#dae2fd" font-family="JetBrains Mono" font-size="9" x="560" y="42">Brunnsteinspitze 2,180m</text>
+<!-- Brunnsteinhütte -->
+<circle cx="670" cy="120" fill="#4ae176" r="4"></circle>
+<text fill="#4ae176" font-family="JetBrains Mono" font-size="9" font-weight="bold" x="675" y="115">Brunnsteinhütte (1,560m)</text>
+<!-- Vertical Scrub Line Indicator (Simulated interactive scrub) -->
+<line opacity="0.8" stroke="#dae2fd" stroke-dasharray="2,2" stroke-width="1.5" x1="340" x2="340" y1="15" y2="225"></line>
+<circle cx="340" cy="55" fill="#dae2fd" r="5" stroke="#0b1326" stroke-width="2"></circle>
+</svg>
+<!-- Elevation Legend & Tooltip Overlay -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm pt-space-xs text-on-surface-variant font-badge-technical text-badge-technical">
+<div class="flex items-center gap-space-md">
+<span class="flex items-center gap-1.5"><span class="w-3 h-1.5 bg-primary rounded-sm inline-block"></span> Klettersteig C/K3 Cable Route</span>
+<span class="flex items-center gap-1.5"><span class="w-3 h-1.5 bg-tertiary opacity-70 rounded-sm inline-block"></span> High Exposure (&gt;25° Gradient)</span>
+</div>
+<span class="text-outline">Dist: 0.0km (Start) → 4.5km (Ridge Peak) → 11.4km (Mittenwald Süd)</span>
+</div>
+</div>
+<!-- Topo Route Map Preview Container -->
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-ui text-label-ui text-on-surface font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px] text-secondary">map</span>
+              Geospatial Vector Map Layer (BKG &amp; Swisstopo Hybrid)
+            </span>
+<span class="font-badge-technical text-badge-technical text-primary font-bold">1:25,000 CONTOURS ACTIVE</span>
+</div>
+<div class="w-full h-80 bg-cover bg-center rounded-xl relative shadow-inner overflow-hidden" data-location="Mittenwald Karwendel, Germany" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDkZzy4MRYMSvglCwlDL1YzD_C6f5tFo7JFFPepVVOKvLzlBMx_Z7QwhiPLiNvJOOn9TScyDyokjKZNqRKwEbuZsL_fS-Czemc2pAXkLV1WrupLlGAGzZARPsE-Q68MIgVFZ2tyo2b6Cf8n1WG2CV6Ig0wxP-uFUTUk4pNtg6b55VK7jDagomFAQte28jSk8AlIpVydN_A8nu4LK2t3n5XEBcnCqbVUg6FMTZC8gc-m4ijSvsjzATXT')">
+<!-- Simulated GPS Track Overlay Over Static Map -->
+<div class="absolute inset-0 bg-surface-container-lowest/30 pointer-events-none"></div>
+<!-- Route Marker Overlay Cards -->
+<div class="absolute top-space-md left-space-md bg-surface/90 backdrop-blur-md p-space-sm rounded-lg font-badge-technical text-badge-technical space-y-1 shadow-lg">
+<div class="text-on-surface font-bold flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+                ACTIVE TRACK: MITTENWALDER_RIDGE_V4.GPX
+              </div>
+<div class="text-on-surface-variant text-[10px]">Trailhead: Mittenwald Talstation (47.4412 N, 11.2789 E)</div>
+<div class="text-secondary text-[10px]">Egress: Gasthof Brunnstein / Isar Trailhead</div>
+</div>
+<!-- Map Controls HUD -->
+<div class="absolute top-space-md right-space-md flex flex-col gap-1 bg-surface/90 backdrop-blur-md p-1 rounded-lg shadow-lg">
+<button class="p-1.5 rounded hover:bg-surface-container-high text-on-surface hover:text-primary transition-colors" title="Zoom In">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+<button class="p-1.5 rounded hover:bg-surface-container-high text-on-surface hover:text-primary transition-colors" title="Zoom Out">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<button class="p-1.5 rounded hover:bg-surface-container-high text-on-surface hover:text-primary transition-colors" title="Toggle 3D Slope Shading">
+<span class="material-symbols-outlined text-[18px]">layers</span>
+</button>
+</div>
+<!-- Bottom Route Waypoint Indicators Pin Strip -->
+<div class="absolute bottom-space-md inset-x-space-md bg-surface-container/95 backdrop-blur-md px-space-md py-space-sm rounded-lg flex items-center justify-between overflow-x-auto gap-space-md font-badge-technical text-badge-technical">
+<span class="text-on-surface font-bold shrink-0">KEY TRANSIT PINS:</span>
+<span class="text-on-surface-variant shrink-0">1. Talstation Gondola (0km)</span>
+<span class="text-primary shrink-0">2. Bergstation Bergwelt (Approach End)</span>
+<span class="text-tertiary shrink-0">3. Linderspitzen Notunterkunft (Bivouac Box)</span>
+<span class="text-on-surface-variant shrink-0">4. Brunnsteinhütte (Refuge/Water)</span>
+<span class="text-secondary shrink-0">5. Mittenwald Bahnhof (Transit Hub)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Route Detailed Description & Waypoint Breakdown -->
+<div class="bg-surface-container p-space-md lg:p-space-lg rounded-xl shadow-md space-y-space-md">
+<div class="flex items-center justify-between border-b-0 pb-0">
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">route</span>
+            Route Overview &amp; Technical Waypoint Sequence
+          </h2>
+<span class="font-badge-technical text-badge-technical text-on-surface-variant bg-surface-container-low px-space-sm py-1 rounded">5 WAYPOINTS REGISTERED</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          The <strong>Mittenwalder Höhenweg</strong> is one of the premier ridge ferratas in the Northern Limestone Alps. Beginning either by cable car ascent or via the strenuous foot climb up the Dammkar, the technical route spans along the spine of the Karwendel peaks. Steel cables secure sheer rock faces, ladders span steep clefts, and airy bridges cross deep chasms. Complete surefootedness and zero vertigo are mandatory.
+        </p>
+<!-- Waypoints List with Technical Details -->
+<div class="space-y-space-sm">
+<!-- Waypoint 1 -->
+<div class="bg-surface-container-low p-space-md rounded-xl flex items-start gap-space-md">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center font-badge-technical text-badge-technical text-primary font-bold shrink-0">
+              01
+            </div>
+<div class="flex-1 min-w-0">
+<div class="flex flex-wrap items-center justify-between gap-1">
+<h3 class="font-headline-sm text-label-ui font-bold text-on-surface">Karwendelbahn Bergstation → Westliche Karwendelspitze</h3>
+<span class="font-badge-technical text-badge-technical text-secondary font-semibold">ALT 2,244m → 2,385m · 35 MIN</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Gentle scree traverse from the mountain station tunnel leading to the start of the fixed cable. Short scramble over stepped limestone (Difficulty A/B) leading directly to the summit cross.
+              </p>
+</div>
+</div>
+<!-- Waypoint 2 -->
+<div class="bg-surface-container-low p-space-md rounded-xl flex items-start gap-space-md">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center font-badge-technical text-badge-technical text-primary font-bold shrink-0">
+              02
+            </div>
+<div class="flex-1 min-w-0">
+<div class="flex flex-wrap items-center justify-between gap-1">
+<h3 class="font-headline-sm text-label-ui font-bold text-on-surface">Westl. Karwendelspitze → Nördliche Linderspitze</h3>
+<span class="font-badge-technical text-badge-technical text-tertiary font-semibold">CRUX SECTION C · 1H 20M</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                The most demanding section of the via ferrata. Steel wire ropes along knife-edge ridges, stepped notches, and iron rungs on near-vertical walls. High exposure with 1,000-meter drops into the Karwendel valley.
+              </p>
+</div>
+</div>
+<!-- Waypoint 3 -->
+<div class="bg-surface-container-low p-space-md rounded-xl flex items-start gap-space-md">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center font-badge-technical text-badge-technical text-primary font-bold shrink-0">
+              03
+            </div>
+<div class="flex-1 min-w-0">
+<div class="flex flex-wrap items-center justify-between gap-1">
+<h3 class="font-headline-sm text-label-ui font-bold text-on-surface">Linderspitzen Notunterkunft (Emergency Refuge Box)</h3>
+<span class="font-badge-technical text-badge-technical text-on-surface font-semibold">ALT 2,240m · CRITICAL SAFETY ESCAPE</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Small fiberglass bivouac shelter for storm defense. A signposted escape descent branches down west to the Dammkarhütte (steep loose scree, helmet required).
+              </p>
+</div>
+</div>
+<!-- Waypoint 4 -->
+<div class="bg-surface-container-low p-space-md rounded-xl flex items-start gap-space-md">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center font-badge-technical text-badge-technical text-primary font-bold shrink-0">
+              04
+            </div>
+<div class="flex-1 min-w-0">
+<div class="flex flex-wrap items-center justify-between gap-1">
+<h3 class="font-headline-sm text-label-ui font-bold text-on-surface">Südliche Linderspitze → Brunnsteinanger</h3>
+<span class="font-badge-technical text-badge-technical text-secondary font-semibold">GRADE B/C · CABLE EXIT · 1H 15M</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Traverse along jagged towers, descending through grassy crests and rocky steps. Fixed cables terminate at the Brunnsteinanger col (2,080m).
+              </p>
+</div>
+</div>
+<!-- Waypoint 5 -->
+<div class="bg-surface-container-low p-space-md rounded-xl flex items-start gap-space-md">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center font-badge-technical text-badge-technical text-on-surface font-bold shrink-0">
+              05
+            </div>
+<div class="flex-1 min-w-0">
+<div class="flex flex-wrap items-center justify-between gap-1">
+<h3 class="font-headline-sm text-label-ui font-bold text-on-surface">Brunnsteinhütte → Mittenwald Valley Return</h3>
+<span class="font-badge-technical text-badge-technical text-on-surface-variant font-semibold">DESCENT -1,160M · 1H 30M</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Strenuous knee-taxing switchback trail down through pine dwarf scrub to the Brunnsteinhütte (serviced, freshwater tap). Crosses the famous suspension bridge (Hängebrücke) before returning to Mittenwald.
+              </p>
+</div>
+</div>
+</div>
+<!-- Download GPX Bar with Technical Quarantine Validation -->
+<div class="pt-space-sm flex flex-col sm:flex-row items-center justify-between gap-space-md bg-surface-container-lowest p-space-md rounded-xl">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[28px]">download_for_offline</span>
+<div>
+<div class="font-label-ui text-label-ui font-bold text-on-surface flex items-center gap-1.5">
+<span>mittenwalder_klettersteig_2026.gpx</span>
+<span class="bg-secondary/20 text-secondary font-badge-technical text-badge-technical px-1.5 py-0.5 rounded uppercase">Verified Clean</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">482 Trackpoints · 11.4km · Elevation smoothed · Sanitized against rogue attributes</p>
+</div>
+</div>
+<button class="w-full sm:w-auto px-space-lg py-2 bg-surface-container-high hover:bg-surface-bright text-on-surface font-label-ui text-label-ui font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-colors" onclick="alert('GPX Download: Track file verified by ClimbIt Security Quarantine Pipeline.')">
+<span class="material-symbols-outlined text-[18px]">file_download</span>
+<span>Download Verified GPX</span>
+</button>
+</div>
+</div>
+<!-- Deterministic Gear Guidance System (Rule-based output) -->
+<div class="bg-surface-container p-space-md lg:p-space-lg rounded-xl shadow-md space-y-space-md">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">backpack</span>
+              Deterministic Gear Guidance (Rule-Based Engine)
+            </h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Automated equipment mandate based on Schall C grade, 2,385m elevation, and current forecast.</p>
+</div>
+<span class="font-badge-technical text-badge-technical text-primary bg-primary-container/20 px-space-sm py-1 rounded font-bold">100% DETERMINISTIC</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- Mandatory Technical Gear -->
+<div class="bg-surface-container-low p-space-md rounded-xl space-y-space-sm">
+<div class="font-label-ui text-label-ui font-bold text-tertiary flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+              MANDATORY TECHNICAL KIT
+            </div>
+<ul class="space-y-space-xs font-body-sm text-body-sm text-on-surface">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-[16px] mt-0.5">check_circle</span>
+<span><strong>Via Ferrata Set (EN 958:2017):</strong> Elasticated arms with progressive tear-webbing brake.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-[16px] mt-0.5">check_circle</span>
+<span><strong>Climbing Helmet (EN 12492):</strong> Critical protection against rockfall triggered on upper ridge.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-[16px] mt-0.5">check_circle</span>
+<span><strong>Climbing Harness:</strong> Sit-harness with verified gear loops and tie-in strength.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-[16px] mt-0.5">check_circle</span>
+<span><strong>Via Ferrata Gloves:</strong> Full-leather or fingerless grip protection against burred steel cables.</span>
+</li>
+</ul>
+</div>
+<!-- Alpine Environmental Gear -->
+<div class="bg-surface-container-low p-space-md rounded-xl space-y-space-sm">
+<div class="font-label-ui text-label-ui font-bold text-secondary flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">ac_unit</span>
+              ALPINE &amp; METEOROLOGICAL PACK
+            </div>
+<ul class="space-y-space-xs font-body-sm text-body-sm text-on-surface">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-secondary text-[16px] mt-0.5">check_circle</span>
+<span><strong>Rigid Mountaineering Boots:</strong> Vibram sole with pronounced climbing zone (B1/B2 rated).</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-secondary text-[16px] mt-0.5">check_circle</span>
+<span><strong>Hardshell Windbreaker / Rain Shell:</strong> Wind gusts up to 18 km/h NW at 2,300m.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-secondary text-[16px] mt-0.5">check_circle</span>
+<span><strong>Min. 2.0 Liters Hydration:</strong> Zero water availability along the ridge until Brunnsteinhütte.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-secondary text-[16px] mt-0.5">check_circle</span>
+<span><strong>Alpine First Aid &amp; Bivy Sack:</strong> Mandatory for sudden weather halts on exposed crests.</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Sidebar: Live Conditions, Hazards & Transit Intelligence (4 cols) -->
+<div class="lg:col-span-4 space-y-space-md">
+<!-- Module 1: Live Mountain Weather Snapshot (At 2,200m) -->
+<div class="bg-surface-container p-space-md rounded-xl shadow-md space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">thermostat</span>
+<h3 class="font-headline-sm text-label-ui font-bold text-on-surface uppercase tracking-wide">Live High-Alt Conditions</h3>
+</div>
+<span class="font-badge-technical text-badge-technical bg-surface-container-high text-primary px-space-xs py-0.5 rounded">2,200M METEO</span>
+</div>
+<!-- Weather Metric Hero Card -->
+<div class="bg-surface-container-low p-space-md rounded-xl flex items-center justify-between">
+<div>
+<div class="font-display-hero text-headline-lg font-black text-on-surface leading-none">12°C</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-1">Feels like 9°C in wind exposure</div>
+</div>
+<div class="flex flex-col items-end text-right">
+<span class="material-symbols-outlined text-tertiary text-[36px]">partly_cloudy_day</span>
+<span class="font-badge-technical text-badge-technical text-secondary font-bold">FAVORABLE (MORNING)</span>
+</div>
+</div>
+<!-- Detailed Weather Metrics Grid -->
+<div class="grid grid-cols-2 gap-space-sm font-badge-technical text-badge-technical">
+<div class="bg-surface-container-lowest p-space-sm rounded">
+<span class="text-outline uppercase text-[10px] block">WIND SPEED &amp; VECTOR</span>
+<span class="text-on-surface font-bold text-body-sm">18 km/h NW</span>
+</div>
+<div class="bg-surface-container-lowest p-space-sm rounded">
+<span class="text-outline uppercase text-[10px] block">PRECIP PROBABILITY</span>
+<span class="text-on-surface font-bold text-body-sm">10% (Until 15:00)</span>
+</div>
+<div class="bg-surface-container-lowest p-space-sm rounded">
+<span class="text-outline uppercase text-[10px] block">FREEZING LEVEL</span>
+<span class="text-on-surface font-bold text-body-sm">3,450 m MSL</span>
+</div>
+<div class="bg-surface-container-lowest p-space-sm rounded">
+<span class="text-outline uppercase text-[10px] block">CLOUD CEILING</span>
+<span class="text-on-surface font-bold text-body-sm">&gt; 3,000 m (Clear)</span>
+</div>
+</div>
+<div class="text-[11px] font-badge-technical text-outline flex items-center justify-between">
+<span>Source: ZAMG / DWD High-Res Adapter</span>
+<span>Checked: 10m ago</span>
+</div>
+</div>
+<!-- Module 2: Thunderstorm & Avalanche Hazard Watch -->
+<div class="bg-surface-container p-space-md rounded-xl shadow-md space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary text-[20px]">warning</span>
+<h3 class="font-headline-sm text-label-ui font-bold text-on-surface uppercase tracking-wide">Hazard Assessment</h3>
+</div>
+<span class="font-badge-technical text-badge-technical text-secondary font-bold">STATUS 4.3 VERIFIED</span>
+</div>
+<!-- Thunderstorm Heuristic Card -->
+<div class="bg-surface-container-low p-space-md rounded-xl border-l-4 border-l-tertiary space-y-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-ui text-label-ui font-bold text-on-surface flex items-center gap-1">
+<span class="material-symbols-outlined text-tertiary text-[18px]">thunderstorm</span>
+              Thunderstorm Risk Heuristic: 18%
+            </span>
+<span class="bg-surface-container-high px-space-xs py-0.5 rounded font-badge-technical text-badge-technical text-tertiary">CAPE RISING</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Low probability in morning windows. Atmospheric CAPE index rises sharply post-16:00 CET.
+          </p>
+<div class="bg-tertiary/10 text-tertiary-fixed font-badge-technical text-badge-technical p-space-xs rounded flex items-center gap-1 font-semibold">
+<span class="material-symbols-outlined text-[14px]">timer_off</span>
+<span>STRATEGY: Be off-ridge to Brunnsteinhütte by 14:30 CET.</span>
+</div>
+</div>
+<!-- EAWS Avalanche Bulletin Card -->
+<div class="bg-surface-container-low p-space-md rounded-xl border-l-4 border-l-secondary space-y-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-ui text-label-ui font-bold text-on-surface flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary text-[18px]">ac_unit</span>
+              EAWS Avalanche Bulletin: Level 1
+            </span>
+<span class="font-badge-technical text-badge-technical text-secondary font-bold">LOW RISK</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Snow-free crest along total ridge route up to 2,400m. South-facing gullies dry. No cornice hazards reported.
+          </p>
+<span class="font-badge-technical text-badge-technical text-outline block">Official Lawinenwarndienst Bayern · Synced 07:00 CET</span>
+</div>
+<!-- Closure Notice Verification -->
+<div class="bg-surface-container-lowest p-space-sm rounded-lg flex items-center justify-between font-badge-technical text-badge-technical">
+<span class="text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
+            CLOSURE NOTICES: NONE ACTIVE
+          </span>
+<span class="text-secondary font-bold">OPEN</span>
+</div>
+</div>
+<!-- Module 3: Public Transit & Last-Return Guarantee Engine -->
+<div class="bg-surface-container p-space-md rounded-xl shadow-md space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">train</span>
+<h3 class="font-headline-sm text-label-ui font-bold text-on-surface uppercase tracking-wide">Public Transit Intelligence</h3>
+</div>
+<span class="font-badge-technical text-badge-technical bg-surface-container-high text-secondary px-space-xs py-0.5 rounded font-bold">MOTIS LIVE</span>
+</div>
+<div class="bg-surface-container-low p-space-md rounded-xl space-y-space-sm">
+<div class="flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[22px] mt-0.5">directions_railway</span>
+<div class="flex-1">
+<span class="font-label-ui text-label-ui font-bold text-on-surface block">Mittenwald Bahnhof (DB / Werdenfelsbahn)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">400 m direct walk to Karwendelbahn Talstation.</span>
+</div>
+</div>
+<!-- Last Return Callout Badge -->
+<div class="bg-surface-container-highest p-space-sm rounded-lg space-y-1">
+<div class="flex items-center justify-between font-badge-technical text-badge-technical">
+<span class="text-on-surface-variant uppercase">LAST RETURN CONNECTION TO MUNICH:</span>
+<span class="text-primary font-bold">RB 6 · 20:34 CET</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface">
+              Last feasible connection to <strong>Munich Hbf</strong> departs <strong>20:34</strong> (Platform 1). Total return journey: 1h 48m without transfers.
+            </p>
+</div>
+<!-- Transit Assumptions -->
+<div class="font-badge-technical text-badge-technical text-outline space-y-0.5 pt-1">
+<div>• Walking transfer allowance: 15 mins incorporated</div>
+<div>• Karwendelbahn lift operation: Last down 17:00 (if bypassing descent)</div>
+<div>• Return bus from Scharnitz/Ried: RVO Line 9608</div>
+</div>
+</div>
+</div>
+<!-- Module 4: Plan Trip CTA Card -->
+<div class="bg-surface-container-high p-space-md rounded-xl shadow-lg space-y-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="w-3 h-3 rounded-full bg-primary animate-pulse"></span>
+<span class="font-headline-sm text-label-ui font-bold text-on-surface uppercase tracking-wider">Alpine Planning Verdict</span>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-lg space-y-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-badge-technical text-badge-technical text-secondary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">task_alt</span>
+              VERDICT: GREEN (ASSESSED)
+            </span>
+<span class="font-badge-technical text-badge-technical text-on-surface-variant">CONFIDENCE 96%</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            All data sources verified. Weather envelope acceptable. Off-ridge threshold calculable.
+          </p>
+</div>
+<button class="w-full py-3 bg-primary hover:bg-secondary-fixed text-on-primary-container font-label-ui text-headline-sm font-bold rounded-lg flex items-center justify-center gap-2 transition-all shadow-md" onclick="document.getElementById('plan-modal').classList.remove('hidden')">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+<span>Plan Trip with Live Assessment</span>
+</button>
+<div class="flex items-center justify-center gap-space-md font-badge-technical text-badge-technical text-outline">
+<a class="hover:text-primary transition-colors flex items-center gap-1" data-path="route-wiki-edits" href="#">
+<span class="material-symbols-outlined text-[14px]">edit_note</span>
+            Propose Revision
+          </a>
+<span>•</span>
+<a class="hover:text-primary transition-colors flex items-center gap-1" href="#" onclick="alert('Trip capability link copied to clipboard.')">
+<span class="material-symbols-outlined text-[14px]">share</span>
+            Share Route Snapshot
+          </a>
+</div>
+</div>
+</div>
+</div>
+<!-- Persistent Bottom Mobile Sticky Planning Banner (Visible on mobile/tablet) -->
+<div class="lg:hidden sticky bottom-0 z-40 bg-surface/95 backdrop-blur-xl p-space-md shadow-2xl flex items-center justify-between gap-space-md">
+<div>
+<div class="font-headline-sm text-label-ui font-bold text-on-surface">Mittenwalder Höhenweg</div>
+<div class="font-badge-technical text-badge-technical text-secondary flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+        C / K3 · 7h 10m · Verdict: Green
+      </div>
+</div>
+<button class="px-space-lg py-2.5 bg-primary text-on-primary-container font-label-ui text-label-ui font-bold rounded-lg shadow-sm" onclick="document.getElementById('plan-modal').classList.remove('hidden')">
+      Plan Trip
+    </button>
+</div>
+<!-- Assessment Drawer / Interactive Modal (Triggered by Plan Trip CTAs) -->
+<div class="hidden fixed inset-0 z-50 bg-surface-container-lowest/80 backdrop-blur-md flex items-center justify-center p-space-md" id="plan-modal">
+<div class="bg-surface-container max-w-xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+<!-- Modal Header -->
+<div class="p-space-md bg-surface-container-high flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[24px]">explore</span>
+<div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Live Alpine Journey Assessment</h3>
+<span class="font-badge-technical text-badge-technical text-on-surface-variant">Deterministic evaluation for Mittenwalder Höhenweg</span>
+</div>
+</div>
+<button class="p-1 rounded text-outline hover:text-on-surface" onclick="document.getElementById('plan-modal').classList.add('hidden')">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Modal Body -->
+<div class="p-space-lg space-y-space-md overflow-y-auto">
+<div class="space-y-space-xs">
+<label class="font-label-ui text-label-ui text-on-surface font-semibold block">Target Expedition Date</label>
+<div class="grid grid-cols-3 gap-space-sm font-badge-technical text-badge-technical">
+<button class="p-space-sm rounded bg-primary text-on-primary-container font-bold">TODAY (LIVE)</button>
+<button class="p-space-sm rounded bg-surface-container-low text-on-surface hover:bg-surface-container-high">TOMORROW</button>
+<button class="p-space-sm rounded bg-surface-container-low text-on-surface hover:bg-surface-container-high">CUSTOM DATE</button>
+</div>
+</div>
+<div class="space-y-space-xs">
+<label class="font-label-ui text-label-ui text-on-surface font-semibold block">Origin / Transit Access</label>
+<div class="bg-surface-container-low p-space-sm rounded-lg flex items-center justify-between text-body-sm text-on-surface">
+<span>Munich Hbf (Transitous Adapter)</span>
+<span class="text-primary font-badge-technical text-badge-technical font-bold">DEP: 06:32 → ARR: 08:24</span>
+</div>
+</div>
+<!-- Calculated Live Safety Thresholds -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl space-y-space-xs font-badge-technical text-badge-technical">
+<span class="text-on-surface font-bold text-body-sm block mb-1">SAFETY RUN TELEMETRY</span>
+<div class="flex justify-between text-on-surface-variant">
+<span>Earliest Safe Trailhead Start:</span>
+<span class="text-on-surface font-bold">08:45 CET</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Latest Mandatory Off-Ridge Col:</span>
+<span class="text-tertiary font-bold">14:30 CET</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Last Feasible Valley Return Train:</span>
+<span class="text-secondary font-bold">20:34 CET</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Total Buffer Overhead:</span>
+<span class="text-primary font-bold">+1h 45m</span>
+</div>
+</div>
+<div class="p-space-sm bg-surface-container-low rounded-lg text-body-sm text-on-surface-variant">
+<span class="font-bold text-on-surface">ClimbIt Assurance:</span> This plan will be cryptographically saved to your local browser capability cookie. No personal identity is transmitted or stored.
+        </div>
+</div>
+<!-- Modal Footer -->
+<div class="p-space-md bg-surface-container-high flex items-center justify-between gap-space-sm">
+<button class="px-space-md py-2 text-on-surface-variant hover:text-on-surface font-label-ui text-label-ui" onclick="document.getElementById('plan-modal').classList.add('hidden')">
+          Cancel
+        </button>
+<button class="px-space-lg py-2 bg-primary hover:bg-secondary-fixed text-on-primary-container font-label-ui text-label-ui font-bold rounded-lg shadow-sm" onclick="alert('Trip saved to device capability store! Navigating to My Trips...'); document.getElementById('plan-modal').classList.add('hidden');">
+          Save Trip &amp; Generate Run Snapshot
+        </button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple micro-interaction for Elevation Profile coordinate simulation
+  document.addEventListener('DOMContentLoaded', () => {
+    const scrubPoly = document.querySelector('svg polyline');
+    if (scrubPoly) {
+      scrubPoly.addEventListener('mouseenter', () => {
+        scrubPoly.setAttribute('stroke-width', '3.5');
+      });
+      scrubPoly.addEventListener('mouseleave', () => {
+        scrubPoly.setAttribute('stroke-width', '2.5');
+      });
+    }
+  });
+</script></main><footer class="w-full bg-surface-container-lowest mt-margin"><div class="w-full px-gutter py-space-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-space-lg"><div class="flex flex-col gap-space-xs"><div class="flex items-center gap-space-sm"><span class="font-headline-sm text-headline-sm font-bold tracking-tight text-on-surface uppercase">Climb<span class="text-primary">It</span></span><span class="font-badge-technical text-badge-technical bg-surface-container-high text-primary px-space-xs py-0.5 rounded">FIELD CAD SYSTEM</span></div><p class="font-body-sm text-body-sm text-on-surface-variant max-w-md">Alpine journey assessment, high-resolution route cartography, SAC scale classifications, and unified transit intelligence for the European Alps.</p></div><div class="flex flex-wrap items-center gap-space-lg text-on-surface-variant font-label-ui text-label-ui"><span class="flex items-center gap-space-xs text-on-surface font-telemetry-md text-body-sm"><span class="material-symbols-outlined text-primary text-[18px]">verified</span>SWISSTOPO / BEV / BKG VALIDATED</span><span class="flex items-center gap-space-xs text-on-surface font-telemetry-md text-body-sm"><span class="material-symbols-outlined text-secondary text-[18px]">directions_transit</span>SBB &amp; ÖBB REALTIME SYNC</span></div></div><div class="w-full px-gutter py-space-sm bg-surface-container-low flex flex-col sm:flex-row items-center justify-between gap-space-sm font-badge-technical text-badge-technical text-outline"><span>© 2025 CLIMBIT ALPINE GEOSPATIAL. LIFE-SAFETY RESPONSIBILITY REMAINS WITH THE NAVIGATOR.</span><div class="flex items-center gap-space-md"><span>DATUM: WGS84</span><span>SLOPE RISK PROTOCOL ACTIVE</span></div></div></footer></body></html>
