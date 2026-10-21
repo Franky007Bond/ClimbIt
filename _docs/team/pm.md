@@ -29,10 +29,11 @@ Safety-critical issues
 
 Acceptance criteria for safety logic give concrete inputs and expected outputs, not adjectives. "The verdict is conservative" is not checkable. "Grade D on a route with a thunderstorm risk of high at 13:00 gives red, latest safe start 06:00" is. For these issues:
 
-Include boundary cases: the value just below and just above each threshold
-Include the missing-data case
-State the rounding direction. When a mapping is ambiguous the harder grade wins
-State where the thresholds live, so a threshold change is a configuration change with tests and not a code edit
+- Include boundary cases: the value just below and just above each threshold
+- Include the missing-data case
+- State the rounding direction. When a mapping is ambiguous the harder grade wins
+- State where the thresholds live, so a threshold change is a configuration change with tests and not a code edit
+- add a label `safety-critical` when the issue touches grade mappings, gear rules, the safety verdict, the thunderstorm heuristic, or what the user sees as a hazard or closure warning. Say in the issue that the orchestrator holds the merge for the user's approval
 
 Decisions
 
