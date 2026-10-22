@@ -1,4 +1,7 @@
+from sqlalchemy import create_engine
+from sqlalchemy.engine import Engine
 from sqlalchemy.engine.url import URL, make_url
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.schema import MetaData
 
 metadata = MetaData()
@@ -19,6 +22,14 @@ def sqlalchemy_url(database_url: str) -> URL:
     if url.drivername in {"postgres", "postgresql"}:
         return url.set(drivername="postgresql+psycopg")
     return url
+
+
+def create_engine_from_database_url(database_url: str) -> Engine:
+    return create_engine(sqlalchemy_url(database_url))
+
+
+def create_sessionmaker(database_url: str) -> sessionmaker:
+    return sessionmaker(bind=create_engine_from_database_url(database_url))
 
 
 def include_name(name, type_, parent_names) -> bool:

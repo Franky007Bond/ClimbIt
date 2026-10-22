@@ -10,6 +10,7 @@ from app.db import include_name
 from app.db import include_object
 from app.db import metadata as target_metadata
 from app.db import sqlalchemy_url
+import app.models.route  # noqa: F401
 
 config = context.config
 
