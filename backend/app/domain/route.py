@@ -118,6 +118,7 @@ class Route(BaseModel):
     duration_is_estimated: bool
     original_difficulty_value: str | None = None
     original_difficulty_scale: str | None = None
+    difficulty: "Difficulty | None" = None
     season_months: set[int]
     season_note: str | None = None
     description: str
@@ -224,4 +225,35 @@ class Route(BaseModel):
                 "duration_minutes must equal approach_minutes + technical_minutes + descent_minutes"
             )
 
+        if self.difficulty is not None:
+            if self.difficulty.route_type != self.route_type:
+                raise ValueError("difficulty.route_type must equal route_type")
+            if self.difficulty.original_value != self.original_difficulty_value:
+                raise ValueError(
+                    "difficulty.original_value must equal original_difficulty_value"
+                )
+            if self.difficulty.original_scale != self.original_difficulty_scale:
+                raise ValueError(
+                    "difficulty.original_scale must equal original_difficulty_scale"
+                )
+            originals_missing = (
+                self.original_difficulty_value is None
+                and self.original_difficulty_scale is None
+            )
+            if originals_missing and (
+                self.difficulty.structured_value is not None
+                or self.difficulty.mapped_huebler is not None
+            ):
+                raise ValueError(
+                    "mapped difficulty is rejected when original difficulty strings are both None"
+                )
+
         return self
+
+
+try:
+    from app.domain.difficulty import Difficulty as Difficulty
+except ImportError:
+    pass
+else:
+    Route.model_rebuild()

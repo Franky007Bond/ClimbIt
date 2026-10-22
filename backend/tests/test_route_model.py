@@ -3,6 +3,7 @@ from enum import Enum
 import pytest
 from pydantic import ValidationError
 
+from app.domain.difficulty import map_difficulty
 from app.domain.route import (
     Assessment,
     Completeness,
@@ -429,3 +430,89 @@ def test_route_omits_out_of_scope_fields() -> None:
         "revisions",
     ):
         assert unexpected not in fields
+
+
+def test_attached_difficulty_keeps_originals() -> None:
+    mapped = map_difficulty(RouteType.KLETTERSTEIG, "K3", "k1_k6")
+    route = _route(
+        route_type=RouteType.KLETTERSTEIG,
+        original_difficulty_value="K3",
+        original_difficulty_scale="k1_k6",
+        difficulty=mapped,
+    )
+    assert route.original_difficulty_value == "K3"
+    assert route.original_difficulty_scale == "k1_k6"
+    assert route.difficulty is not None
+    assert route.difficulty.mapped_huebler == "C"
+    assert route.difficulty.original_value == "K3"
+    assert route.difficulty.route_type is RouteType.KLETTERSTEIG
+    with pytest.raises(ValidationError):
+        _route(mapped_grade="C")
+    for name in ("rank", "numeric", "numeric_value", "comparable_rank"):
+        assert name not in Route.model_fields
+        assert name not in route.model_dump()
+
+
+def test_route_difficulty_defaults_to_none() -> None:
+    route = _route()
+    assert route.difficulty is None
+
+
+def test_difficulty_must_match_route_originals_and_type() -> None:
+    mapped = map_difficulty(RouteType.KLETTERSTEIG, "C", "huebler")
+    with pytest.raises(ValidationError):
+        _route(
+            route_type=RouteType.ALPINE_HIKE,
+            original_difficulty_value="C",
+            original_difficulty_scale="huebler",
+            difficulty=mapped,
+        )
+    with pytest.raises(ValidationError):
+        _route(
+            route_type=RouteType.KLETTERSTEIG,
+            original_difficulty_value="D",
+            original_difficulty_scale="huebler",
+            difficulty=mapped,
+        )
+    with pytest.raises(ValidationError):
+        _route(
+            route_type=RouteType.KLETTERSTEIG,
+            original_difficulty_value="C",
+            original_difficulty_scale="Huebler",
+            difficulty=mapped,
+        )
+
+
+def test_mapped_difficulty_rejected_when_originals_are_none() -> None:
+    mapped = map_difficulty(RouteType.KLETTERSTEIG, "C", "huebler")
+    mismatched = mapped.model_copy(
+        update={"original_value": None, "original_scale": None}
+    )
+    with pytest.raises(ValidationError):
+        _route(
+            publication=Publication.QUARANTINED,
+            original_difficulty_value=None,
+            original_difficulty_scale=None,
+            difficulty=mismatched,
+        )
+
+
+def test_unmapped_difficulty_may_attach_when_originals_are_none() -> None:
+    route = _route(
+        publication=Publication.QUARANTINED,
+        original_difficulty_value=None,
+        original_difficulty_scale=None,
+        difficulty=map_difficulty(RouteType.ALPINE_HIKE, None, None),
+    )
+    assert route.difficulty is not None
+    assert route.difficulty.mapping_confidence.value == "unmapped"
+
+
+def test_opaque_originals_still_construct_without_mapping() -> None:
+    route = _route(
+        original_difficulty_value="Z",
+        original_difficulty_scale="Huebler",
+        difficulty=None,
+    )
+    assert route.original_difficulty_value == "Z"
+    assert route.difficulty is None

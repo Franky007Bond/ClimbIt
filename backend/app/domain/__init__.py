@@ -1,3 +1,9 @@
+from app.domain.difficulty import (
+    Difficulty,
+    MappingConfidence,
+    is_harder,
+    map_difficulty,
+)
 from app.domain.route import (
     Assessment,
     Completeness,
@@ -15,7 +21,9 @@ from app.domain.route import (
 __all__ = [
     "Assessment",
     "Completeness",
+    "Difficulty",
     "LineString",
+    "MappingConfidence",
     "Point",
     "Provenance",
     "Publication",
@@ -24,4 +32,6 @@ __all__ = [
     "Route",
     "RouteType",
     "TransitAccessibility",
+    "is_harder",
+    "map_difficulty",
 ]

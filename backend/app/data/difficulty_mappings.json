@@ -1,0 +1,86 @@
+{
+  "version": "1",
+  "source": "ClimbIt specification section 4.2 and GitHub issue 7",
+  "citation": "ClimbIt spec section 4.2 (route-type-specific difficulty). GitHub issue 7 defines the 1:1 Klettersteig pairing K1=A, K2=B, K3=C, K4=D, K5=E, K6=F as parallel labels, not as a range conversion.",
+  "mapped_huebler_scale": "huebler",
+  "allowed_structured_scales": ["huebler", "k1_k6", "sac", "french", "uiaa"],
+  "incomparable_structured_scales": ["french", "uiaa"],
+  "scale_aliases": {
+    "huebler": "huebler",
+    "Huebler": "huebler",
+    "Hübler": "huebler",
+    "k1_k6": "k1_k6",
+    "sac": "sac",
+    "SAC": "sac",
+    "french": "french",
+    "French": "french",
+    "uiaa": "uiaa",
+    "UIAA": "uiaa"
+  },
+  "allowed_scales_by_route_type": {
+    "klettersteig": ["huebler", "k1_k6"],
+    "alpine_hike": ["sac"],
+    "outdoor_climbing": ["french", "uiaa"]
+  },
+  "scales": {
+    "huebler": {
+      "order": ["A", "B", "C", "D", "E", "F"],
+      "assign_mapped_huebler": true,
+      "entries": {
+        "A": {"mapped_huebler": "A", "confidence": "exact"},
+        "B": {"mapped_huebler": "B", "confidence": "exact"},
+        "C": {"mapped_huebler": "C", "confidence": "exact"},
+        "D": {"mapped_huebler": "D", "confidence": "exact"},
+        "E": {"mapped_huebler": "E", "confidence": "exact"},
+        "F": {"mapped_huebler": "F", "confidence": "exact"},
+        "A+": {"mapped_huebler": "B", "confidence": "approximate"},
+        "A/B": {"mapped_huebler": "B", "confidence": "approximate"},
+        "B-": {"mapped_huebler": "B", "confidence": "approximate"},
+        "C/D": {"mapped_huebler": "D", "confidence": "approximate"},
+        "E/F": {"mapped_huebler": "F", "confidence": "approximate"},
+        "A-": {"mapped_huebler": "A", "confidence": "approximate"}
+      }
+    },
+    "k1_k6": {
+      "order": ["K1", "K2", "K3", "K4", "K5", "K6"],
+      "assign_mapped_huebler": true,
+      "entries": {
+        "K1": {"mapped_huebler": "A", "confidence": "exact"},
+        "K2": {"mapped_huebler": "B", "confidence": "exact"},
+        "K3": {"mapped_huebler": "C", "confidence": "exact"},
+        "K4": {"mapped_huebler": "D", "confidence": "exact"},
+        "K5": {"mapped_huebler": "E", "confidence": "exact"},
+        "K6": {"mapped_huebler": "F", "confidence": "exact"},
+        "K3+": {"mapped_huebler": "D", "confidence": "approximate"},
+        "K3/K4": {"mapped_huebler": "D", "confidence": "approximate"},
+        "K2+": {"mapped_huebler": "C", "confidence": "approximate"}
+      }
+    },
+    "sac": {
+      "order": ["T1", "T2", "T3", "T4", "T5", "T6"],
+      "assign_mapped_huebler": false,
+      "entries": {
+        "T1": {"confidence": "exact"},
+        "T2": {"confidence": "exact"},
+        "T3": {"confidence": "exact"},
+        "T4": {"confidence": "exact"},
+        "T5": {"confidence": "exact"},
+        "T6": {"confidence": "exact"}
+      }
+    },
+    "french": {
+      "order": ["6a"],
+      "assign_mapped_huebler": false,
+      "entries": {
+        "6a": {"confidence": "exact"}
+      }
+    },
+    "uiaa": {
+      "order": ["V"],
+      "assign_mapped_huebler": false,
+      "entries": {
+        "V": {"confidence": "exact"}
+      }
+    }
+  }
+}
