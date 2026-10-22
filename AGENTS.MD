@@ -22,6 +22,8 @@ Commands
   metadata, from `backend/`
 - `uv run alembic heads` - print the migration head(s) from `backend/`
 - `uv run python -m app.seed` - load the six fixture routes from `backend/`. Requires `DATABASE_URL`. Compose does not load seed data automatically. Example host URL for the published Compose port: `postgresql://climbit:climbit@127.0.0.1:5432/climbit`
+- `uv run python -m app.export_openapi` - from `backend/`, write `contracts/openapi.json` from the FastAPI schema
+- `npm run generate:api` - from `frontend/`, regenerate `src/api/generated/` from `contracts/openapi.json` (run export first when the API changes)
 - `npm install` - the build-time toolchain:  Vite
 
 Rules

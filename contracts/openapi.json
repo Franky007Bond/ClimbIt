@@ -1,0 +1,994 @@
+{
+  "components": {
+    "schemas": {
+      "Assessment": {
+        "enum": [
+          "unassessed",
+          "current",
+          "stale"
+        ],
+        "title": "Assessment",
+        "type": "string"
+      },
+      "ClosureAssessment": {
+        "additionalProperties": false,
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "expires_at": {
+            "format": "date-time",
+            "title": "Expires At",
+            "type": "string"
+          },
+          "owner": {
+            "title": "Owner",
+            "type": "string"
+          },
+          "review_status": {
+            "$ref": "#/components/schemas/ClosureReviewStatus"
+          },
+          "reviewed_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewed At"
+          },
+          "source_url": {
+            "title": "Source Url",
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ClosureStatus"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "source_url",
+          "owner",
+          "review_status",
+          "created_at",
+          "updated_at",
+          "reviewed_at",
+          "expires_at"
+        ],
+        "title": "ClosureAssessment",
+        "type": "object"
+      },
+      "ClosureReviewStatus": {
+        "enum": [
+          "unreviewed",
+          "reviewed"
+        ],
+        "title": "ClosureReviewStatus",
+        "type": "string"
+      },
+      "ClosureStatus": {
+        "enum": [
+          "none_known",
+          "active"
+        ],
+        "title": "ClosureStatus",
+        "type": "string"
+      },
+      "Completeness": {
+        "enum": [
+          "complete",
+          "incomplete"
+        ],
+        "title": "Completeness",
+        "type": "string"
+      },
+      "Difficulty": {
+        "additionalProperties": false,
+        "properties": {
+          "mapped_huebler": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mapped Huebler"
+          },
+          "mapping_citation": {
+            "title": "Mapping Citation",
+            "type": "string"
+          },
+          "mapping_confidence": {
+            "$ref": "#/components/schemas/MappingConfidence"
+          },
+          "mapping_source": {
+            "title": "Mapping Source",
+            "type": "string"
+          },
+          "mapping_version": {
+            "title": "Mapping Version",
+            "type": "string"
+          },
+          "original_scale": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Original Scale"
+          },
+          "original_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Original Value"
+          },
+          "route_type": {
+            "$ref": "#/components/schemas/RouteType"
+          },
+          "structured_scale": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Structured Scale"
+          },
+          "structured_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Structured Value"
+          }
+        },
+        "required": [
+          "route_type",
+          "original_value",
+          "original_scale",
+          "structured_scale",
+          "structured_value",
+          "mapped_huebler",
+          "mapping_confidence",
+          "mapping_source",
+          "mapping_citation",
+          "mapping_version"
+        ],
+        "title": "Difficulty",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "LineString": {
+        "additionalProperties": false,
+        "properties": {
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/Point"
+            },
+            "minItems": 2,
+            "title": "Points",
+            "type": "array"
+          }
+        },
+        "required": [
+          "points"
+        ],
+        "title": "LineString",
+        "type": "object"
+      },
+      "MappingConfidence": {
+        "enum": [
+          "exact",
+          "approximate",
+          "unmapped"
+        ],
+        "title": "MappingConfidence",
+        "type": "string"
+      },
+      "Point": {
+        "additionalProperties": false,
+        "properties": {
+          "latitude": {
+            "maximum": 90.0,
+            "minimum": -90.0,
+            "title": "Latitude",
+            "type": "number"
+          },
+          "longitude": {
+            "maximum": 180.0,
+            "minimum": -180.0,
+            "title": "Longitude",
+            "type": "number"
+          }
+        },
+        "required": [
+          "longitude",
+          "latitude"
+        ],
+        "title": "Point",
+        "type": "object"
+      },
+      "Provenance": {
+        "enum": [
+          "seed",
+          "osm",
+          "gpx_upload",
+          "maintainer",
+          "user"
+        ],
+        "title": "Provenance",
+        "type": "string"
+      },
+      "Publication": {
+        "enum": [
+          "quarantined",
+          "pending_review",
+          "published",
+          "unpublished"
+        ],
+        "title": "Publication",
+        "type": "string"
+      },
+      "Region": {
+        "additionalProperties": false,
+        "properties": {
+          "country": {
+            "title": "Country",
+            "type": "string"
+          },
+          "coverage": {
+            "$ref": "#/components/schemas/RegionCoverage"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "country",
+          "coverage"
+        ],
+        "title": "Region",
+        "type": "object"
+      },
+      "RegionCoverage": {
+        "enum": [
+          "supported",
+          "sample",
+          "unsupported"
+        ],
+        "title": "RegionCoverage",
+        "type": "string"
+      },
+      "RouteDetail": {
+        "additionalProperties": false,
+        "properties": {
+          "approach_minutes": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approach Minutes"
+          },
+          "assessment": {
+            "$ref": "#/components/schemas/Assessment"
+          },
+          "closure_assessment": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ClosureAssessment"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "completeness": {
+            "$ref": "#/components/schemas/Completeness"
+          },
+          "descent_minutes": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Descent Minutes"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "difficulty": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Difficulty"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "duration_is_estimated": {
+            "title": "Duration Is Estimated",
+            "type": "boolean"
+          },
+          "duration_minutes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Minutes"
+          },
+          "elevation_gain_m": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Elevation Gain M"
+          },
+          "elevation_loss_m": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Elevation Loss M"
+          },
+          "elevation_max_m": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Elevation Max M"
+          },
+          "elevation_min_m": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Elevation Min M"
+          },
+          "gpx": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gpx"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "linestring": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LineString"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "official_source_links": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Official Source Links",
+            "type": "array"
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/Provenance"
+          },
+          "publication": {
+            "$ref": "#/components/schemas/Publication"
+          },
+          "region": {
+            "$ref": "#/components/schemas/Region"
+          },
+          "route_type": {
+            "$ref": "#/components/schemas/RouteType"
+          },
+          "season_months": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Season Months",
+            "type": "array"
+          },
+          "season_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Season Note"
+          },
+          "technical_minutes": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Technical Minutes"
+          },
+          "trailhead": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Point"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transit_accessibility": {
+            "$ref": "#/components/schemas/TransitAccessibility"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "route_type",
+          "region",
+          "publication",
+          "provenance",
+          "completeness",
+          "assessment",
+          "duration_minutes",
+          "duration_is_estimated",
+          "transit_accessibility",
+          "season_months",
+          "difficulty",
+          "trailhead",
+          "linestring",
+          "gpx",
+          "elevation_min_m",
+          "elevation_max_m",
+          "elevation_gain_m",
+          "elevation_loss_m",
+          "approach_minutes",
+          "technical_minutes",
+          "descent_minutes",
+          "season_note",
+          "description",
+          "official_source_links",
+          "closure_assessment"
+        ],
+        "title": "RouteDetail",
+        "type": "object"
+      },
+      "RouteSearchItem": {
+        "additionalProperties": false,
+        "properties": {
+          "assessment": {
+            "$ref": "#/components/schemas/Assessment"
+          },
+          "completeness": {
+            "$ref": "#/components/schemas/Completeness"
+          },
+          "difficulty": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Difficulty"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "duration_is_estimated": {
+            "title": "Duration Is Estimated",
+            "type": "boolean"
+          },
+          "duration_minutes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Minutes"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/Provenance"
+          },
+          "publication": {
+            "$ref": "#/components/schemas/Publication"
+          },
+          "region": {
+            "$ref": "#/components/schemas/Region"
+          },
+          "route_type": {
+            "$ref": "#/components/schemas/RouteType"
+          },
+          "season_months": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Season Months",
+            "type": "array"
+          },
+          "transit_accessibility": {
+            "$ref": "#/components/schemas/TransitAccessibility"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "route_type",
+          "region",
+          "publication",
+          "provenance",
+          "completeness",
+          "assessment",
+          "duration_minutes",
+          "duration_is_estimated",
+          "transit_accessibility",
+          "season_months",
+          "difficulty"
+        ],
+        "title": "RouteSearchItem",
+        "type": "object"
+      },
+      "RouteSearchResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "routes": {
+            "items": {
+              "$ref": "#/components/schemas/RouteSearchItem"
+            },
+            "title": "Routes",
+            "type": "array"
+          }
+        },
+        "required": [
+          "routes"
+        ],
+        "title": "RouteSearchResponse",
+        "type": "object"
+      },
+      "RouteType": {
+        "enum": [
+          "klettersteig",
+          "alpine_hike",
+          "outdoor_climbing"
+        ],
+        "title": "RouteType",
+        "type": "string"
+      },
+      "TransitAccessibility": {
+        "enum": [
+          "transit_friendly",
+          "limited",
+          "unknown"
+        ],
+        "title": "TransitAccessibility",
+        "type": "string"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "ClimbIt",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health"
+      }
+    },
+    "/ready": {
+      "get": {
+        "operationId": "ready_ready_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Ready"
+      }
+    },
+    "/routes": {
+      "get": {
+        "operationId": "list_routes_routes_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "region",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Region"
+            }
+          },
+          {
+            "in": "query",
+            "name": "country",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 2,
+                  "minLength": 2,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Country"
+            }
+          },
+          {
+            "in": "query",
+            "name": "route_type",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/RouteType"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Route Type"
+            }
+          },
+          {
+            "in": "query",
+            "name": "difficulty_scale",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Difficulty Scale"
+            }
+          },
+          {
+            "in": "query",
+            "name": "difficulty_min",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Difficulty Min"
+            }
+          },
+          {
+            "in": "query",
+            "name": "difficulty_max",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Difficulty Max"
+            }
+          },
+          {
+            "in": "query",
+            "name": "duration_min_minutes",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "exclusiveMinimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Duration Min Minutes"
+            }
+          },
+          {
+            "in": "query",
+            "name": "duration_max_minutes",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "exclusiveMinimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Duration Max Minutes"
+            }
+          },
+          {
+            "in": "query",
+            "name": "season_month",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 12,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Season Month"
+            }
+          },
+          {
+            "in": "query",
+            "name": "transit_accessibility",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/TransitAccessibility"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Transit Accessibility"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteSearchResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Routes",
+        "tags": [
+          "routes"
+        ]
+      }
+    },
+    "/routes/{route_id}": {
+      "get": {
+        "operationId": "get_route_detail_routes__route_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "route_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Route Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Route Detail",
+        "tags": [
+          "routes"
+        ]
+      }
+    }
+  },
+  "security": [],
+  "servers": [
+    {
+      "url": "/"
+    }
+  ]
+}
