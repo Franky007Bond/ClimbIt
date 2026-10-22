@@ -32,6 +32,22 @@ def save_route(session: Session, route: Route) -> uuid.UUID:
     return route_id
 
 
+def upsert_route(session: Session, route_id: uuid.UUID, route: Route) -> uuid.UUID:
+    incoming = route_to_record(route, route_id)
+    existing = session.get(RouteRecord, route_id)
+    if existing is None:
+        session.add(incoming)
+        session.flush()
+        return route_id
+    for column in RouteRecord.__table__.columns:
+        name = column.key
+        if name == "id":
+            continue
+        setattr(existing, name, getattr(incoming, name))
+    session.flush()
+    return route_id
+
+
 def get_route(session: Session, route_id: uuid.UUID) -> Route | None:
     record = session.get(RouteRecord, route_id)
     if record is None:

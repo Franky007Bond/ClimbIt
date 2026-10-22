@@ -13,7 +13,10 @@ From `backend/`:
 ```powershell
 uv run pytest
 uv run uvicorn app.main:app --host 127.0.0.1 --port 8000
+uv run python -m app.seed
 ```
+
+`uv run python -m app.seed` requires `DATABASE_URL` (Compose does not load seed data automatically). Example host URL for the published Compose port: `postgresql://climbit:climbit@127.0.0.1:5432/climbit`.
 
 ## Frontend
 

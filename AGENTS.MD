@@ -21,6 +21,7 @@ Commands
 - `uv run alembic check` - confirm the database schema matches SQLAlchemy
   metadata, from `backend/`
 - `uv run alembic heads` - print the migration head(s) from `backend/`
+- `uv run python -m app.seed` - load the six fixture routes from `backend/`. Requires `DATABASE_URL`. Compose does not load seed data automatically. Example host URL for the published Compose port: `postgresql://climbit:climbit@127.0.0.1:5432/climbit`
 - `npm install` - the build-time toolchain:  Vite
 
 Rules
