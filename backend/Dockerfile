@@ -6,6 +6,9 @@ WORKDIR /app
 
 COPY --chown=app:app pyproject.toml uv.lock ./
 COPY --chown=app:app app ./app
+COPY --chown=app:app alembic.ini ./
+COPY --chown=app:app alembic ./alembic
+COPY --chown=app:app entrypoint.py ./entrypoint.py
 
 RUN chown app:app /app
 
@@ -15,5 +18,4 @@ RUN uv sync --frozen --no-dev --no-cache
 
 ENV PATH="/app/.venv/bin:$PATH"
 
-ENTRYPOINT []
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+ENTRYPOINT ["python", "/app/entrypoint.py"]

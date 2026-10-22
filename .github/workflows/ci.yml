@@ -19,6 +19,20 @@ jobs:
     name: backend-test
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    services:
+      postgis:
+        image: postgis/postgis:17-3.5
+        env:
+          POSTGRES_USER: climbit
+          POSTGRES_PASSWORD: climbit
+          POSTGRES_DB: climbit
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U climbit -d climbit"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v7
 
@@ -28,4 +42,6 @@ jobs:
           enable-cache: false
 
       - working-directory: backend
+        env:
+          DATABASE_URL: postgresql://climbit:climbit@127.0.0.1:5432/climbit
         run: uv run --frozen pytest
