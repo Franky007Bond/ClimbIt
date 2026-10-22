@@ -80,6 +80,14 @@ def search_routes(session: Session, criteria: RouteSearchCriteria) -> list[Route
     return list(session.scalars(statement).all())
 
 
+def get_published_route_by_id(session: Session, route_id: uuid.UUID) -> RouteRecord | None:
+    statement = select(RouteRecord).where(
+        RouteRecord.id == route_id,
+        RouteRecord.publication == Publication.PUBLISHED.value,
+    )
+    return session.scalar(statement)
+
+
 def save_route(session: Session, route: Route) -> uuid.UUID:
     route_id = uuid.uuid4()
     session.add(route_to_record(route, route_id))

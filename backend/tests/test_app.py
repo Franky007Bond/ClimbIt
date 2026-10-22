@@ -23,3 +23,7 @@ def test_openapi_lists_health_and_ready() -> None:
     assert "/health" in body["paths"]
     assert "/ready" in body["paths"]
     assert "/routes" in body["paths"]
+    assert "/routes/{route_id}" in body["paths"]
+    route_detail = body["paths"]["/routes/{route_id}"]["get"]
+    assert "route_id" in route_detail["parameters"][0]["name"]
+    assert "200" in route_detail["responses"]
