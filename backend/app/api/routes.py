@@ -18,6 +18,7 @@ from app.domain.route import RouteType
 from app.domain.route import TransitAccessibility
 from app.models.route import RouteRecord
 from app.repositories.routes import RouteSearchCriteria
+from app.repositories.routes import _point_from_element
 from app.repositories.routes import difficulty_from_route_record
 from app.repositories.routes import get_published_route_by_id
 from app.repositories.routes import record_to_route
@@ -26,7 +27,7 @@ from app.repositories.routes import search_routes
 router = APIRouter(tags=["routes"])
 
 
-def _record_to_search_item(record: RouteRecord) -> RouteSearchItem:
+def _record_to_search_item(session: Session, record: RouteRecord) -> RouteSearchItem:
     from app.domain.route import Assessment
     from app.domain.route import Completeness
     from app.domain.route import Provenance
@@ -34,10 +35,16 @@ def _record_to_search_item(record: RouteRecord) -> RouteSearchItem:
     from app.domain.route import Region
     from app.domain.route import RegionCoverage
 
+    trailhead = _point_from_element(session, record.trailhead)
+    if trailhead is None:
+        msg = f"published route {record.id} is missing trailhead"
+        raise ValueError(msg)
+
     return RouteSearchItem(
         id=record.id,
         name=record.name,
         route_type=RouteType(record.route_type),
+        trailhead=trailhead,
         region=Region(
             name=record.region_name,
             country=record.region_country,
@@ -56,11 +63,10 @@ def _record_to_search_item(record: RouteRecord) -> RouteSearchItem:
 
 
 def _record_to_detail(session: Session, record: RouteRecord) -> RouteDetail:
-    item = _record_to_search_item(record)
+    item = _record_to_search_item(session, record)
     route = record_to_route(session, record)
     return RouteDetail(
         **item.model_dump(),
-        trailhead=route.trailhead,
         linestring=route.linestring,
         gpx=route.gpx,
         elevation_min_m=route.elevation_min_m,
@@ -135,4 +141,6 @@ def list_routes(
         transit_accessibility=transit_accessibility,
     )
     records = search_routes(session, criteria)
-    return RouteSearchResponse(routes=[_record_to_search_item(record) for record in records])
+    return RouteSearchResponse(
+        routes=[_record_to_search_item(session, record) for record in records]
+    )

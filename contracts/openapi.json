@@ -515,6 +515,7 @@
           "id",
           "name",
           "route_type",
+          "trailhead",
           "region",
           "publication",
           "provenance",
@@ -525,7 +526,6 @@
           "transit_accessibility",
           "season_months",
           "difficulty",
-          "trailhead",
           "linestring",
           "gpx",
           "elevation_min_m",
@@ -605,6 +605,9 @@
             "title": "Season Months",
             "type": "array"
           },
+          "trailhead": {
+            "$ref": "#/components/schemas/Point"
+          },
           "transit_accessibility": {
             "$ref": "#/components/schemas/TransitAccessibility"
           }
@@ -613,6 +616,7 @@
           "id",
           "name",
           "route_type",
+          "trailhead",
           "region",
           "publication",
           "provenance",

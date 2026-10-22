@@ -277,6 +277,7 @@ export type RouteSearchItem = {
      * Season Months
      */
     season_months: Array<number>;
+    trailhead: Point;
     transit_accessibility: TransitAccessibility;
 };
 

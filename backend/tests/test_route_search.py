@@ -127,6 +127,9 @@ def test_search_includes_route_state_and_region_coverage(seeded_client: TestClie
     assert alpine["region"]["coverage"] == "sample"
     assert alpine["region"]["name"] == "Chamonix"
     assert alpine["region"]["country"] == "FR"
+    trailhead = alpine["trailhead"]
+    assert trailhead is not None
+    assert "longitude" in trailhead and "latitude" in trailhead
 
 
 def test_search_region_filter_requires_exact_spelling_and_casing(

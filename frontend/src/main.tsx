@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { IntlProvider } from 'react-intl'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
+import './api/client'
 import { defaultLocale, messagesByLocale } from './i18n/messages'
 import './index.css'
 
