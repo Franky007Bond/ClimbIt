@@ -41,6 +41,10 @@ def _canonical_scale(scale: str) -> str | None:
     return _casefold_lookup(scale, aliases)
 
 
+def canonical_structured_scale(scale: str) -> str | None:
+    return _canonical_scale(scale)
+
+
 def _allowed_mapped_huebler() -> list[str]:
     table = _load_mappings()
     scale_name = table["mapped_huebler_scale"]

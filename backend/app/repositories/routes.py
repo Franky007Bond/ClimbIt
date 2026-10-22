@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import uuid
+from dataclasses import dataclass
 
 from geoalchemy2.elements import WKTElement
 from sqlalchemy import select
@@ -23,6 +24,60 @@ from app.domain.route import Route
 from app.domain.route import RouteType
 from app.domain.route import TransitAccessibility
 from app.models.route import RouteRecord
+
+
+@dataclass(frozen=True, slots=True)
+class RouteSearchCriteria:
+    region_name: str | None = None
+    country: str | None = None
+    route_type: RouteType | None = None
+    difficulty_structured_scale: str | None = None
+    difficulty_structured_values: list[str] | None = None
+    duration_min_minutes: int | None = None
+    duration_max_minutes: int | None = None
+    season_month: int | None = None
+    transit_accessibility: TransitAccessibility | None = None
+
+
+def search_routes(session: Session, criteria: RouteSearchCriteria) -> list[RouteRecord]:
+    statement = select(RouteRecord).where(
+        RouteRecord.publication == Publication.PUBLISHED.value
+    )
+    if criteria.region_name is not None:
+        normalized = criteria.region_name.strip()
+        statement = statement.where(RouteRecord.region_name == normalized)
+    if criteria.country is not None:
+        statement = statement.where(RouteRecord.region_country == criteria.country)
+    if criteria.route_type is not None:
+        statement = statement.where(RouteRecord.route_type == criteria.route_type.value)
+    if criteria.transit_accessibility is not None:
+        statement = statement.where(
+            RouteRecord.transit_accessibility == criteria.transit_accessibility.value
+        )
+    if criteria.duration_min_minutes is not None:
+        statement = statement.where(
+            RouteRecord.duration_minutes >= criteria.duration_min_minutes
+        )
+    if criteria.duration_max_minutes is not None:
+        statement = statement.where(
+            RouteRecord.duration_minutes <= criteria.duration_max_minutes
+        )
+    if criteria.season_month is not None:
+        statement = statement.where(
+            RouteRecord.season_months.contains([criteria.season_month])
+        )
+    if criteria.difficulty_structured_scale is not None:
+        statement = statement.where(
+            RouteRecord.difficulty_structured_scale == criteria.difficulty_structured_scale
+        )
+        if criteria.difficulty_structured_values is not None:
+            statement = statement.where(
+                RouteRecord.difficulty_structured_value.in_(
+                    criteria.difficulty_structured_values
+                )
+            )
+    statement = statement.order_by(RouteRecord.name.asc(), RouteRecord.id.asc())
+    return list(session.scalars(statement).all())
 
 
 def save_route(session: Session, route: Route) -> uuid.UUID:
@@ -201,6 +256,10 @@ def _linestring_from_element(session: Session, geom: object) -> LineString | Non
         return None
     pairs = _wkt_coordinates(wkt, "LINESTRING")
     return LineString(points=[Point(longitude=lon, latitude=lat) for lon, lat in pairs])
+
+
+def difficulty_from_route_record(record: RouteRecord) -> Difficulty | None:
+    return _difficulty_from_record(record)
 
 
 def _difficulty_from_record(record: RouteRecord) -> Difficulty | None:
