@@ -7,7 +7,8 @@ Documents
 Commands
 
 - `docker compose up -d --build` - start the API and PostGIS from the
-  repository root. The database service is named `db`
+  repository root. The database service is named `db`. Compose applies
+  pending migrations on start
 - `uv sync` - install dependencies
 - `uv run pytest` - the whole suite. The tests that read a built asset build it
   first, once per session, so a fresh checkout does not have to remember the npm
@@ -16,6 +17,10 @@ Commands
 - `uv run pytest tests/test_home.py` - one test file
 - `uv run ruff check . && uv run ruff format --check .` - lint and format check,
   run it before committing
+- `uv run alembic upgrade head` - apply pending migrations from `backend/`
+- `uv run alembic check` - confirm the database schema matches SQLAlchemy
+  metadata, from `backend/`
+- `uv run alembic heads` - print the migration head(s) from `backend/`
 - `npm install` - the build-time toolchain:  Vite
 
 Rules
