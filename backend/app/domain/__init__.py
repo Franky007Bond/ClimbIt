@@ -1,3 +1,10 @@
+from app.domain.closure import (
+    ClosureAssessment,
+    ClosureReviewStatus,
+    ClosureStatus,
+    closure_planning_input,
+    effective_closure_status,
+)
 from app.domain.difficulty import (
     Difficulty,
     MappingConfidence,
@@ -20,6 +27,9 @@ from app.domain.route import (
 
 __all__ = [
     "Assessment",
+    "ClosureAssessment",
+    "ClosureReviewStatus",
+    "ClosureStatus",
     "Completeness",
     "Difficulty",
     "LineString",
@@ -32,6 +42,8 @@ __all__ = [
     "Route",
     "RouteType",
     "TransitAccessibility",
+    "closure_planning_input",
+    "effective_closure_status",
     "is_harder",
     "map_difficulty",
 ]

@@ -1,8 +1,10 @@
+from datetime import datetime, timezone
 from enum import Enum
 
 import pytest
 from pydantic import ValidationError
 
+from app.domain.closure import ClosureAssessment, ClosureReviewStatus, ClosureStatus
 from app.domain.difficulty import map_difficulty
 from app.domain.route import (
     Assessment,
@@ -424,7 +426,6 @@ def test_route_omits_out_of_scope_fields() -> None:
         "normalized_grade",
         "mapped_grade",
         "mapping_confidence",
-        "closure_assessment",
         "reviewed_at",
         "expires_at",
         "revisions",
@@ -516,3 +517,73 @@ def test_opaque_originals_still_construct_without_mapping() -> None:
     )
     assert route.original_difficulty_value == "Z"
     assert route.difficulty is None
+
+
+def _closure_assessment(**overrides) -> ClosureAssessment:
+    utc = timezone.utc
+    payload = {
+        "status": ClosureStatus.NONE_KNOWN,
+        "source_url": "https://example.invalid/closure-notice",
+        "owner": "maintainer",
+        "review_status": ClosureReviewStatus.REVIEWED,
+        "created_at": datetime(2026, 7, 1, 0, 0, 0, tzinfo=utc),
+        "updated_at": datetime(2026, 7, 10, 0, 0, 0, tzinfo=utc),
+        "reviewed_at": datetime(2026, 7, 10, 0, 0, 0, tzinfo=utc),
+        "expires_at": datetime(2026, 7, 15, 12, 0, 0, tzinfo=utc),
+    }
+    payload.update(overrides)
+    return ClosureAssessment(**payload)
+
+
+def test_route_closure_assessment_defaults_to_none() -> None:
+    route = _route()
+    assert route.closure_assessment is None
+    dumped = route.model_dump()
+    assert dumped["closure_assessment"] is None
+    assert dumped["closure_assessment"] != {
+        "status": ClosureStatus.NONE_KNOWN,
+    }
+    for name in ("reviewed_at", "expires_at", "source_url", "owner"):
+        assert name not in Route.model_fields
+    with pytest.raises(ValidationError):
+        _route(reviewed_at=datetime(2026, 7, 10, 0, 0, 0, tzinfo=timezone.utc))
+
+
+def test_published_alpine_hike_constructs_with_and_without_closure() -> None:
+    without_record = _route(
+        route_type=RouteType.ALPINE_HIKE,
+        **_published_geometry(),
+        approach_minutes=None,
+        technical_minutes=None,
+        descent_minutes=None,
+        closure_assessment=None,
+    )
+    assert without_record.publication is Publication.PUBLISHED
+    assert without_record.closure_assessment is None
+    with_record = _route(
+        route_type=RouteType.ALPINE_HIKE,
+        **_published_geometry(),
+        approach_minutes=None,
+        technical_minutes=None,
+        descent_minutes=None,
+        closure_assessment=_closure_assessment(),
+    )
+    assert with_record.closure_assessment is not None
+    assert with_record.closure_assessment.status is ClosureStatus.NONE_KNOWN
+
+
+def test_attached_closure_keeps_difficulty() -> None:
+    mapped = map_difficulty(RouteType.KLETTERSTEIG, "K3", "k1_k6")
+    assessment = _closure_assessment(status=ClosureStatus.ACTIVE)
+    route = _route(
+        route_type=RouteType.KLETTERSTEIG,
+        original_difficulty_value="K3",
+        original_difficulty_scale="k1_k6",
+        difficulty=mapped,
+        closure_assessment=assessment,
+    )
+    assert route.difficulty is not None
+    assert route.difficulty.mapped_huebler == "C"
+    assert route.closure_assessment is not None
+    assert route.closure_assessment.status is ClosureStatus.ACTIVE
+    assert route.closure_assessment.source_url == "https://example.invalid/closure-notice"

@@ -119,6 +119,7 @@ class Route(BaseModel):
     original_difficulty_value: str | None = None
     original_difficulty_scale: str | None = None
     difficulty: "Difficulty | None" = None
+    closure_assessment: "ClosureAssessment | None" = None
     season_months: set[int]
     season_note: str | None = None
     description: str
@@ -250,6 +251,8 @@ class Route(BaseModel):
 
         return self
 
+
+from app.domain.closure import ClosureAssessment as ClosureAssessment
 
 try:
     from app.domain.difficulty import Difficulty as Difficulty
