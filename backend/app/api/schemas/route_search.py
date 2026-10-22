@@ -8,6 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from app.domain.difficulty import Difficulty
 from app.domain.route import Assessment
 from app.domain.route import Completeness
+from app.domain.route import Point
 from app.domain.route import Provenance
 from app.domain.route import Publication
 from app.domain.route import Region
@@ -21,6 +22,7 @@ class RouteSearchItem(BaseModel):
     id: uuid.UUID
     name: str
     route_type: RouteType
+    trailhead: Point
     region: Region
     publication: Publication
     provenance: Provenance
