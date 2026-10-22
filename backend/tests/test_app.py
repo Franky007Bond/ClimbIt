@@ -22,3 +22,4 @@ def test_openapi_lists_health_and_ready() -> None:
     assert body["info"]["title"] == "ClimbIt"
     assert "/health" in body["paths"]
     assert "/ready" in body["paths"]
+    assert "/routes" in body["paths"]
