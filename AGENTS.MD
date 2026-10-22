@@ -6,8 +6,8 @@ Documents
 
 Commands
 
-- `docker compose up -d db` - Postgres, needed before anything touches the
-  database
+- `docker compose up -d --build` - start the API and PostGIS from the
+  repository root. The database service is named `db`
 - `uv sync` - install dependencies
 - `uv run pytest` - the whole suite. The tests that read a built asset build it
   first, once per session, so a fresh checkout does not have to remember the npm
