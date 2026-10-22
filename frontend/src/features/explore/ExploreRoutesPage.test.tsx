@@ -99,6 +99,12 @@ describe('ExploreRoutesPage filters', () => {
     expect(await screen.findByText('Alpine Alpha')).toBeInTheDocument()
     expect(screen.getByText('Alpine Beta')).toBeInTheDocument()
 
+    const alphaLink = screen.getByRole('link', { name: 'Alpine Alpha' })
+    expect(alphaLink).toHaveAttribute(
+      'href',
+      '/routes/11111111-1111-4111-8111-111111111111',
+    )
+
     const routeTypeSelect = screen.getByRole('combobox', {
       name: en['explore.filter.routeType.label'],
     })

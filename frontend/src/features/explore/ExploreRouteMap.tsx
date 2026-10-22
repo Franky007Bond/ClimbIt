@@ -1,10 +1,8 @@
 import { useEffect } from 'react'
-import { CircleMarker, MapContainer, TileLayer, useMap } from 'react-leaflet'
+import { CircleMarker, useMap } from 'react-leaflet'
 import type { RouteSearchItem } from '../../api/generated/types.gen'
-import 'leaflet/dist/leaflet.css'
-
-const DEFAULT_CENTER: [number, number] = [47.2, 10.5]
-const DEFAULT_ZOOM = 6
+import { ClimbItMapContainer } from '../map/ClimbItMapContainer'
+import { DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM } from '../map/mapConstants'
 
 type ExploreRouteMapProps = {
   routes: RouteSearchItem[]
@@ -15,7 +13,7 @@ function FitMapToRoutes({ routes }: { routes: RouteSearchItem[] }) {
 
   useEffect(() => {
     if (routes.length === 0) {
-      map.setView(DEFAULT_CENTER, DEFAULT_ZOOM)
+      map.setView(DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM)
       return
     }
     if (routes.length === 1) {
@@ -38,16 +36,7 @@ function FitMapToRoutes({ routes }: { routes: RouteSearchItem[] }) {
 
 export function ExploreRouteMap({ routes }: ExploreRouteMapProps) {
   return (
-    <MapContainer
-      center={DEFAULT_CENTER}
-      zoom={DEFAULT_ZOOM}
-      className="explore-map"
-      scrollWheelZoom
-    >
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      />
+    <ClimbItMapContainer className="explore-map" scrollWheelZoom>
       <FitMapToRoutes routes={routes} />
       {routes.map((route) => (
         <CircleMarker
@@ -57,6 +46,6 @@ export function ExploreRouteMap({ routes }: ExploreRouteMapProps) {
           pathOptions={{ color: '#2563eb', fillColor: '#2563eb', fillOpacity: 0.85 }}
         />
       ))}
-    </MapContainer>
+    </ClimbItMapContainer>
   )
 }

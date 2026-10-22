@@ -1,15 +1,32 @@
+import { FormattedMessage } from 'react-intl'
 import { useParams } from 'react-router-dom'
-import { PlaceholderPage } from '../components/PlaceholderPage'
+import { RouteDetailContent } from '../features/route-detail/RouteDetailContent'
+import { useRouteDetail } from '../features/route-detail/useRouteDetail'
 
 export function RouteDetailPage() {
   const { routeId } = useParams<{ routeId: string }>()
-  const resolvedRouteId = routeId ?? ''
+  const { route, status } = useRouteDetail(routeId)
 
   return (
-    <PlaceholderPage
-      titleId="page.routeDetail.title"
-      bodyId="page.routeDetail.body"
-      bodyValues={{ routeId: resolvedRouteId }}
-    />
+    <main className="route-detail-page">
+      {status === 'loading' ? (
+        <p className="route-detail-status" role="status">
+          <FormattedMessage id="routeDetail.status.loading" />
+        </p>
+      ) : null}
+      {status === 'notFound' ? (
+        <p className="route-detail-status route-detail-status-error" role="alert">
+          <FormattedMessage id="routeDetail.status.notFound" />
+        </p>
+      ) : null}
+      {status === 'error' ? (
+        <p className="route-detail-status route-detail-status-error" role="alert">
+          <FormattedMessage id="routeDetail.status.error" />
+        </p>
+      ) : null}
+      {status === 'ready' && route ? (
+        <RouteDetailContent route={route} />
+      ) : null}
+    </main>
   )
 }
