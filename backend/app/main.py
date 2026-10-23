@@ -4,6 +4,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.plans import router as plans_router
+from app.api.maintainer import router as maintainer_router
+from app.api.maintainer_revisions import router as maintainer_revisions_router
 from app.api.routes import router as routes_router
 from app.health import health_body, ready_response
 from app.json_logging import configure_logging, log_http_access
@@ -33,6 +36,9 @@ app.add_middleware(
 
 app.middleware("http")(log_http_access)
 app.include_router(routes_router)
+app.include_router(plans_router)
+app.include_router(maintainer_router)
+app.include_router(maintainer_revisions_router)
 
 
 @app.get("/health")

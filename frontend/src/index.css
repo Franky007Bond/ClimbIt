@@ -31,7 +31,8 @@ body {
 }
 
 .app-shell:has(.explore-page),
-.app-shell:has(.route-detail-page) {
+.app-shell:has(.route-detail-page),
+.app-shell:has(.route-wiki-page) {
   max-width: none;
   padding-left: 0;
   padding-right: 0;
@@ -434,4 +435,110 @@ main p {
   .route-detail-map {
     min-height: calc(100svh - 7rem);
   }
+}
+
+.route-wiki-page {
+  padding: 1.25rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.route-wiki-layout {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) minmax(320px, 2fr);
+  gap: 1.5rem;
+}
+
+.route-wiki-queue ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.route-wiki-queue button {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: #fff;
+  cursor: pointer;
+}
+
+.route-wiki-queue-selected {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+.route-wiki-login form {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 360px;
+}
+
+.route-wiki-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.trip-planner {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.trip-planner-form {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 420px;
+}
+
+.trip-planner-form label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.trip-planner-rec {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.trip-planner-rec--green {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.trip-planner-rec--yellow {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.trip-planner-rec--red {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.trip-planner-rec--unknown {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.trip-planner-components {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.trip-planner-disclaimer {
+  font-size: 0.9rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
 }

@@ -92,6 +92,72 @@
         "title": "Completeness",
         "type": "string"
       },
+      "DescriptiveEditRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "base_revision_number": {
+            "title": "Base Revision Number",
+            "type": "integer"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "season_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Season Note"
+          }
+        },
+        "required": [
+          "base_revision_number"
+        ],
+        "title": "DescriptiveEditRequest",
+        "type": "object"
+      },
+      "DescriptiveEditResponse": {
+        "properties": {
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "revision_number": {
+            "title": "Revision Number",
+            "type": "integer"
+          },
+          "season_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Season Note"
+          }
+        },
+        "required": [
+          "revision_number",
+          "description",
+          "season_note"
+        ],
+        "title": "DescriptiveEditResponse",
+        "type": "object"
+      },
       "Difficulty": {
         "additionalProperties": false,
         "properties": {
@@ -184,6 +250,39 @@
         "title": "Difficulty",
         "type": "object"
       },
+      "FieldDiffItem": {
+        "properties": {
+          "after": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "title": "After"
+          },
+          "before": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Before"
+          },
+          "field": {
+            "title": "Field",
+            "type": "string"
+          }
+        },
+        "required": [
+          "field",
+          "before",
+          "after"
+        ],
+        "title": "FieldDiffItem",
+        "type": "object"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -215,6 +314,40 @@
         "title": "LineString",
         "type": "object"
       },
+      "MaintainerLoginRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "password": {
+            "minLength": 1,
+            "title": "Password",
+            "type": "string"
+          },
+          "username": {
+            "minLength": 1,
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "MaintainerLoginRequest",
+        "type": "object"
+      },
+      "MaintainerSessionResponse": {
+        "properties": {
+          "username": {
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username"
+        ],
+        "title": "MaintainerSessionResponse",
+        "type": "object"
+      },
       "MappingConfidence": {
         "enum": [
           "exact",
@@ -223,6 +356,198 @@
         ],
         "title": "MappingConfidence",
         "type": "string"
+      },
+      "PendingRevisionItem": {
+        "properties": {
+          "author_kind": {
+            "title": "Author Kind",
+            "type": "string"
+          },
+          "changed_keys": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Changed Keys",
+            "type": "array"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "revision_id": {
+            "format": "uuid",
+            "title": "Revision Id",
+            "type": "string"
+          },
+          "revision_number": {
+            "title": "Revision Number",
+            "type": "integer"
+          },
+          "route_id": {
+            "format": "uuid",
+            "title": "Route Id",
+            "type": "string"
+          },
+          "route_name": {
+            "title": "Route Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "revision_id",
+          "route_id",
+          "route_name",
+          "revision_number",
+          "created_at",
+          "author_kind",
+          "changed_keys"
+        ],
+        "title": "PendingRevisionItem",
+        "type": "object"
+      },
+      "PlanRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "origin": {
+            "minLength": 1,
+            "title": "Origin",
+            "type": "string"
+          },
+          "plan_date": {
+            "format": "date",
+            "title": "Plan Date",
+            "type": "string"
+          },
+          "start_time_local": {
+            "anyOf": [
+              {
+                "format": "time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Time Local"
+          }
+        },
+        "required": [
+          "plan_date",
+          "origin"
+        ],
+        "title": "PlanRequest",
+        "type": "object"
+      },
+      "PlanResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "components": {
+            "additionalProperties": true,
+            "title": "Components",
+            "type": "object"
+          },
+          "confidence": {
+            "title": "Confidence",
+            "type": "string"
+          },
+          "daylight": {
+            "additionalProperties": true,
+            "title": "Daylight",
+            "type": "object"
+          },
+          "explanation": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Explanation",
+            "type": "array"
+          },
+          "gear": {
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "title": "Gear",
+            "type": "array"
+          },
+          "origin_region": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Origin Region"
+          },
+          "plan_date": {
+            "title": "Plan Date",
+            "type": "string"
+          },
+          "plan_run_id": {
+            "title": "Plan Run Id",
+            "type": "string"
+          },
+          "recommendation": {
+            "title": "Recommendation",
+            "type": "string"
+          },
+          "route_id": {
+            "title": "Route Id",
+            "type": "string"
+          },
+          "safety_disclaimer": {
+            "title": "Safety Disclaimer",
+            "type": "string"
+          },
+          "thunderstorm": {
+            "additionalProperties": true,
+            "title": "Thunderstorm",
+            "type": "object"
+          },
+          "trailhead_timezone": {
+            "title": "Trailhead Timezone",
+            "type": "string"
+          },
+          "transit_summary": {
+            "title": "Transit Summary",
+            "type": "string"
+          },
+          "weather": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weather"
+          }
+        },
+        "required": [
+          "plan_run_id",
+          "route_id",
+          "plan_date",
+          "trailhead_timezone",
+          "safety_disclaimer",
+          "recommendation",
+          "confidence",
+          "components",
+          "weather",
+          "gear",
+          "daylight",
+          "explanation",
+          "thunderstorm",
+          "transit_summary",
+          "origin_region"
+        ],
+        "title": "PlanResponse",
+        "type": "object"
       },
       "Point": {
         "additionalProperties": false,
@@ -245,6 +570,312 @@
           "latitude"
         ],
         "title": "Point",
+        "type": "object"
+      },
+      "ProtectedEditRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "approach_minutes": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approach Minutes"
+          },
+          "base_revision_number": {
+            "title": "Base Revision Number",
+            "type": "integer"
+          },
+          "closure_assessment": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ClosureAssessment"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deleted": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deleted"
+          },
+          "descent_minutes": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Descent Minutes"
+          },
+          "difficulty": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Difficulty"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "duration_is_estimated": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Is Estimated"
+          },
+          "duration_minutes": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Minutes"
+          },
+          "elevation_gain_m": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Elevation Gain M"
+          },
+          "elevation_loss_m": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Elevation Loss M"
+          },
+          "elevation_max_m": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Elevation Max M"
+          },
+          "elevation_min_m": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Elevation Min M"
+          },
+          "gpx": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gpx"
+          },
+          "linestring": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LineString"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "official_source_links": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Official Source Links"
+          },
+          "original_difficulty_scale": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Original Difficulty Scale"
+          },
+          "original_difficulty_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Original Difficulty Value"
+          },
+          "publication": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Publication"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "region": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Region"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "route_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RouteType"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "season_months": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Season Months"
+          },
+          "technical_minutes": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Technical Minutes"
+          },
+          "trailhead": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Point"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transit_accessibility": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TransitAccessibility"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "base_revision_number"
+        ],
+        "title": "ProtectedEditRequest",
+        "type": "object"
+      },
+      "ProtectedEditResponse": {
+        "properties": {
+          "application_status": {
+            "title": "Application Status",
+            "type": "string"
+          },
+          "revision_id": {
+            "title": "Revision Id",
+            "type": "string"
+          },
+          "revision_number": {
+            "title": "Revision Number",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "revision_id",
+          "revision_number",
+          "application_status"
+        ],
+        "title": "ProtectedEditResponse",
         "type": "object"
       },
       "Provenance": {
@@ -299,6 +930,95 @@
         ],
         "title": "RegionCoverage",
         "type": "string"
+      },
+      "RevertRequest": {
+        "properties": {
+          "target_revision_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Revision Number"
+          }
+        },
+        "title": "RevertRequest",
+        "type": "object"
+      },
+      "RevertResponse": {
+        "properties": {
+          "application_status": {
+            "title": "Application Status",
+            "type": "string"
+          },
+          "revision_id": {
+            "format": "uuid",
+            "title": "Revision Id",
+            "type": "string"
+          },
+          "revision_number": {
+            "title": "Revision Number",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "revision_id",
+          "revision_number",
+          "application_status"
+        ],
+        "title": "RevertResponse",
+        "type": "object"
+      },
+      "RevisionDetailResponse": {
+        "properties": {
+          "application_status": {
+            "title": "Application Status",
+            "type": "string"
+          },
+          "author_kind": {
+            "title": "Author Kind",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "field_diffs": {
+            "items": {
+              "$ref": "#/components/schemas/FieldDiffItem"
+            },
+            "title": "Field Diffs",
+            "type": "array"
+          },
+          "revision_id": {
+            "format": "uuid",
+            "title": "Revision Id",
+            "type": "string"
+          },
+          "revision_number": {
+            "title": "Revision Number",
+            "type": "integer"
+          },
+          "route_id": {
+            "format": "uuid",
+            "title": "Route Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "revision_id",
+          "route_id",
+          "application_status",
+          "revision_number",
+          "created_at",
+          "author_kind",
+          "field_diffs"
+        ],
+        "title": "RevisionDetailResponse",
+        "type": "object"
       },
       "RouteDetail": {
         "additionalProperties": false,
@@ -730,6 +1450,273 @@
         "summary": "Health"
       }
     },
+    "/maintainer/revisions/pending": {
+      "get": {
+        "operationId": "get_pending_revisions_maintainer_revisions_pending_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PendingRevisionItem"
+                  },
+                  "title": "Response Get Pending Revisions Maintainer Revisions Pending Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Pending Revisions",
+        "tags": [
+          "maintainer"
+        ]
+      }
+    },
+    "/maintainer/revisions/{revision_id}": {
+      "get": {
+        "operationId": "get_revision_detail_maintainer_revisions__revision_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "revision_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Revision Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevisionDetailResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Revision Detail",
+        "tags": [
+          "maintainer"
+        ]
+      }
+    },
+    "/maintainer/revisions/{revision_id}/approve": {
+      "post": {
+        "operationId": "approve_revision_maintainer_revisions__revision_id__approve_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "revision_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Revision Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Approve Revision",
+        "tags": [
+          "maintainer"
+        ]
+      }
+    },
+    "/maintainer/revisions/{revision_id}/reject": {
+      "post": {
+        "operationId": "reject_revision_maintainer_revisions__revision_id__reject_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "revision_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Revision Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reject Revision",
+        "tags": [
+          "maintainer"
+        ]
+      }
+    },
+    "/maintainer/revisions/{revision_id}/revert": {
+      "post": {
+        "operationId": "revert_revision_maintainer_revisions__revision_id__revert_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "revision_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Revision Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevertRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevertResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Revert Revision",
+        "tags": [
+          "maintainer"
+        ]
+      }
+    },
+    "/maintainer/session": {
+      "get": {
+        "operationId": "get_maintainer_session_maintainer_session_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaintainerSessionResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Maintainer Session",
+        "tags": [
+          "maintainer"
+        ]
+      }
+    },
+    "/maintainer/sessions": {
+      "delete": {
+        "operationId": "delete_maintainer_session_maintainer_sessions_delete",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Delete Maintainer Session",
+        "tags": [
+          "maintainer"
+        ]
+      },
+      "post": {
+        "operationId": "create_maintainer_session_maintainer_sessions_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaintainerLoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaintainerSessionResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Maintainer Session",
+        "tags": [
+          "maintainer"
+        ]
+      }
+    },
     "/ready": {
       "get": {
         "operationId": "ready_ready_get",
@@ -983,6 +1970,197 @@
           }
         },
         "summary": "Get Route Detail",
+        "tags": [
+          "routes"
+        ]
+      }
+    },
+    "/routes/{route_id}/descriptive": {
+      "patch": {
+        "operationId": "patch_route_descriptive_routes__route_id__descriptive_patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "route_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Route Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-ClimbIt-Anonymous-Id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Climbit-Anonymous-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DescriptiveEditRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DescriptiveEditResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Patch Route Descriptive",
+        "tags": [
+          "routes"
+        ]
+      }
+    },
+    "/routes/{route_id}/plans": {
+      "post": {
+        "operationId": "create_plan_routes__route_id__plans_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "route_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Route Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Plan",
+        "tags": [
+          "plans"
+        ]
+      }
+    },
+    "/routes/{route_id}/protected-edits": {
+      "post": {
+        "operationId": "post_route_protected_edit_routes__route_id__protected_edits_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "route_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Route Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-ClimbIt-Anonymous-Id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Climbit-Anonymous-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProtectedEditRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProtectedEditResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Post Route Protected Edit",
         "tags": [
           "routes"
         ]

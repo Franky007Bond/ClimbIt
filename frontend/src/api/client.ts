@@ -8,6 +8,9 @@ const baseUrl =
       ? ''
       : 'http://127.0.0.1:8000'
 
-client.setConfig({ baseUrl })
+client.setConfig({
+  baseUrl,
+  credentials: 'include',
+})
 
 export { client }

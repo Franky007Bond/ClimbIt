@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { GetRouteDetailRoutesRouteIdGetData, GetRouteDetailRoutesRouteIdGetErrors, GetRouteDetailRoutesRouteIdGetResponses, HealthHealthGetData, HealthHealthGetResponses, ListRoutesRoutesGetData, ListRoutesRoutesGetErrors, ListRoutesRoutesGetResponses, ReadyReadyGetData, ReadyReadyGetResponses } from './types.gen';
+import type { ApproveRevisionMaintainerRevisionsRevisionIdApprovePostData, ApproveRevisionMaintainerRevisionsRevisionIdApprovePostErrors, ApproveRevisionMaintainerRevisionsRevisionIdApprovePostResponses, CreateMaintainerSessionMaintainerSessionsPostData, CreateMaintainerSessionMaintainerSessionsPostErrors, CreateMaintainerSessionMaintainerSessionsPostResponses, CreatePlanRoutesRouteIdPlansPostData, CreatePlanRoutesRouteIdPlansPostErrors, CreatePlanRoutesRouteIdPlansPostResponses, DeleteMaintainerSessionMaintainerSessionsDeleteData, DeleteMaintainerSessionMaintainerSessionsDeleteResponses, GetMaintainerSessionMaintainerSessionGetData, GetMaintainerSessionMaintainerSessionGetResponses, GetPendingRevisionsMaintainerRevisionsPendingGetData, GetPendingRevisionsMaintainerRevisionsPendingGetResponses, GetRevisionDetailMaintainerRevisionsRevisionIdGetData, GetRevisionDetailMaintainerRevisionsRevisionIdGetErrors, GetRevisionDetailMaintainerRevisionsRevisionIdGetResponses, GetRouteDetailRoutesRouteIdGetData, GetRouteDetailRoutesRouteIdGetErrors, GetRouteDetailRoutesRouteIdGetResponses, HealthHealthGetData, HealthHealthGetResponses, ListRoutesRoutesGetData, ListRoutesRoutesGetErrors, ListRoutesRoutesGetResponses, PatchRouteDescriptiveRoutesRouteIdDescriptivePatchData, PatchRouteDescriptiveRoutesRouteIdDescriptivePatchErrors, PatchRouteDescriptiveRoutesRouteIdDescriptivePatchResponses, PostRouteProtectedEditRoutesRouteIdProtectedEditsPostData, PostRouteProtectedEditRoutesRouteIdProtectedEditsPostErrors, PostRouteProtectedEditRoutesRouteIdProtectedEditsPostResponses, ReadyReadyGetData, ReadyReadyGetResponses, RejectRevisionMaintainerRevisionsRevisionIdRejectPostData, RejectRevisionMaintainerRevisionsRevisionIdRejectPostErrors, RejectRevisionMaintainerRevisionsRevisionIdRejectPostResponses, RevertRevisionMaintainerRevisionsRevisionIdRevertPostData, RevertRevisionMaintainerRevisionsRevisionIdRevertPostErrors, RevertRevisionMaintainerRevisionsRevisionIdRevertPostResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -24,6 +24,60 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 export const healthHealthGet = <ThrowOnError extends boolean = false>(options?: Options<HealthHealthGetData, ThrowOnError>) => (options?.client ?? client).get<HealthHealthGetResponses, unknown, ThrowOnError>({ url: '/health', ...options });
 
 /**
+ * Get Pending Revisions
+ */
+export const getPendingRevisionsMaintainerRevisionsPendingGet = <ThrowOnError extends boolean = false>(options?: Options<GetPendingRevisionsMaintainerRevisionsPendingGetData, ThrowOnError>) => (options?.client ?? client).get<GetPendingRevisionsMaintainerRevisionsPendingGetResponses, unknown, ThrowOnError>({ url: '/maintainer/revisions/pending', ...options });
+
+/**
+ * Get Revision Detail
+ */
+export const getRevisionDetailMaintainerRevisionsRevisionIdGet = <ThrowOnError extends boolean = false>(options: Options<GetRevisionDetailMaintainerRevisionsRevisionIdGetData, ThrowOnError>) => (options.client ?? client).get<GetRevisionDetailMaintainerRevisionsRevisionIdGetResponses, GetRevisionDetailMaintainerRevisionsRevisionIdGetErrors, ThrowOnError>({ url: '/maintainer/revisions/{revision_id}', ...options });
+
+/**
+ * Approve Revision
+ */
+export const approveRevisionMaintainerRevisionsRevisionIdApprovePost = <ThrowOnError extends boolean = false>(options: Options<ApproveRevisionMaintainerRevisionsRevisionIdApprovePostData, ThrowOnError>) => (options.client ?? client).post<ApproveRevisionMaintainerRevisionsRevisionIdApprovePostResponses, ApproveRevisionMaintainerRevisionsRevisionIdApprovePostErrors, ThrowOnError>({ url: '/maintainer/revisions/{revision_id}/approve', ...options });
+
+/**
+ * Reject Revision
+ */
+export const rejectRevisionMaintainerRevisionsRevisionIdRejectPost = <ThrowOnError extends boolean = false>(options: Options<RejectRevisionMaintainerRevisionsRevisionIdRejectPostData, ThrowOnError>) => (options.client ?? client).post<RejectRevisionMaintainerRevisionsRevisionIdRejectPostResponses, RejectRevisionMaintainerRevisionsRevisionIdRejectPostErrors, ThrowOnError>({ url: '/maintainer/revisions/{revision_id}/reject', ...options });
+
+/**
+ * Revert Revision
+ */
+export const revertRevisionMaintainerRevisionsRevisionIdRevertPost = <ThrowOnError extends boolean = false>(options: Options<RevertRevisionMaintainerRevisionsRevisionIdRevertPostData, ThrowOnError>) => (options.client ?? client).post<RevertRevisionMaintainerRevisionsRevisionIdRevertPostResponses, RevertRevisionMaintainerRevisionsRevisionIdRevertPostErrors, ThrowOnError>({
+    url: '/maintainer/revisions/{revision_id}/revert',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Get Maintainer Session
+ */
+export const getMaintainerSessionMaintainerSessionGet = <ThrowOnError extends boolean = false>(options?: Options<GetMaintainerSessionMaintainerSessionGetData, ThrowOnError>) => (options?.client ?? client).get<GetMaintainerSessionMaintainerSessionGetResponses, unknown, ThrowOnError>({ url: '/maintainer/session', ...options });
+
+/**
+ * Delete Maintainer Session
+ */
+export const deleteMaintainerSessionMaintainerSessionsDelete = <ThrowOnError extends boolean = false>(options?: Options<DeleteMaintainerSessionMaintainerSessionsDeleteData, ThrowOnError>) => (options?.client ?? client).delete<DeleteMaintainerSessionMaintainerSessionsDeleteResponses, unknown, ThrowOnError>({ url: '/maintainer/sessions', ...options });
+
+/**
+ * Create Maintainer Session
+ */
+export const createMaintainerSessionMaintainerSessionsPost = <ThrowOnError extends boolean = false>(options: Options<CreateMaintainerSessionMaintainerSessionsPostData, ThrowOnError>) => (options.client ?? client).post<CreateMaintainerSessionMaintainerSessionsPostResponses, CreateMaintainerSessionMaintainerSessionsPostErrors, ThrowOnError>({
+    url: '/maintainer/sessions',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
  * Ready
  */
 export const readyReadyGet = <ThrowOnError extends boolean = false>(options?: Options<ReadyReadyGetData, ThrowOnError>) => (options?.client ?? client).get<ReadyReadyGetResponses, unknown, ThrowOnError>({ url: '/ready', ...options });
@@ -37,3 +91,39 @@ export const listRoutesRoutesGet = <ThrowOnError extends boolean = false>(option
  * Get Route Detail
  */
 export const getRouteDetailRoutesRouteIdGet = <ThrowOnError extends boolean = false>(options: Options<GetRouteDetailRoutesRouteIdGetData, ThrowOnError>) => (options.client ?? client).get<GetRouteDetailRoutesRouteIdGetResponses, GetRouteDetailRoutesRouteIdGetErrors, ThrowOnError>({ url: '/routes/{route_id}', ...options });
+
+/**
+ * Patch Route Descriptive
+ */
+export const patchRouteDescriptiveRoutesRouteIdDescriptivePatch = <ThrowOnError extends boolean = false>(options: Options<PatchRouteDescriptiveRoutesRouteIdDescriptivePatchData, ThrowOnError>) => (options.client ?? client).patch<PatchRouteDescriptiveRoutesRouteIdDescriptivePatchResponses, PatchRouteDescriptiveRoutesRouteIdDescriptivePatchErrors, ThrowOnError>({
+    url: '/routes/{route_id}/descriptive',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Create Plan
+ */
+export const createPlanRoutesRouteIdPlansPost = <ThrowOnError extends boolean = false>(options: Options<CreatePlanRoutesRouteIdPlansPostData, ThrowOnError>) => (options.client ?? client).post<CreatePlanRoutesRouteIdPlansPostResponses, CreatePlanRoutesRouteIdPlansPostErrors, ThrowOnError>({
+    url: '/routes/{route_id}/plans',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Post Route Protected Edit
+ */
+export const postRouteProtectedEditRoutesRouteIdProtectedEditsPost = <ThrowOnError extends boolean = false>(options: Options<PostRouteProtectedEditRoutesRouteIdProtectedEditsPostData, ThrowOnError>) => (options.client ?? client).post<PostRouteProtectedEditRoutesRouteIdProtectedEditsPostResponses, PostRouteProtectedEditRoutesRouteIdProtectedEditsPostErrors, ThrowOnError>({
+    url: '/routes/{route_id}/protected-edits',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
