@@ -243,6 +243,39 @@
         "title": "Difficulty",
         "type": "object"
       },
+      "FieldDiffItem": {
+        "properties": {
+          "after": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "title": "After"
+          },
+          "before": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Before"
+          },
+          "field": {
+            "title": "Field",
+            "type": "string"
+          }
+        },
+        "required": [
+          "field",
+          "before",
+          "after"
+        ],
+        "title": "FieldDiffItem",
+        "type": "object"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -316,6 +349,54 @@
         ],
         "title": "MappingConfidence",
         "type": "string"
+      },
+      "PendingRevisionItem": {
+        "properties": {
+          "author_kind": {
+            "title": "Author Kind",
+            "type": "string"
+          },
+          "changed_keys": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Changed Keys",
+            "type": "array"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "revision_id": {
+            "format": "uuid",
+            "title": "Revision Id",
+            "type": "string"
+          },
+          "revision_number": {
+            "title": "Revision Number",
+            "type": "integer"
+          },
+          "route_id": {
+            "format": "uuid",
+            "title": "Route Id",
+            "type": "string"
+          },
+          "route_name": {
+            "title": "Route Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "revision_id",
+          "route_id",
+          "route_name",
+          "revision_number",
+          "created_at",
+          "author_kind",
+          "changed_keys"
+        ],
+        "title": "PendingRevisionItem",
+        "type": "object"
       },
       "Point": {
         "additionalProperties": false,
@@ -691,6 +772,54 @@
         ],
         "title": "RegionCoverage",
         "type": "string"
+      },
+      "RevisionDetailResponse": {
+        "properties": {
+          "application_status": {
+            "title": "Application Status",
+            "type": "string"
+          },
+          "author_kind": {
+            "title": "Author Kind",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "field_diffs": {
+            "items": {
+              "$ref": "#/components/schemas/FieldDiffItem"
+            },
+            "title": "Field Diffs",
+            "type": "array"
+          },
+          "revision_id": {
+            "format": "uuid",
+            "title": "Revision Id",
+            "type": "string"
+          },
+          "revision_number": {
+            "title": "Revision Number",
+            "type": "integer"
+          },
+          "route_id": {
+            "format": "uuid",
+            "title": "Route Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "revision_id",
+          "route_id",
+          "application_status",
+          "revision_number",
+          "created_at",
+          "author_kind",
+          "field_diffs"
+        ],
+        "title": "RevisionDetailResponse",
+        "type": "object"
       },
       "RouteDetail": {
         "additionalProperties": false,
@@ -1120,6 +1249,146 @@
           }
         },
         "summary": "Health"
+      }
+    },
+    "/maintainer/revisions/pending": {
+      "get": {
+        "operationId": "get_pending_revisions_maintainer_revisions_pending_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PendingRevisionItem"
+                  },
+                  "title": "Response Get Pending Revisions Maintainer Revisions Pending Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Pending Revisions",
+        "tags": [
+          "maintainer"
+        ]
+      }
+    },
+    "/maintainer/revisions/{revision_id}": {
+      "get": {
+        "operationId": "get_revision_detail_maintainer_revisions__revision_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "revision_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Revision Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevisionDetailResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Revision Detail",
+        "tags": [
+          "maintainer"
+        ]
+      }
+    },
+    "/maintainer/revisions/{revision_id}/approve": {
+      "post": {
+        "operationId": "approve_revision_maintainer_revisions__revision_id__approve_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "revision_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Revision Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Approve Revision",
+        "tags": [
+          "maintainer"
+        ]
+      }
+    },
+    "/maintainer/revisions/{revision_id}/reject": {
+      "post": {
+        "operationId": "reject_revision_maintainer_revisions__revision_id__reject_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "revision_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Revision Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reject Revision",
+        "tags": [
+          "maintainer"
+        ]
       }
     },
     "/maintainer/session": {

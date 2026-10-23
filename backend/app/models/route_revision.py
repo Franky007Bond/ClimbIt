@@ -11,6 +11,7 @@ from sqlalchemy import UniqueConstraint
 from sqlalchemy import Uuid
 from sqlalchemy import event
 from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import inspect
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 
@@ -46,7 +47,14 @@ _APPEND_ONLY_ERROR = "route revision rows are append-only"
 
 
 @event.listens_for(RouteRevisionRecord, "before_update")
-def _reject_route_revision_update(_mapper, _connection, _target) -> None:
+def _reject_route_revision_update(_mapper, _connection, target: RouteRevisionRecord) -> None:
+    state = inspect(target)
+    changed = {attr.key for attr in state.attrs if attr.history.has_changes()}
+    if changed == {"application_status"}:
+        history = state.attrs.application_status.history
+        previous = history.deleted[0] if history.deleted else None
+        if previous == "pending" and target.application_status in {"rejected", "superseded"}:
+            return
     raise RuntimeError(_APPEND_ONLY_ERROR)
 
 
