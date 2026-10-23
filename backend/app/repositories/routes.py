@@ -284,18 +284,22 @@ def _append_route_revision(
     after_snapshot: dict,
     author_kind: str,
     author_ref: str | None,
-) -> None:
+    application_status: str = "applied",
+) -> tuple[uuid.UUID, int]:
     if author_kind not in _AUTHOR_KINDS:
         raise ValueError(f"unsupported author_kind: {author_kind}")
+    if application_status not in {"applied", "pending"}:
+        raise ValueError(f"unsupported application_status: {application_status}")
     max_number = session.scalar(
         select(func.max(RouteRevisionRecord.revision_number)).where(
             RouteRevisionRecord.route_id == route_id
         )
     )
     revision_number = 1 if max_number is None else max_number + 1
+    revision_id = uuid.uuid4()
     session.add(
         RouteRevisionRecord(
-            id=uuid.uuid4(),
+            id=revision_id,
             route_id=route_id,
             revision_number=revision_number,
             created_at=datetime.now(timezone.utc),
@@ -303,9 +307,37 @@ def _append_route_revision(
             author_ref=author_ref,
             before_snapshot=before_snapshot,
             after_snapshot=after_snapshot,
-            application_status="applied",
+            application_status=application_status,
         )
     )
+    session.flush()
+    return revision_id, revision_number
+
+
+def submit_protected_edit(
+    session: Session,
+    route_id: uuid.UUID,
+    proposed: Route,
+    *,
+    author_ref: str | None = None,
+) -> tuple[uuid.UUID, int]:
+    record = get_published_route_by_id(session, route_id)
+    if record is None:
+        msg = "route not found"
+        raise LookupError(msg)
+    current = record_to_route(session, record)
+    before_snapshot = route_snapshot(current)
+    after_snapshot = route_snapshot(proposed)
+    revision_id, revision_number = _append_route_revision(
+        session,
+        route_id=route_id,
+        before_snapshot=before_snapshot,
+        after_snapshot=after_snapshot,
+        author_kind="anonymous",
+        author_ref=author_ref,
+        application_status="pending",
+    )
+    return revision_id, revision_number
 
 
 def _point_geojson(point: Point | None) -> dict | None:

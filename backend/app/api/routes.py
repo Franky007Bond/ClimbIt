@@ -9,6 +9,8 @@ from sqlalchemy.orm import Session
 from app.api.deps import get_db_session
 from app.api.schemas.route_descriptive_edit import DescriptiveEditRequest
 from app.api.schemas.route_descriptive_edit import DescriptiveEditResponse
+from app.api.schemas.route_protected_edit import ProtectedEditRequest
+from app.api.schemas.route_protected_edit import ProtectedEditResponse
 from app.api.route_search_filters import RouteSearchFilterError
 from app.api.route_search_filters import difficulty_values_in_filter
 from app.api.route_search_filters import parse_difficulty_filter
@@ -27,6 +29,7 @@ from app.repositories.routes import get_published_route_by_id
 from app.repositories.routes import record_to_route
 from app.repositories.routes import apply_descriptive_edit
 from app.repositories.routes import search_routes
+from app.repositories.routes import submit_protected_edit
 
 router = APIRouter(tags=["routes"])
 
@@ -154,6 +157,52 @@ def patch_route_descriptive(
         revision_number=revision_number,
         description=stored_description,
         season_note=stored_season_note,
+    )
+
+
+@router.post(
+    "/routes/{route_id}/protected-edits",
+    response_model=ProtectedEditResponse,
+    status_code=201,
+)
+def post_route_protected_edit(
+    route_id: uuid.UUID,
+    body: ProtectedEditRequest,
+    session: Session = Depends(get_db_session),
+    x_climbit_anonymous_id: str | None = Header(default=None, alias="X-ClimbIt-Anonymous-Id"),
+) -> ProtectedEditResponse:
+    record = get_published_route_by_id(session, route_id)
+    if record is None:
+        raise HTTPException(status_code=404, detail="Route not found")
+    current = record_to_route(session, record)
+    try:
+        proposed = body.merge_onto(current)
+    except ValidationError as exc:
+        raise HTTPException(
+            status_code=422,
+            detail=[{"type": error["type"], "msg": error["msg"]} for error in exc.errors()],
+        ) from exc
+
+    author_ref = None
+    if x_climbit_anonymous_id is not None:
+        stripped = x_climbit_anonymous_id.strip()
+        author_ref = stripped or None
+
+    try:
+        revision_id, revision_number = submit_protected_edit(
+            session,
+            route_id,
+            proposed,
+            author_ref=author_ref,
+        )
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail="Route not found") from exc
+
+    session.commit()
+    return ProtectedEditResponse(
+        revision_id=str(revision_id),
+        revision_number=revision_number,
+        application_status="pending",
     )
 
 
