@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.plans import router as plans_router
+from app.api.trips import router as trips_router
 from app.api.maintainer import router as maintainer_router
 from app.api.maintainer_revisions import router as maintainer_revisions_router
 from app.api.routes import router as routes_router
@@ -30,13 +31,15 @@ _cors_origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_cors_origins,
-    allow_methods=["GET"],
+    allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
     allow_headers=["*"],
+    allow_credentials=True,
 )
 
 app.middleware("http")(log_http_access)
 app.include_router(routes_router)
 app.include_router(plans_router)
+app.include_router(trips_router)
 app.include_router(maintainer_router)
 app.include_router(maintainer_revisions_router)
 

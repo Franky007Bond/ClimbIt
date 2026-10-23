@@ -1386,6 +1386,20 @@
         "title": "TransitAccessibility",
         "type": "string"
       },
+      "TripCapabilityStatus": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "TripCapabilityStatus",
+        "type": "object"
+      },
       "ValidationError": {
         "properties": {
           "ctx": {
@@ -2163,6 +2177,39 @@
         "summary": "Post Route Protected Edit",
         "tags": [
           "routes"
+        ]
+      }
+    },
+    "/trips/capability": {
+      "delete": {
+        "operationId": "delete_trip_capability_trips_capability_delete",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Delete Trip Capability",
+        "tags": [
+          "trips"
+        ]
+      },
+      "get": {
+        "operationId": "ensure_trip_capability_trips_capability_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TripCapabilityStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Ensure Trip Capability",
+        "tags": [
+          "trips"
         ]
       }
     }

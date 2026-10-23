@@ -670,6 +670,16 @@ export type RouteType = 'klettersteig' | 'alpine_hike' | 'outdoor_climbing';
 export type TransitAccessibility = 'transit_friendly' | 'limited' | 'unknown';
 
 /**
+ * TripCapabilityStatus
+ */
+export type TripCapabilityStatus = {
+    /**
+     * Status
+     */
+    status: string;
+};
+
+/**
  * ValidationError
  */
 export type ValidationError = {
@@ -1117,3 +1127,35 @@ export type PostRouteProtectedEditRoutesRouteIdProtectedEditsPostResponses = {
 };
 
 export type PostRouteProtectedEditRoutesRouteIdProtectedEditsPostResponse = PostRouteProtectedEditRoutesRouteIdProtectedEditsPostResponses[keyof PostRouteProtectedEditRoutesRouteIdProtectedEditsPostResponses];
+
+export type DeleteTripCapabilityTripsCapabilityDeleteData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/trips/capability';
+};
+
+export type DeleteTripCapabilityTripsCapabilityDeleteResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DeleteTripCapabilityTripsCapabilityDeleteResponse = DeleteTripCapabilityTripsCapabilityDeleteResponses[keyof DeleteTripCapabilityTripsCapabilityDeleteResponses];
+
+export type EnsureTripCapabilityTripsCapabilityGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/trips/capability';
+};
+
+export type EnsureTripCapabilityTripsCapabilityGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: TripCapabilityStatus;
+};
+
+export type EnsureTripCapabilityTripsCapabilityGetResponse = EnsureTripCapabilityTripsCapabilityGetResponses[keyof EnsureTripCapabilityTripsCapabilityGetResponses];
