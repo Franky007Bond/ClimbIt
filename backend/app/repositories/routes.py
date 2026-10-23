@@ -169,6 +169,43 @@ def upsert_route(
     return route_id
 
 
+def apply_descriptive_edit(
+    session: Session,
+    route_id: uuid.UUID,
+    *,
+    description: str | None = None,
+    season_note: str | None = None,
+    update_description: bool = False,
+    update_season_note: bool = False,
+    author_ref: str | None = None,
+) -> tuple[int, str, str | None]:
+    record = get_published_route_by_id(session, route_id)
+    if record is None:
+        msg = "route not found"
+        raise LookupError(msg)
+    route = record_to_route(session, record)
+    updates: dict[str, object] = {}
+    if update_description:
+        assert description is not None
+        updates["description"] = description
+    if update_season_note:
+        updates["season_note"] = season_note
+    updated = route.model_copy(update=updates)
+    upsert_route(
+        session,
+        route_id,
+        updated,
+        author_kind="anonymous",
+        author_ref=author_ref,
+    )
+    revisions = list_route_revisions(session, route_id)
+    if not revisions:
+        msg = "expected revision after descriptive edit"
+        raise RuntimeError(msg)
+    latest = revisions[-1]
+    return latest.revision_number, updated.description, updated.season_note
+
+
 def list_route_revisions(session: Session, route_id: uuid.UUID) -> list[RouteRevision]:
     rows = session.scalars(
         select(RouteRevisionRecord)

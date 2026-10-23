@@ -92,6 +92,65 @@
         "title": "Completeness",
         "type": "string"
       },
+      "DescriptiveEditRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "season_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Season Note"
+          }
+        },
+        "title": "DescriptiveEditRequest",
+        "type": "object"
+      },
+      "DescriptiveEditResponse": {
+        "properties": {
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "revision_number": {
+            "title": "Revision Number",
+            "type": "integer"
+          },
+          "season_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Season Note"
+          }
+        },
+        "required": [
+          "revision_number",
+          "description",
+          "season_note"
+        ],
+        "title": "DescriptiveEditResponse",
+        "type": "object"
+      },
       "Difficulty": {
         "additionalProperties": false,
         "properties": {
@@ -983,6 +1042,75 @@
           }
         },
         "summary": "Get Route Detail",
+        "tags": [
+          "routes"
+        ]
+      }
+    },
+    "/routes/{route_id}/descriptive": {
+      "patch": {
+        "operationId": "patch_route_descriptive_routes__route_id__descriptive_patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "route_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Route Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-ClimbIt-Anonymous-Id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Climbit-Anonymous-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DescriptiveEditRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DescriptiveEditResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Patch Route Descriptive",
         "tags": [
           "routes"
         ]
