@@ -260,7 +260,8 @@ def test_upgrade_head_creates_routes_table_only(migrated_test_database: str) -> 
     script = ScriptDirectory.from_config(_alembic_config())
     heads = script.get_heads()
     assert len(heads) == 1
-    assert script.get_revision(heads[0]).down_revision == "855431646849"
+    assert heads[0] == "b7c8d9e0f1a2"
+    assert script.get_revision(heads[0]).down_revision == "a3f1c2d4e5b6"
 
     engine = create_engine_from_database_url(_operator_url(migrated_test_database))
     try:
@@ -271,6 +272,10 @@ def test_upgrade_head_creates_routes_table_only(migrated_test_database: str) -> 
                 text("SELECT to_regclass('public.route_revisions')")
             ).scalar()
             assert str(route_revisions) == "route_revisions"
+            plan_runs = connection.execute(
+                text("SELECT to_regclass('public.plan_runs')")
+            ).scalar()
+            assert str(plan_runs) == "plan_runs"
             for relation in _MISSING_RELATIONS:
                 assert connection.execute(
                     text("SELECT to_regclass(:name)"),
