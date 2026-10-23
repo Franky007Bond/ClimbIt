@@ -10,6 +10,7 @@ from app.db import include_name
 from app.db import include_object
 from app.db import metadata as target_metadata
 from app.db import sqlalchemy_url
+import app.models.plan_run  # noqa: F401
 import app.models.route  # noqa: F401
 import app.models.route_revision  # noqa: F401
 
