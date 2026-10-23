@@ -113,6 +113,20 @@ def clear_trip_capability_cookie(response: Response, request: Request) -> None:
     )
 
 
+def require_trip_capability(
+    request: Request,
+    response: Response,
+    session: Session,
+) -> TripCapability:
+    capability = read_trip_capability(request, session)
+    if capability is not None:
+        return capability
+    capability, token = issue_trip_capability(session)
+    session.flush()
+    set_trip_capability_cookie(response, request, token)
+    return capability
+
+
 def invalidate_trip_capability_for_request(
     request: Request,
     session: Session,

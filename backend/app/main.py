@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.plans import router as plans_router
+from app.api.shares import router as shares_router
 from app.api.trips import router as trips_router
 from app.api.maintainer import router as maintainer_router
 from app.api.maintainer_revisions import router as maintainer_revisions_router
@@ -40,6 +41,7 @@ app.middleware("http")(log_http_access)
 app.include_router(routes_router)
 app.include_router(plans_router)
 app.include_router(trips_router)
+app.include_router(shares_router)
 app.include_router(maintainer_router)
 app.include_router(maintainer_revisions_router)
 

@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { ApproveRevisionMaintainerRevisionsRevisionIdApprovePostData, ApproveRevisionMaintainerRevisionsRevisionIdApprovePostErrors, ApproveRevisionMaintainerRevisionsRevisionIdApprovePostResponses, CreateMaintainerSessionMaintainerSessionsPostData, CreateMaintainerSessionMaintainerSessionsPostErrors, CreateMaintainerSessionMaintainerSessionsPostResponses, CreatePlanRoutesRouteIdPlansPostData, CreatePlanRoutesRouteIdPlansPostErrors, CreatePlanRoutesRouteIdPlansPostResponses, DeleteMaintainerSessionMaintainerSessionsDeleteData, DeleteMaintainerSessionMaintainerSessionsDeleteResponses, DeleteTripCapabilityTripsCapabilityDeleteData, DeleteTripCapabilityTripsCapabilityDeleteResponses, EnsureTripCapabilityTripsCapabilityGetData, EnsureTripCapabilityTripsCapabilityGetResponses, GetMaintainerSessionMaintainerSessionGetData, GetMaintainerSessionMaintainerSessionGetResponses, GetPendingRevisionsMaintainerRevisionsPendingGetData, GetPendingRevisionsMaintainerRevisionsPendingGetResponses, GetRevisionDetailMaintainerRevisionsRevisionIdGetData, GetRevisionDetailMaintainerRevisionsRevisionIdGetErrors, GetRevisionDetailMaintainerRevisionsRevisionIdGetResponses, GetRouteDetailRoutesRouteIdGetData, GetRouteDetailRoutesRouteIdGetErrors, GetRouteDetailRoutesRouteIdGetResponses, HealthHealthGetData, HealthHealthGetResponses, ListRoutesRoutesGetData, ListRoutesRoutesGetErrors, ListRoutesRoutesGetResponses, PatchRouteDescriptiveRoutesRouteIdDescriptivePatchData, PatchRouteDescriptiveRoutesRouteIdDescriptivePatchErrors, PatchRouteDescriptiveRoutesRouteIdDescriptivePatchResponses, PostRouteProtectedEditRoutesRouteIdProtectedEditsPostData, PostRouteProtectedEditRoutesRouteIdProtectedEditsPostErrors, PostRouteProtectedEditRoutesRouteIdProtectedEditsPostResponses, ReadyReadyGetData, ReadyReadyGetResponses, RejectRevisionMaintainerRevisionsRevisionIdRejectPostData, RejectRevisionMaintainerRevisionsRevisionIdRejectPostErrors, RejectRevisionMaintainerRevisionsRevisionIdRejectPostResponses, RevertRevisionMaintainerRevisionsRevisionIdRevertPostData, RevertRevisionMaintainerRevisionsRevisionIdRevertPostErrors, RevertRevisionMaintainerRevisionsRevisionIdRevertPostResponses } from './types.gen';
+import type { ApproveRevisionMaintainerRevisionsRevisionIdApprovePostData, ApproveRevisionMaintainerRevisionsRevisionIdApprovePostErrors, ApproveRevisionMaintainerRevisionsRevisionIdApprovePostResponses, CreateMaintainerSessionMaintainerSessionsPostData, CreateMaintainerSessionMaintainerSessionsPostErrors, CreateMaintainerSessionMaintainerSessionsPostResponses, CreatePlanRoutesRouteIdPlansPostData, CreatePlanRoutesRouteIdPlansPostErrors, CreatePlanRoutesRouteIdPlansPostResponses, CreateTripShareLinkTripsTripIdSharePostData, CreateTripShareLinkTripsTripIdSharePostErrors, CreateTripShareLinkTripsTripIdSharePostResponses, DeleteMaintainerSessionMaintainerSessionsDeleteData, DeleteMaintainerSessionMaintainerSessionsDeleteResponses, DeleteTripCapabilityTripsCapabilityDeleteData, DeleteTripCapabilityTripsCapabilityDeleteResponses, DeleteTripTripsTripIdDeleteData, DeleteTripTripsTripIdDeleteErrors, DeleteTripTripsTripIdDeleteResponses, EnsureTripCapabilityTripsCapabilityGetData, EnsureTripCapabilityTripsCapabilityGetResponses, GetMaintainerSessionMaintainerSessionGetData, GetMaintainerSessionMaintainerSessionGetResponses, GetPendingRevisionsMaintainerRevisionsPendingGetData, GetPendingRevisionsMaintainerRevisionsPendingGetResponses, GetRevisionDetailMaintainerRevisionsRevisionIdGetData, GetRevisionDetailMaintainerRevisionsRevisionIdGetErrors, GetRevisionDetailMaintainerRevisionsRevisionIdGetResponses, GetRouteDetailRoutesRouteIdGetData, GetRouteDetailRoutesRouteIdGetErrors, GetRouteDetailRoutesRouteIdGetResponses, GetSharedPlanSharesShareTokenGetData, GetSharedPlanSharesShareTokenGetErrors, GetSharedPlanSharesShareTokenGetResponses, GetTripTripsTripIdGetData, GetTripTripsTripIdGetErrors, GetTripTripsTripIdGetResponses, HealthHealthGetData, HealthHealthGetResponses, ListRoutesRoutesGetData, ListRoutesRoutesGetErrors, ListRoutesRoutesGetResponses, ListTripsTripsGetData, ListTripsTripsGetResponses, PatchRouteDescriptiveRoutesRouteIdDescriptivePatchData, PatchRouteDescriptiveRoutesRouteIdDescriptivePatchErrors, PatchRouteDescriptiveRoutesRouteIdDescriptivePatchResponses, PostRouteProtectedEditRoutesRouteIdProtectedEditsPostData, PostRouteProtectedEditRoutesRouteIdProtectedEditsPostErrors, PostRouteProtectedEditRoutesRouteIdProtectedEditsPostResponses, ReadyReadyGetData, ReadyReadyGetResponses, ReevaluateTripTripsTripIdReevaluatePostData, ReevaluateTripTripsTripIdReevaluatePostErrors, ReevaluateTripTripsTripIdReevaluatePostResponses, RejectRevisionMaintainerRevisionsRevisionIdRejectPostData, RejectRevisionMaintainerRevisionsRevisionIdRejectPostErrors, RejectRevisionMaintainerRevisionsRevisionIdRejectPostResponses, RevertRevisionMaintainerRevisionsRevisionIdRevertPostData, RevertRevisionMaintainerRevisionsRevisionIdRevertPostErrors, RevertRevisionMaintainerRevisionsRevisionIdRevertPostResponses, SaveTripTripsPostData, SaveTripTripsPostErrors, SaveTripTripsPostResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -129,6 +129,28 @@ export const postRouteProtectedEditRoutesRouteIdProtectedEditsPost = <ThrowOnErr
 });
 
 /**
+ * Get Shared Plan
+ */
+export const getSharedPlanSharesShareTokenGet = <ThrowOnError extends boolean = false>(options: Options<GetSharedPlanSharesShareTokenGetData, ThrowOnError>) => (options.client ?? client).get<GetSharedPlanSharesShareTokenGetResponses, GetSharedPlanSharesShareTokenGetErrors, ThrowOnError>({ url: '/shares/{share_token}', ...options });
+
+/**
+ * List Trips
+ */
+export const listTripsTripsGet = <ThrowOnError extends boolean = false>(options?: Options<ListTripsTripsGetData, ThrowOnError>) => (options?.client ?? client).get<ListTripsTripsGetResponses, unknown, ThrowOnError>({ url: '/trips', ...options });
+
+/**
+ * Save Trip
+ */
+export const saveTripTripsPost = <ThrowOnError extends boolean = false>(options: Options<SaveTripTripsPostData, ThrowOnError>) => (options.client ?? client).post<SaveTripTripsPostResponses, SaveTripTripsPostErrors, ThrowOnError>({
+    url: '/trips',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
  * Delete Trip Capability
  */
 export const deleteTripCapabilityTripsCapabilityDelete = <ThrowOnError extends boolean = false>(options?: Options<DeleteTripCapabilityTripsCapabilityDeleteData, ThrowOnError>) => (options?.client ?? client).delete<DeleteTripCapabilityTripsCapabilityDeleteResponses, unknown, ThrowOnError>({ url: '/trips/capability', ...options });
@@ -137,3 +159,23 @@ export const deleteTripCapabilityTripsCapabilityDelete = <ThrowOnError extends b
  * Ensure Trip Capability
  */
 export const ensureTripCapabilityTripsCapabilityGet = <ThrowOnError extends boolean = false>(options?: Options<EnsureTripCapabilityTripsCapabilityGetData, ThrowOnError>) => (options?.client ?? client).get<EnsureTripCapabilityTripsCapabilityGetResponses, unknown, ThrowOnError>({ url: '/trips/capability', ...options });
+
+/**
+ * Delete Trip
+ */
+export const deleteTripTripsTripIdDelete = <ThrowOnError extends boolean = false>(options: Options<DeleteTripTripsTripIdDeleteData, ThrowOnError>) => (options.client ?? client).delete<DeleteTripTripsTripIdDeleteResponses, DeleteTripTripsTripIdDeleteErrors, ThrowOnError>({ url: '/trips/{trip_id}', ...options });
+
+/**
+ * Get Trip
+ */
+export const getTripTripsTripIdGet = <ThrowOnError extends boolean = false>(options: Options<GetTripTripsTripIdGetData, ThrowOnError>) => (options.client ?? client).get<GetTripTripsTripIdGetResponses, GetTripTripsTripIdGetErrors, ThrowOnError>({ url: '/trips/{trip_id}', ...options });
+
+/**
+ * Reevaluate Trip
+ */
+export const reevaluateTripTripsTripIdReevaluatePost = <ThrowOnError extends boolean = false>(options: Options<ReevaluateTripTripsTripIdReevaluatePostData, ThrowOnError>) => (options.client ?? client).post<ReevaluateTripTripsTripIdReevaluatePostResponses, ReevaluateTripTripsTripIdReevaluatePostErrors, ThrowOnError>({ url: '/trips/{trip_id}/reevaluate', ...options });
+
+/**
+ * Create Trip Share Link
+ */
+export const createTripShareLinkTripsTripIdSharePost = <ThrowOnError extends boolean = false>(options: Options<CreateTripShareLinkTripsTripIdSharePostData, ThrowOnError>) => (options.client ?? client).post<CreateTripShareLinkTripsTripIdSharePostResponses, CreateTripShareLinkTripsTripIdSharePostErrors, ThrowOnError>({ url: '/trips/{trip_id}/share', ...options });
