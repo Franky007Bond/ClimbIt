@@ -1,5 +1,6 @@
 import { FormattedMessage, useIntl } from 'react-intl'
 import { NavLink, Outlet } from 'react-router-dom'
+import { DEMO_PUBLISHED_ROUTE_ID } from '../data/seedRouteIds'
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   isActive ? 'nav-link nav-link-active' : 'nav-link'
@@ -20,7 +21,7 @@ export function AppShell() {
           <NavLink to="/" end className={navLinkClass}>
             <FormattedMessage id="nav.exploreRoutes" />
           </NavLink>
-          <NavLink to="/routes/preview" className={navLinkClass}>
+          <NavLink to={`/routes/${DEMO_PUBLISHED_ROUTE_ID}`} className={navLinkClass}>
             <FormattedMessage id="nav.routeDetail" />
           </NavLink>
           <NavLink to="/plan" className={navLinkClass}>

@@ -131,7 +131,7 @@ describe('RouteDetailPage', () => {
     expect(screen.queryByRole('heading', { name: 'Test Klettersteig' })).not.toBeInTheDocument()
   })
 
-  it('shows a distinct error message for HTTP 422', async () => {
+  it('shows not-found for HTTP 422 invalid route id', async () => {
     vi.mocked(getRouteDetailRoutesRouteIdGet).mockResolvedValue({
       data: undefined,
       error: { detail: [] },
@@ -142,8 +142,8 @@ describe('RouteDetailPage', () => {
     renderRouteDetail('/routes/not-a-uuid')
 
     expect(await screen.findByRole('alert')).toHaveTextContent(
-      en['routeDetail.status.error'],
+      en['routeDetail.status.notFound'],
     )
-    expect(screen.queryByText(en['routeDetail.status.notFound'])).not.toBeInTheDocument()
+    expect(screen.queryByText(en['routeDetail.status.error'])).not.toBeInTheDocument()
   })
 })
