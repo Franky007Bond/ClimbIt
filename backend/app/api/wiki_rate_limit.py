@@ -10,6 +10,10 @@ from fastapi import HTTPException, Request
 _BUCKETS: dict[str, deque[float]] = defaultdict(deque)
 
 
+def reset_wiki_anonymous_rate_limit_buckets() -> None:
+    _BUCKETS.clear()
+
+
 def _limit_max() -> int:
     return int(os.environ.get("WIKI_ANONYMOUS_EDIT_RATE_LIMIT_MAX", "20"))
 
