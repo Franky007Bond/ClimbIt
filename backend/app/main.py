@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from app.api.plans import router as plans_router
 from app.api.maintainer import router as maintainer_router
 from app.api.maintainer_revisions import router as maintainer_revisions_router
 from app.api.routes import router as routes_router
@@ -19,6 +20,7 @@ configure_logging()
 app = FastAPI(title="ClimbIt", lifespan=lifespan)
 app.middleware("http")(log_http_access)
 app.include_router(routes_router)
+app.include_router(plans_router)
 app.include_router(maintainer_router)
 app.include_router(maintainer_revisions_router)
 

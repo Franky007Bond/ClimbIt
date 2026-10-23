@@ -405,6 +405,150 @@
         "title": "PendingRevisionItem",
         "type": "object"
       },
+      "PlanRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "origin": {
+            "minLength": 1,
+            "title": "Origin",
+            "type": "string"
+          },
+          "plan_date": {
+            "format": "date",
+            "title": "Plan Date",
+            "type": "string"
+          },
+          "start_time_local": {
+            "anyOf": [
+              {
+                "format": "time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Time Local"
+          }
+        },
+        "required": [
+          "plan_date",
+          "origin"
+        ],
+        "title": "PlanRequest",
+        "type": "object"
+      },
+      "PlanResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "components": {
+            "additionalProperties": true,
+            "title": "Components",
+            "type": "object"
+          },
+          "confidence": {
+            "title": "Confidence",
+            "type": "string"
+          },
+          "daylight": {
+            "additionalProperties": true,
+            "title": "Daylight",
+            "type": "object"
+          },
+          "explanation": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Explanation",
+            "type": "array"
+          },
+          "gear": {
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "title": "Gear",
+            "type": "array"
+          },
+          "origin_region": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Origin Region"
+          },
+          "plan_date": {
+            "title": "Plan Date",
+            "type": "string"
+          },
+          "plan_run_id": {
+            "title": "Plan Run Id",
+            "type": "string"
+          },
+          "recommendation": {
+            "title": "Recommendation",
+            "type": "string"
+          },
+          "route_id": {
+            "title": "Route Id",
+            "type": "string"
+          },
+          "safety_disclaimer": {
+            "title": "Safety Disclaimer",
+            "type": "string"
+          },
+          "thunderstorm": {
+            "additionalProperties": true,
+            "title": "Thunderstorm",
+            "type": "object"
+          },
+          "trailhead_timezone": {
+            "title": "Trailhead Timezone",
+            "type": "string"
+          },
+          "transit_summary": {
+            "title": "Transit Summary",
+            "type": "string"
+          },
+          "weather": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weather"
+          }
+        },
+        "required": [
+          "plan_run_id",
+          "route_id",
+          "plan_date",
+          "trailhead_timezone",
+          "safety_disclaimer",
+          "recommendation",
+          "confidence",
+          "components",
+          "weather",
+          "gear",
+          "daylight",
+          "explanation",
+          "thunderstorm",
+          "transit_summary",
+          "origin_region"
+        ],
+        "title": "PlanResponse",
+        "type": "object"
+      },
       "Point": {
         "additionalProperties": false,
         "properties": {
@@ -1897,6 +2041,59 @@
         "summary": "Patch Route Descriptive",
         "tags": [
           "routes"
+        ]
+      }
+    },
+    "/routes/{route_id}/plans": {
+      "post": {
+        "operationId": "create_plan_routes__route_id__plans_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "route_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Route Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Plan",
+        "tags": [
+          "plans"
         ]
       }
     },
