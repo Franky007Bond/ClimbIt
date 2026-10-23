@@ -57,6 +57,42 @@ export type ClosureStatus = 'none_known' | 'active';
 export type Completeness = 'complete' | 'incomplete';
 
 /**
+ * DescriptiveEditRequest
+ */
+export type DescriptiveEditRequest = {
+    /**
+     * Base Revision Number
+     */
+    base_revision_number: number;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Season Note
+     */
+    season_note?: string | null;
+};
+
+/**
+ * DescriptiveEditResponse
+ */
+export type DescriptiveEditResponse = {
+    /**
+     * Description
+     */
+    description: string;
+    /**
+     * Revision Number
+     */
+    revision_number: number;
+    /**
+     * Season Note
+     */
+    season_note: string | null;
+};
+
+/**
  * Difficulty
  */
 export type Difficulty = {
@@ -97,6 +133,24 @@ export type Difficulty = {
 };
 
 /**
+ * FieldDiffItem
+ */
+export type FieldDiffItem = {
+    /**
+     * After
+     */
+    after: unknown | null;
+    /**
+     * Before
+     */
+    before: unknown | null;
+    /**
+     * Field
+     */
+    field: string;
+};
+
+/**
  * HTTPValidationError
  */
 export type HttpValidationError = {
@@ -117,9 +171,67 @@ export type LineString = {
 };
 
 /**
+ * MaintainerLoginRequest
+ */
+export type MaintainerLoginRequest = {
+    /**
+     * Password
+     */
+    password: string;
+    /**
+     * Username
+     */
+    username: string;
+};
+
+/**
+ * MaintainerSessionResponse
+ */
+export type MaintainerSessionResponse = {
+    /**
+     * Username
+     */
+    username: string;
+};
+
+/**
  * MappingConfidence
  */
 export type MappingConfidence = 'exact' | 'approximate' | 'unmapped';
+
+/**
+ * PendingRevisionItem
+ */
+export type PendingRevisionItem = {
+    /**
+     * Author Kind
+     */
+    author_kind: string;
+    /**
+     * Changed Keys
+     */
+    changed_keys: Array<string>;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Revision Id
+     */
+    revision_id: string;
+    /**
+     * Revision Number
+     */
+    revision_number: number;
+    /**
+     * Route Id
+     */
+    route_id: string;
+    /**
+     * Route Name
+     */
+    route_name: string;
+};
 
 /**
  * Point
@@ -133,6 +245,106 @@ export type Point = {
      * Longitude
      */
     longitude: number;
+};
+
+/**
+ * ProtectedEditRequest
+ */
+export type ProtectedEditRequest = {
+    /**
+     * Approach Minutes
+     */
+    approach_minutes?: number | null;
+    /**
+     * Base Revision Number
+     */
+    base_revision_number: number;
+    closure_assessment?: ClosureAssessment | null;
+    /**
+     * Deleted
+     */
+    deleted?: boolean | null;
+    /**
+     * Descent Minutes
+     */
+    descent_minutes?: number | null;
+    difficulty?: Difficulty | null;
+    /**
+     * Duration Is Estimated
+     */
+    duration_is_estimated?: boolean | null;
+    /**
+     * Duration Minutes
+     */
+    duration_minutes?: number | null;
+    /**
+     * Elevation Gain M
+     */
+    elevation_gain_m?: number | null;
+    /**
+     * Elevation Loss M
+     */
+    elevation_loss_m?: number | null;
+    /**
+     * Elevation Max M
+     */
+    elevation_max_m?: number | null;
+    /**
+     * Elevation Min M
+     */
+    elevation_min_m?: number | null;
+    /**
+     * Gpx
+     */
+    gpx?: string | null;
+    linestring?: LineString | null;
+    /**
+     * Name
+     */
+    name?: string | null;
+    /**
+     * Official Source Links
+     */
+    official_source_links?: Array<string> | null;
+    /**
+     * Original Difficulty Scale
+     */
+    original_difficulty_scale?: string | null;
+    /**
+     * Original Difficulty Value
+     */
+    original_difficulty_value?: string | null;
+    publication?: Publication | null;
+    region?: Region | null;
+    route_type?: RouteType | null;
+    /**
+     * Season Months
+     */
+    season_months?: Array<number> | null;
+    /**
+     * Technical Minutes
+     */
+    technical_minutes?: number | null;
+    trailhead?: Point | null;
+    transit_accessibility?: TransitAccessibility | null;
+};
+
+/**
+ * ProtectedEditResponse
+ */
+export type ProtectedEditResponse = {
+    /**
+     * Application Status
+     */
+    application_status: string;
+    /**
+     * Revision Id
+     */
+    revision_id: string;
+    /**
+     * Revision Number
+     */
+    revision_number: number;
 };
 
 /**
@@ -164,6 +376,68 @@ export type Region = {
  * RegionCoverage
  */
 export type RegionCoverage = 'supported' | 'sample' | 'unsupported';
+
+/**
+ * RevertRequest
+ */
+export type RevertRequest = {
+    /**
+     * Target Revision Number
+     */
+    target_revision_number?: number | null;
+};
+
+/**
+ * RevertResponse
+ */
+export type RevertResponse = {
+    /**
+     * Application Status
+     */
+    application_status: string;
+    /**
+     * Revision Id
+     */
+    revision_id: string;
+    /**
+     * Revision Number
+     */
+    revision_number: number;
+};
+
+/**
+ * RevisionDetailResponse
+ */
+export type RevisionDetailResponse = {
+    /**
+     * Application Status
+     */
+    application_status: string;
+    /**
+     * Author Kind
+     */
+    author_kind: string;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Field Diffs
+     */
+    field_diffs: Array<FieldDiffItem>;
+    /**
+     * Revision Id
+     */
+    revision_id: string;
+    /**
+     * Revision Number
+     */
+    revision_number: number;
+    /**
+     * Route Id
+     */
+    route_id: string;
+};
 
 /**
  * RouteDetail
@@ -343,6 +617,201 @@ export type HealthHealthGetResponses = {
     200: unknown;
 };
 
+export type GetPendingRevisionsMaintainerRevisionsPendingGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/maintainer/revisions/pending';
+};
+
+export type GetPendingRevisionsMaintainerRevisionsPendingGetResponses = {
+    /**
+     * Response Get Pending Revisions Maintainer Revisions Pending Get
+     *
+     * Successful Response
+     */
+    200: Array<PendingRevisionItem>;
+};
+
+export type GetPendingRevisionsMaintainerRevisionsPendingGetResponse = GetPendingRevisionsMaintainerRevisionsPendingGetResponses[keyof GetPendingRevisionsMaintainerRevisionsPendingGetResponses];
+
+export type GetRevisionDetailMaintainerRevisionsRevisionIdGetData = {
+    body?: never;
+    path: {
+        /**
+         * Revision Id
+         */
+        revision_id: string;
+    };
+    query?: never;
+    url: '/maintainer/revisions/{revision_id}';
+};
+
+export type GetRevisionDetailMaintainerRevisionsRevisionIdGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetRevisionDetailMaintainerRevisionsRevisionIdGetError = GetRevisionDetailMaintainerRevisionsRevisionIdGetErrors[keyof GetRevisionDetailMaintainerRevisionsRevisionIdGetErrors];
+
+export type GetRevisionDetailMaintainerRevisionsRevisionIdGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: RevisionDetailResponse;
+};
+
+export type GetRevisionDetailMaintainerRevisionsRevisionIdGetResponse = GetRevisionDetailMaintainerRevisionsRevisionIdGetResponses[keyof GetRevisionDetailMaintainerRevisionsRevisionIdGetResponses];
+
+export type ApproveRevisionMaintainerRevisionsRevisionIdApprovePostData = {
+    body?: never;
+    path: {
+        /**
+         * Revision Id
+         */
+        revision_id: string;
+    };
+    query?: never;
+    url: '/maintainer/revisions/{revision_id}/approve';
+};
+
+export type ApproveRevisionMaintainerRevisionsRevisionIdApprovePostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ApproveRevisionMaintainerRevisionsRevisionIdApprovePostError = ApproveRevisionMaintainerRevisionsRevisionIdApprovePostErrors[keyof ApproveRevisionMaintainerRevisionsRevisionIdApprovePostErrors];
+
+export type ApproveRevisionMaintainerRevisionsRevisionIdApprovePostResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type ApproveRevisionMaintainerRevisionsRevisionIdApprovePostResponse = ApproveRevisionMaintainerRevisionsRevisionIdApprovePostResponses[keyof ApproveRevisionMaintainerRevisionsRevisionIdApprovePostResponses];
+
+export type RejectRevisionMaintainerRevisionsRevisionIdRejectPostData = {
+    body?: never;
+    path: {
+        /**
+         * Revision Id
+         */
+        revision_id: string;
+    };
+    query?: never;
+    url: '/maintainer/revisions/{revision_id}/reject';
+};
+
+export type RejectRevisionMaintainerRevisionsRevisionIdRejectPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RejectRevisionMaintainerRevisionsRevisionIdRejectPostError = RejectRevisionMaintainerRevisionsRevisionIdRejectPostErrors[keyof RejectRevisionMaintainerRevisionsRevisionIdRejectPostErrors];
+
+export type RejectRevisionMaintainerRevisionsRevisionIdRejectPostResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type RejectRevisionMaintainerRevisionsRevisionIdRejectPostResponse = RejectRevisionMaintainerRevisionsRevisionIdRejectPostResponses[keyof RejectRevisionMaintainerRevisionsRevisionIdRejectPostResponses];
+
+export type RevertRevisionMaintainerRevisionsRevisionIdRevertPostData = {
+    body: RevertRequest;
+    path: {
+        /**
+         * Revision Id
+         */
+        revision_id: string;
+    };
+    query?: never;
+    url: '/maintainer/revisions/{revision_id}/revert';
+};
+
+export type RevertRevisionMaintainerRevisionsRevisionIdRevertPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RevertRevisionMaintainerRevisionsRevisionIdRevertPostError = RevertRevisionMaintainerRevisionsRevisionIdRevertPostErrors[keyof RevertRevisionMaintainerRevisionsRevisionIdRevertPostErrors];
+
+export type RevertRevisionMaintainerRevisionsRevisionIdRevertPostResponses = {
+    /**
+     * Successful Response
+     */
+    201: RevertResponse;
+};
+
+export type RevertRevisionMaintainerRevisionsRevisionIdRevertPostResponse = RevertRevisionMaintainerRevisionsRevisionIdRevertPostResponses[keyof RevertRevisionMaintainerRevisionsRevisionIdRevertPostResponses];
+
+export type GetMaintainerSessionMaintainerSessionGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/maintainer/session';
+};
+
+export type GetMaintainerSessionMaintainerSessionGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: MaintainerSessionResponse;
+};
+
+export type GetMaintainerSessionMaintainerSessionGetResponse = GetMaintainerSessionMaintainerSessionGetResponses[keyof GetMaintainerSessionMaintainerSessionGetResponses];
+
+export type DeleteMaintainerSessionMaintainerSessionsDeleteData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/maintainer/sessions';
+};
+
+export type DeleteMaintainerSessionMaintainerSessionsDeleteResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DeleteMaintainerSessionMaintainerSessionsDeleteResponse = DeleteMaintainerSessionMaintainerSessionsDeleteResponses[keyof DeleteMaintainerSessionMaintainerSessionsDeleteResponses];
+
+export type CreateMaintainerSessionMaintainerSessionsPostData = {
+    body: MaintainerLoginRequest;
+    path?: never;
+    query?: never;
+    url: '/maintainer/sessions';
+};
+
+export type CreateMaintainerSessionMaintainerSessionsPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateMaintainerSessionMaintainerSessionsPostError = CreateMaintainerSessionMaintainerSessionsPostErrors[keyof CreateMaintainerSessionMaintainerSessionsPostErrors];
+
+export type CreateMaintainerSessionMaintainerSessionsPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: MaintainerSessionResponse;
+};
+
+export type CreateMaintainerSessionMaintainerSessionsPostResponse = CreateMaintainerSessionMaintainerSessionsPostResponses[keyof CreateMaintainerSessionMaintainerSessionsPostResponses];
+
 export type ReadyReadyGetData = {
     body?: never;
     path?: never;
@@ -452,3 +921,75 @@ export type GetRouteDetailRoutesRouteIdGetResponses = {
 };
 
 export type GetRouteDetailRoutesRouteIdGetResponse = GetRouteDetailRoutesRouteIdGetResponses[keyof GetRouteDetailRoutesRouteIdGetResponses];
+
+export type PatchRouteDescriptiveRoutesRouteIdDescriptivePatchData = {
+    body: DescriptiveEditRequest;
+    headers?: {
+        /**
+         * X-Climbit-Anonymous-Id
+         */
+        'X-ClimbIt-Anonymous-Id'?: string | null;
+    };
+    path: {
+        /**
+         * Route Id
+         */
+        route_id: string;
+    };
+    query?: never;
+    url: '/routes/{route_id}/descriptive';
+};
+
+export type PatchRouteDescriptiveRoutesRouteIdDescriptivePatchErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type PatchRouteDescriptiveRoutesRouteIdDescriptivePatchError = PatchRouteDescriptiveRoutesRouteIdDescriptivePatchErrors[keyof PatchRouteDescriptiveRoutesRouteIdDescriptivePatchErrors];
+
+export type PatchRouteDescriptiveRoutesRouteIdDescriptivePatchResponses = {
+    /**
+     * Successful Response
+     */
+    200: DescriptiveEditResponse;
+};
+
+export type PatchRouteDescriptiveRoutesRouteIdDescriptivePatchResponse = PatchRouteDescriptiveRoutesRouteIdDescriptivePatchResponses[keyof PatchRouteDescriptiveRoutesRouteIdDescriptivePatchResponses];
+
+export type PostRouteProtectedEditRoutesRouteIdProtectedEditsPostData = {
+    body: ProtectedEditRequest;
+    headers?: {
+        /**
+         * X-Climbit-Anonymous-Id
+         */
+        'X-ClimbIt-Anonymous-Id'?: string | null;
+    };
+    path: {
+        /**
+         * Route Id
+         */
+        route_id: string;
+    };
+    query?: never;
+    url: '/routes/{route_id}/protected-edits';
+};
+
+export type PostRouteProtectedEditRoutesRouteIdProtectedEditsPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type PostRouteProtectedEditRoutesRouteIdProtectedEditsPostError = PostRouteProtectedEditRoutesRouteIdProtectedEditsPostErrors[keyof PostRouteProtectedEditRoutesRouteIdProtectedEditsPostErrors];
+
+export type PostRouteProtectedEditRoutesRouteIdProtectedEditsPostResponses = {
+    /**
+     * Successful Response
+     */
+    201: ProtectedEditResponse;
+};
+
+export type PostRouteProtectedEditRoutesRouteIdProtectedEditsPostResponse = PostRouteProtectedEditRoutesRouteIdProtectedEditsPostResponses[keyof PostRouteProtectedEditRoutesRouteIdProtectedEditsPostResponses];
