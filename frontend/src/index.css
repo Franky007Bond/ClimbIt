@@ -584,3 +584,15 @@ main p {
   font-size: 0.85rem;
   overflow: auto;
 }
+
+.map-attribution {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.25rem;
+  z-index: 1000;
+  font-size: 0.75rem;
+  background: rgb(255 255 255 / 0.85);
+  padding: 0.15rem 0.35rem;
+  border-radius: 0.25rem;
+  pointer-events: auto;
+}

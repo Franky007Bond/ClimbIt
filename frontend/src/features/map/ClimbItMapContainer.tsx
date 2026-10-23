@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { MapContainer } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import { DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM } from './mapConstants'
+import { MapAttribution } from './MapAttribution'
 import { OsmTileLayer } from './OsmTileLayer'
 
 type ClimbItMapContainerProps = {
@@ -23,6 +24,7 @@ export function ClimbItMapContainer({
       scrollWheelZoom={scrollWheelZoom}
     >
       <OsmTileLayer />
+      <MapAttribution />
       {children}
     </MapContainer>
   )

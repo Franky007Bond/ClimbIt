@@ -1,8 +1,8 @@
 import { TileLayer } from 'react-leaflet'
-import { OSM_TILE_ATTRIBUTION, OSM_TILE_URL } from './mapConstants'
+import { MAP_TILE_ATTRIBUTION, MAP_TILE_URL } from './mapConfig'
 
 export function OsmTileLayer() {
   return (
-    <TileLayer url={OSM_TILE_URL} attribution={OSM_TILE_ATTRIBUTION} />
+    <TileLayer url={MAP_TILE_URL} attribution={MAP_TILE_ATTRIBUTION} />
   )
 }
