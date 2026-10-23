@@ -274,6 +274,40 @@
         "title": "LineString",
         "type": "object"
       },
+      "MaintainerLoginRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "password": {
+            "minLength": 1,
+            "title": "Password",
+            "type": "string"
+          },
+          "username": {
+            "minLength": 1,
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "MaintainerLoginRequest",
+        "type": "object"
+      },
+      "MaintainerSessionResponse": {
+        "properties": {
+          "username": {
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username"
+        ],
+        "title": "MaintainerSessionResponse",
+        "type": "object"
+      },
       "MappingConfidence": {
         "enum": [
           "exact",
@@ -1086,6 +1120,80 @@
           }
         },
         "summary": "Health"
+      }
+    },
+    "/maintainer/session": {
+      "get": {
+        "operationId": "get_maintainer_session_maintainer_session_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaintainerSessionResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Maintainer Session",
+        "tags": [
+          "maintainer"
+        ]
+      }
+    },
+    "/maintainer/sessions": {
+      "delete": {
+        "operationId": "delete_maintainer_session_maintainer_sessions_delete",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Delete Maintainer Session",
+        "tags": [
+          "maintainer"
+        ]
+      },
+      "post": {
+        "operationId": "create_maintainer_session_maintainer_sessions_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaintainerLoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaintainerSessionResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Maintainer Session",
+        "tags": [
+          "maintainer"
+        ]
       }
     },
     "/ready": {
