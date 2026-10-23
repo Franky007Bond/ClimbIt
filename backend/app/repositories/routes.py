@@ -2,8 +2,11 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass
+from datetime import datetime
+from datetime import timezone
 
 from geoalchemy2.elements import WKTElement
+from sqlalchemy import func
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -24,6 +27,20 @@ from app.domain.route import Route
 from app.domain.route import RouteType
 from app.domain.route import TransitAccessibility
 from app.models.route import RouteRecord
+from app.models.route_revision import RouteRevisionRecord
+
+_AUTHOR_KINDS = frozenset({"system", "anonymous", "maintainer"})
+
+
+@dataclass(frozen=True, slots=True)
+class RouteRevision:
+    revision_number: int
+    created_at: datetime
+    author_kind: str
+    author_ref: str | None
+    before_snapshot: dict | None
+    after_snapshot: dict
+    application_status: str
 
 
 @dataclass(frozen=True, slots=True)
@@ -88,27 +105,88 @@ def get_published_route_by_id(session: Session, route_id: uuid.UUID) -> RouteRec
     return session.scalar(statement)
 
 
-def save_route(session: Session, route: Route) -> uuid.UUID:
+def save_route(
+    session: Session,
+    route: Route,
+    *,
+    author_kind: str = "system",
+    author_ref: str | None = None,
+) -> uuid.UUID:
     route_id = uuid.uuid4()
     session.add(route_to_record(route, route_id))
     session.flush()
+    _append_route_revision(
+        session,
+        route_id=route_id,
+        before_snapshot=None,
+        after_snapshot=route_snapshot(route),
+        author_kind=author_kind,
+        author_ref=author_ref,
+    )
     return route_id
 
 
-def upsert_route(session: Session, route_id: uuid.UUID, route: Route) -> uuid.UUID:
-    incoming = route_to_record(route, route_id)
+def upsert_route(
+    session: Session,
+    route_id: uuid.UUID,
+    route: Route,
+    *,
+    author_kind: str = "system",
+    author_ref: str | None = None,
+) -> uuid.UUID:
     existing = session.get(RouteRecord, route_id)
     if existing is None:
-        session.add(incoming)
+        session.add(route_to_record(route, route_id))
         session.flush()
+        _append_route_revision(
+            session,
+            route_id=route_id,
+            before_snapshot=None,
+            after_snapshot=route_snapshot(route),
+            author_kind=author_kind,
+            author_ref=author_ref,
+        )
         return route_id
+    current = record_to_route(session, existing)
+    if route_snapshot(current) == route_snapshot(route):
+        return route_id
+    before_snapshot = route_snapshot(current)
+    incoming = route_to_record(route, route_id)
     for column in RouteRecord.__table__.columns:
         name = column.key
         if name == "id":
             continue
         setattr(existing, name, getattr(incoming, name))
     session.flush()
+    _append_route_revision(
+        session,
+        route_id=route_id,
+        before_snapshot=before_snapshot,
+        after_snapshot=route_snapshot(route),
+        author_kind=author_kind,
+        author_ref=author_ref,
+    )
     return route_id
+
+
+def list_route_revisions(session: Session, route_id: uuid.UUID) -> list[RouteRevision]:
+    rows = session.scalars(
+        select(RouteRevisionRecord)
+        .where(RouteRevisionRecord.route_id == route_id)
+        .order_by(RouteRevisionRecord.revision_number.asc())
+    ).all()
+    return [
+        RouteRevision(
+            revision_number=row.revision_number,
+            created_at=row.created_at,
+            author_kind=row.author_kind,
+            author_ref=row.author_ref,
+            before_snapshot=row.before_snapshot,
+            after_snapshot=row.after_snapshot,
+            application_status=row.application_status,
+        )
+        for row in rows
+    ]
 
 
 def get_route(session: Session, route_id: uuid.UUID) -> Route | None:
@@ -116,6 +194,96 @@ def get_route(session: Session, route_id: uuid.UUID) -> Route | None:
     if record is None:
         return None
     return record_to_route(session, record)
+
+
+def route_snapshot(route: Route) -> dict:
+    difficulty = None
+    if route.difficulty is not None:
+        difficulty = route.difficulty.model_dump(mode="json")
+    closure = None
+    if route.closure_assessment is not None:
+        closure = route.closure_assessment.model_dump(mode="json")
+    return {
+        "name": route.name,
+        "route_type": route.route_type.value,
+        "region": {
+            "name": route.region.name,
+            "country": route.region.country,
+            "coverage": route.region.coverage.value,
+        },
+        "publication": route.publication.value,
+        "provenance": route.provenance.value,
+        "completeness": route.completeness.value,
+        "assessment": route.assessment.value,
+        "trailhead": _point_geojson(route.trailhead),
+        "linestring": _linestring_geojson(route.linestring),
+        "gpx": route.gpx,
+        "elevation_min_m": route.elevation_min_m,
+        "elevation_max_m": route.elevation_max_m,
+        "elevation_gain_m": route.elevation_gain_m,
+        "elevation_loss_m": route.elevation_loss_m,
+        "duration_minutes": route.duration_minutes,
+        "approach_minutes": route.approach_minutes,
+        "technical_minutes": route.technical_minutes,
+        "descent_minutes": route.descent_minutes,
+        "duration_is_estimated": route.duration_is_estimated,
+        "original_difficulty_value": route.original_difficulty_value,
+        "original_difficulty_scale": route.original_difficulty_scale,
+        "difficulty": difficulty,
+        "closure_assessment": closure,
+        "season_months": sorted(route.season_months),
+        "season_note": route.season_note,
+        "description": route.description,
+        "transit_accessibility": route.transit_accessibility.value,
+        "official_source_links": list(route.official_source_links),
+    }
+
+
+def _append_route_revision(
+    session: Session,
+    *,
+    route_id: uuid.UUID,
+    before_snapshot: dict | None,
+    after_snapshot: dict,
+    author_kind: str,
+    author_ref: str | None,
+) -> None:
+    if author_kind not in _AUTHOR_KINDS:
+        raise ValueError(f"unsupported author_kind: {author_kind}")
+    max_number = session.scalar(
+        select(func.max(RouteRevisionRecord.revision_number)).where(
+            RouteRevisionRecord.route_id == route_id
+        )
+    )
+    revision_number = 1 if max_number is None else max_number + 1
+    session.add(
+        RouteRevisionRecord(
+            id=uuid.uuid4(),
+            route_id=route_id,
+            revision_number=revision_number,
+            created_at=datetime.now(timezone.utc),
+            author_kind=author_kind,
+            author_ref=author_ref,
+            before_snapshot=before_snapshot,
+            after_snapshot=after_snapshot,
+            application_status="applied",
+        )
+    )
+
+
+def _point_geojson(point: Point | None) -> dict | None:
+    if point is None:
+        return None
+    return {"type": "Point", "coordinates": [point.longitude, point.latitude]}
+
+
+def _linestring_geojson(line: LineString | None) -> dict | None:
+    if line is None:
+        return None
+    return {
+        "type": "LineString",
+        "coordinates": [[point.longitude, point.latitude] for point in line.points],
+    }
 
 
 def route_to_record(route: Route, route_id: uuid.UUID) -> RouteRecord:

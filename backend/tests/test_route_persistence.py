@@ -46,7 +46,6 @@ _MISSING_RELATIONS = (
     "public.trips",
     "public.users",
     "public.revisions",
-    "public.route_revisions",
 )
 
 
@@ -261,13 +260,17 @@ def test_upgrade_head_creates_routes_table_only(migrated_test_database: str) -> 
     script = ScriptDirectory.from_config(_alembic_config())
     heads = script.get_heads()
     assert len(heads) == 1
-    assert script.get_revision(heads[0]).down_revision == "4dcc9bd6cf18"
+    assert script.get_revision(heads[0]).down_revision == "855431646849"
 
     engine = create_engine_from_database_url(_operator_url(migrated_test_database))
     try:
         with engine.connect() as connection:
             routes = connection.execute(text("SELECT to_regclass('public.routes')")).scalar()
             assert str(routes) == "routes"
+            route_revisions = connection.execute(
+                text("SELECT to_regclass('public.route_revisions')")
+            ).scalar()
+            assert str(route_revisions) == "route_revisions"
             for relation in _MISSING_RELATIONS:
                 assert connection.execute(
                     text("SELECT to_regclass(:name)"),
