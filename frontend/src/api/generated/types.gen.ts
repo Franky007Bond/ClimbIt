@@ -234,6 +234,100 @@ export type PendingRevisionItem = {
 };
 
 /**
+ * PlanRequest
+ */
+export type PlanRequest = {
+    /**
+     * Origin
+     */
+    origin: string;
+    /**
+     * Plan Date
+     */
+    plan_date: string;
+    /**
+     * Start Time Local
+     */
+    start_time_local?: string | null;
+};
+
+/**
+ * PlanResponse
+ */
+export type PlanResponse = {
+    /**
+     * Components
+     */
+    components: {
+        [key: string]: unknown;
+    };
+    /**
+     * Confidence
+     */
+    confidence: string;
+    /**
+     * Daylight
+     */
+    daylight: {
+        [key: string]: unknown;
+    };
+    /**
+     * Explanation
+     */
+    explanation: Array<string>;
+    /**
+     * Gear
+     */
+    gear: Array<{
+        [key: string]: string;
+    }>;
+    /**
+     * Origin Region
+     */
+    origin_region: string | null;
+    /**
+     * Plan Date
+     */
+    plan_date: string;
+    /**
+     * Plan Run Id
+     */
+    plan_run_id: string;
+    /**
+     * Recommendation
+     */
+    recommendation: string;
+    /**
+     * Route Id
+     */
+    route_id: string;
+    /**
+     * Safety Disclaimer
+     */
+    safety_disclaimer: string;
+    /**
+     * Thunderstorm
+     */
+    thunderstorm: {
+        [key: string]: unknown;
+    };
+    /**
+     * Trailhead Timezone
+     */
+    trailhead_timezone: string;
+    /**
+     * Transit Summary
+     */
+    transit_summary: string;
+    /**
+     * Weather
+     */
+    weather: {
+        [key: string]: unknown;
+    } | null;
+};
+
+/**
  * Point
  */
 export type Point = {
@@ -957,6 +1051,36 @@ export type PatchRouteDescriptiveRoutesRouteIdDescriptivePatchResponses = {
 };
 
 export type PatchRouteDescriptiveRoutesRouteIdDescriptivePatchResponse = PatchRouteDescriptiveRoutesRouteIdDescriptivePatchResponses[keyof PatchRouteDescriptiveRoutesRouteIdDescriptivePatchResponses];
+
+export type CreatePlanRoutesRouteIdPlansPostData = {
+    body: PlanRequest;
+    path: {
+        /**
+         * Route Id
+         */
+        route_id: string;
+    };
+    query?: never;
+    url: '/routes/{route_id}/plans';
+};
+
+export type CreatePlanRoutesRouteIdPlansPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreatePlanRoutesRouteIdPlansPostError = CreatePlanRoutesRouteIdPlansPostErrors[keyof CreatePlanRoutesRouteIdPlansPostErrors];
+
+export type CreatePlanRoutesRouteIdPlansPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: PlanResponse;
+};
+
+export type CreatePlanRoutesRouteIdPlansPostResponse = CreatePlanRoutesRouteIdPlansPostResponses[keyof CreatePlanRoutesRouteIdPlansPostResponses];
 
 export type PostRouteProtectedEditRoutesRouteIdProtectedEditsPostData = {
     body: ProtectedEditRequest;

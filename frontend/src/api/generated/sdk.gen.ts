@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { ApproveRevisionMaintainerRevisionsRevisionIdApprovePostData, ApproveRevisionMaintainerRevisionsRevisionIdApprovePostErrors, ApproveRevisionMaintainerRevisionsRevisionIdApprovePostResponses, CreateMaintainerSessionMaintainerSessionsPostData, CreateMaintainerSessionMaintainerSessionsPostErrors, CreateMaintainerSessionMaintainerSessionsPostResponses, DeleteMaintainerSessionMaintainerSessionsDeleteData, DeleteMaintainerSessionMaintainerSessionsDeleteResponses, GetMaintainerSessionMaintainerSessionGetData, GetMaintainerSessionMaintainerSessionGetResponses, GetPendingRevisionsMaintainerRevisionsPendingGetData, GetPendingRevisionsMaintainerRevisionsPendingGetResponses, GetRevisionDetailMaintainerRevisionsRevisionIdGetData, GetRevisionDetailMaintainerRevisionsRevisionIdGetErrors, GetRevisionDetailMaintainerRevisionsRevisionIdGetResponses, GetRouteDetailRoutesRouteIdGetData, GetRouteDetailRoutesRouteIdGetErrors, GetRouteDetailRoutesRouteIdGetResponses, HealthHealthGetData, HealthHealthGetResponses, ListRoutesRoutesGetData, ListRoutesRoutesGetErrors, ListRoutesRoutesGetResponses, PatchRouteDescriptiveRoutesRouteIdDescriptivePatchData, PatchRouteDescriptiveRoutesRouteIdDescriptivePatchErrors, PatchRouteDescriptiveRoutesRouteIdDescriptivePatchResponses, PostRouteProtectedEditRoutesRouteIdProtectedEditsPostData, PostRouteProtectedEditRoutesRouteIdProtectedEditsPostErrors, PostRouteProtectedEditRoutesRouteIdProtectedEditsPostResponses, ReadyReadyGetData, ReadyReadyGetResponses, RejectRevisionMaintainerRevisionsRevisionIdRejectPostData, RejectRevisionMaintainerRevisionsRevisionIdRejectPostErrors, RejectRevisionMaintainerRevisionsRevisionIdRejectPostResponses, RevertRevisionMaintainerRevisionsRevisionIdRevertPostData, RevertRevisionMaintainerRevisionsRevisionIdRevertPostErrors, RevertRevisionMaintainerRevisionsRevisionIdRevertPostResponses } from './types.gen';
+import type { ApproveRevisionMaintainerRevisionsRevisionIdApprovePostData, ApproveRevisionMaintainerRevisionsRevisionIdApprovePostErrors, ApproveRevisionMaintainerRevisionsRevisionIdApprovePostResponses, CreateMaintainerSessionMaintainerSessionsPostData, CreateMaintainerSessionMaintainerSessionsPostErrors, CreateMaintainerSessionMaintainerSessionsPostResponses, CreatePlanRoutesRouteIdPlansPostData, CreatePlanRoutesRouteIdPlansPostErrors, CreatePlanRoutesRouteIdPlansPostResponses, DeleteMaintainerSessionMaintainerSessionsDeleteData, DeleteMaintainerSessionMaintainerSessionsDeleteResponses, GetMaintainerSessionMaintainerSessionGetData, GetMaintainerSessionMaintainerSessionGetResponses, GetPendingRevisionsMaintainerRevisionsPendingGetData, GetPendingRevisionsMaintainerRevisionsPendingGetResponses, GetRevisionDetailMaintainerRevisionsRevisionIdGetData, GetRevisionDetailMaintainerRevisionsRevisionIdGetErrors, GetRevisionDetailMaintainerRevisionsRevisionIdGetResponses, GetRouteDetailRoutesRouteIdGetData, GetRouteDetailRoutesRouteIdGetErrors, GetRouteDetailRoutesRouteIdGetResponses, HealthHealthGetData, HealthHealthGetResponses, ListRoutesRoutesGetData, ListRoutesRoutesGetErrors, ListRoutesRoutesGetResponses, PatchRouteDescriptiveRoutesRouteIdDescriptivePatchData, PatchRouteDescriptiveRoutesRouteIdDescriptivePatchErrors, PatchRouteDescriptiveRoutesRouteIdDescriptivePatchResponses, PostRouteProtectedEditRoutesRouteIdProtectedEditsPostData, PostRouteProtectedEditRoutesRouteIdProtectedEditsPostErrors, PostRouteProtectedEditRoutesRouteIdProtectedEditsPostResponses, ReadyReadyGetData, ReadyReadyGetResponses, RejectRevisionMaintainerRevisionsRevisionIdRejectPostData, RejectRevisionMaintainerRevisionsRevisionIdRejectPostErrors, RejectRevisionMaintainerRevisionsRevisionIdRejectPostResponses, RevertRevisionMaintainerRevisionsRevisionIdRevertPostData, RevertRevisionMaintainerRevisionsRevisionIdRevertPostErrors, RevertRevisionMaintainerRevisionsRevisionIdRevertPostResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -97,6 +97,18 @@ export const getRouteDetailRoutesRouteIdGet = <ThrowOnError extends boolean = fa
  */
 export const patchRouteDescriptiveRoutesRouteIdDescriptivePatch = <ThrowOnError extends boolean = false>(options: Options<PatchRouteDescriptiveRoutesRouteIdDescriptivePatchData, ThrowOnError>) => (options.client ?? client).patch<PatchRouteDescriptiveRoutesRouteIdDescriptivePatchResponses, PatchRouteDescriptiveRoutesRouteIdDescriptivePatchErrors, ThrowOnError>({
     url: '/routes/{route_id}/descriptive',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Create Plan
+ */
+export const createPlanRoutesRouteIdPlansPost = <ThrowOnError extends boolean = false>(options: Options<CreatePlanRoutesRouteIdPlansPostData, ThrowOnError>) => (options.client ?? client).post<CreatePlanRoutesRouteIdPlansPostResponses, CreatePlanRoutesRouteIdPlansPostErrors, ThrowOnError>({
+    url: '/routes/{route_id}/plans',
     ...options,
     headers: {
         'Content-Type': 'application/json',
