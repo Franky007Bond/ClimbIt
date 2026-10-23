@@ -156,7 +156,10 @@ def test_single_alembic_head_includes_route_revisions(migrated_test_database: st
     script = ScriptDirectory.from_config(_alembic_config())
     heads = script.get_heads()
     assert len(heads) == 1
-    assert script.get_revision(heads[0]).down_revision == "855431646849"
+    assert heads[0] == "b7c8d9e0f1a2"
+    route_revisions = script.get_revision("a3f1c2d4e5b6")
+    assert route_revisions is not None
+    assert route_revisions.down_revision == "855431646849"
 
 
 def test_save_route_appends_revision_one(session) -> None:

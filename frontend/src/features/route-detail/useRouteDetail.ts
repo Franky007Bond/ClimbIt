@@ -30,7 +30,10 @@ export function useRouteDetail(routeId: string | undefined) {
         return
       }
 
-      if (result.response.status === 404) {
+      if (
+        result.response.status === 404 ||
+        result.response.status === 422
+      ) {
         setRoute(null)
         setStatus('notFound')
         return
