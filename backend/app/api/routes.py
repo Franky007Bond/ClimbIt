@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import uuid
 
-from fastapi import APIRouter, Depends, Header, HTTPException, Query
+from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db_session
 from app.api.wiki_concurrency import ensure_revision_base
+from app.api.wiki_rate_limit import enforce_wiki_anonymous_rate_limit
 from app.api.schemas.route_descriptive_edit import DescriptiveEditRequest
 from app.api.schemas.route_descriptive_edit import DescriptiveEditResponse
 from app.api.schemas.route_protected_edit import ProtectedEditRequest
@@ -125,9 +126,11 @@ def _normalize_descriptive_edit(body: DescriptiveEditRequest) -> tuple[str | Non
 def patch_route_descriptive(
     route_id: uuid.UUID,
     body: DescriptiveEditRequest,
+    request: Request,
     session: Session = Depends(get_db_session),
     x_climbit_anonymous_id: str | None = Header(default=None, alias="X-ClimbIt-Anonymous-Id"),
 ) -> DescriptiveEditResponse:
+    enforce_wiki_anonymous_rate_limit(request)
     try:
         description, season_note, update_description, update_season_note = (
             _normalize_descriptive_edit(body)
@@ -171,9 +174,11 @@ def patch_route_descriptive(
 def post_route_protected_edit(
     route_id: uuid.UUID,
     body: ProtectedEditRequest,
+    request: Request,
     session: Session = Depends(get_db_session),
     x_climbit_anonymous_id: str | None = Header(default=None, alias="X-ClimbIt-Anonymous-Id"),
 ) -> ProtectedEditResponse:
+    enforce_wiki_anonymous_rate_limit(request)
     record = get_published_route_by_id(session, route_id)
     if record is None:
         raise HTTPException(status_code=404, detail="Route not found")

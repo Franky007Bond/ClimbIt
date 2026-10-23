@@ -22,6 +22,9 @@ from app.domain.route import RouteType
 from app.domain.route import TransitAccessibility
 from app.models.route import RouteRecord
 from app.models.route_revision import RouteRevisionRecord
+from app.repositories.routes import get_published_route_by_id
+from app.repositories.routes import record_to_route
+from app.repositories.routes import route_snapshot
 from app.repositories.routes import upsert_route
 
 
@@ -181,6 +184,74 @@ def approve_pending_revision(
     )
     revision.application_status = "superseded"
     session.flush()
+
+
+def propose_revert_revision(
+    session: Session,
+    route_id: uuid.UUID,
+    *,
+    target_revision_number: int | None,
+    maintainer_username: str,
+) -> tuple[uuid.UUID, int]:
+    record = get_published_route_by_id(session, route_id)
+    if record is None:
+        raise RevisionNotFound
+    current = record_to_route(session, record)
+    applied_numbers = session.scalars(
+        select(RouteRevisionRecord.revision_number)
+        .where(
+            RouteRevisionRecord.route_id == route_id,
+            RouteRevisionRecord.application_status == "applied",
+        )
+        .order_by(RouteRevisionRecord.revision_number.desc())
+    ).all()
+    if not applied_numbers:
+        raise RevisionReviewError("no applied revisions")
+    if target_revision_number is None:
+        if len(applied_numbers) < 2:
+            raise RevisionReviewError("no prior applied revision")
+        target_revision_number = applied_numbers[1]
+    target = session.scalar(
+        select(RouteRevisionRecord).where(
+            RouteRevisionRecord.route_id == route_id,
+            RouteRevisionRecord.revision_number == target_revision_number,
+            RouteRevisionRecord.application_status == "applied",
+        )
+    )
+    if target is None:
+        raise RevisionNotFound
+    proposed = snapshot_to_route(target.after_snapshot)
+    before_snapshot = route_snapshot(current)
+    after_snapshot = route_snapshot(proposed)
+    revision_id, revision_number = _append_pending_revision(
+        session,
+        route_id=route_id,
+        before_snapshot=before_snapshot,
+        after_snapshot=after_snapshot,
+        author_ref=maintainer_username,
+    )
+    return revision_id, revision_number
+
+
+def _append_pending_revision(
+    session: Session,
+    *,
+    route_id: uuid.UUID,
+    before_snapshot: dict,
+    after_snapshot: dict,
+    author_ref: str | None,
+) -> tuple[uuid.UUID, int]:
+    from app.repositories.routes import _append_route_revision
+
+    return _append_route_revision(
+        session,
+        route_id=route_id,
+        before_snapshot=before_snapshot,
+        after_snapshot=after_snapshot,
+        author_kind="maintainer",
+        author_ref=author_ref,
+        application_status="pending",
+    )
 
 
 def reject_pending_revision(session: Session, revision_id: uuid.UUID) -> None:

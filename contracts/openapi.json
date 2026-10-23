@@ -787,6 +787,47 @@
         "title": "RegionCoverage",
         "type": "string"
       },
+      "RevertRequest": {
+        "properties": {
+          "target_revision_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Revision Number"
+          }
+        },
+        "title": "RevertRequest",
+        "type": "object"
+      },
+      "RevertResponse": {
+        "properties": {
+          "application_status": {
+            "title": "Application Status",
+            "type": "string"
+          },
+          "revision_id": {
+            "format": "uuid",
+            "title": "Revision Id",
+            "type": "string"
+          },
+          "revision_number": {
+            "title": "Revision Number",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "revision_id",
+          "revision_number",
+          "application_status"
+        ],
+        "title": "RevertResponse",
+        "type": "object"
+      },
       "RevisionDetailResponse": {
         "properties": {
           "application_status": {
@@ -1400,6 +1441,59 @@
           }
         },
         "summary": "Reject Revision",
+        "tags": [
+          "maintainer"
+        ]
+      }
+    },
+    "/maintainer/revisions/{revision_id}/revert": {
+      "post": {
+        "operationId": "revert_revision_maintainer_revisions__revision_id__revert_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "revision_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Revision Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevertRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevertResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Revert Revision",
         "tags": [
           "maintainer"
         ]

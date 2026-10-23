@@ -15,6 +15,8 @@ from app.repositories.revision_review import approve_pending_revision
 from app.repositories.revision_review import field_diffs
 from app.repositories.revision_review import get_revision_record
 from app.repositories.revision_review import list_pending_revisions
+from app.repositories.revision_review import RevisionReviewError
+from app.repositories.revision_review import propose_revert_revision
 from app.repositories.revision_review import reject_pending_revision
 
 router = APIRouter(prefix="/maintainer/revisions", tags=["maintainer"])
@@ -34,6 +36,16 @@ class FieldDiffItem(BaseModel):
     field: str
     before: object | None
     after: object | None
+
+
+class RevertRequest(BaseModel):
+    target_revision_number: int | None = None
+
+
+class RevertResponse(BaseModel):
+    revision_id: uuid.UUID
+    revision_number: int
+    application_status: str
 
 
 class RevisionDetailResponse(BaseModel):
@@ -107,6 +119,36 @@ def approve_revision(
     except RevisionNotPending as exc:
         raise HTTPException(status_code=409, detail="Revision is not pending") from exc
     session.commit()
+
+
+@router.post("/{revision_id}/revert", response_model=RevertResponse, status_code=201)
+def revert_revision(
+    revision_id: uuid.UUID,
+    body: RevertRequest,
+    session: Session = Depends(get_db_session),
+    maintainer: MaintainerSession = Depends(require_maintainer),
+) -> RevertResponse:
+    try:
+        anchor = get_revision_record(session, revision_id)
+    except RevisionNotFound as exc:
+        raise HTTPException(status_code=404, detail="Revision not found") from exc
+    try:
+        new_revision_id, revision_number = propose_revert_revision(
+            session,
+            anchor.route_id,
+            target_revision_number=body.target_revision_number,
+            maintainer_username=maintainer.username,
+        )
+    except RevisionNotFound as exc:
+        raise HTTPException(status_code=404, detail="Revision not found") from exc
+    except RevisionReviewError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    session.commit()
+    return RevertResponse(
+        revision_id=new_revision_id,
+        revision_number=revision_number,
+        application_status="pending",
+    )
 
 
 @router.post("/{revision_id}/reject", status_code=204)
