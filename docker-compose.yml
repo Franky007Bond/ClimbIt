@@ -25,6 +25,10 @@ services:
     restart: unless-stopped
     environment:
       DATABASE_URL: ${DATABASE_URL:-postgresql://climbit:climbit@db:5432/climbit}
+      MAINTAINER_SESSION_SECRET: ${MAINTAINER_SESSION_SECRET:-local-dev-maintainer-secret}
+      MAINTAINER_ALLOWLIST: ${MAINTAINER_ALLOWLIST:-[]}
+      WIKI_ANONYMOUS_EDIT_RATE_LIMIT_MAX: ${WIKI_ANONYMOUS_EDIT_RATE_LIMIT_MAX:-20}
+      WIKI_ANONYMOUS_EDIT_RATE_LIMIT_WINDOW_SECONDS: ${WIKI_ANONYMOUS_EDIT_RATE_LIMIT_WINDOW_SECONDS:-3600}
     ports:
       - "127.0.0.1:8000:8000"
     depends_on:
