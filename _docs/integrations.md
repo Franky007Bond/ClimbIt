@@ -60,6 +60,8 @@ Implementation: `MockWeatherAdapter` in tests; production adapter behind `Weathe
 
 Implementation: `mock_transit_summary` in MVP path; real adapter behind transit interface later.
 
+Spike (remote trailhead coverage on the public instance): [`_docs/spikes/transitous-remote-trailheads.md`](spikes/transitous-remote-trailheads.md) (issue #42).
+
 ## OpenStreetMap / Overpass (route import)
 
 | Topic | Record |
