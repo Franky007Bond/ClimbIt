@@ -7,6 +7,7 @@ from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db_session
+from app.api.wiki_concurrency import ensure_revision_base
 from app.api.schemas.route_descriptive_edit import DescriptiveEditRequest
 from app.api.schemas.route_descriptive_edit import DescriptiveEditResponse
 from app.api.schemas.route_protected_edit import ProtectedEditRequest
@@ -134,6 +135,8 @@ def patch_route_descriptive(
     except ValidationError as exc:
         raise HTTPException(status_code=422, detail=exc.errors()) from exc
 
+    ensure_revision_base(session, route_id, body.base_revision_number)
+
     author_ref = None
     if x_climbit_anonymous_id is not None:
         stripped = x_climbit_anonymous_id.strip()
@@ -174,6 +177,7 @@ def post_route_protected_edit(
     record = get_published_route_by_id(session, route_id)
     if record is None:
         raise HTTPException(status_code=404, detail="Route not found")
+    ensure_revision_base(session, route_id, body.base_revision_number)
     current = record_to_route(session, record)
     try:
         proposed = body.merge_onto(current)

@@ -95,6 +95,10 @@
       "DescriptiveEditRequest": {
         "additionalProperties": false,
         "properties": {
+          "base_revision_number": {
+            "title": "Base Revision Number",
+            "type": "integer"
+          },
           "description": {
             "anyOf": [
               {
@@ -118,6 +122,9 @@
             "title": "Season Note"
           }
         },
+        "required": [
+          "base_revision_number"
+        ],
         "title": "DescriptiveEditRequest",
         "type": "object"
       },
@@ -436,6 +443,10 @@
             ],
             "title": "Approach Minutes"
           },
+          "base_revision_number": {
+            "title": "Base Revision Number",
+            "type": "integer"
+          },
           "closure_assessment": {
             "anyOf": [
               {
@@ -694,6 +705,9 @@
             ]
           }
         },
+        "required": [
+          "base_revision_number"
+        ],
         "title": "ProtectedEditRequest",
         "type": "object"
       },

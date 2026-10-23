@@ -19,6 +19,7 @@ from app.domain.route import TransitAccessibility
 class ProtectedEditRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
+    base_revision_number: int
     name: str | None = None
     route_type: RouteType | None = None
     region: Region | None = None
@@ -46,14 +47,15 @@ class ProtectedEditRequest(BaseModel):
 
     @model_validator(mode="after")
     def at_least_one_field(self) -> ProtectedEditRequest:
-        if not self.model_fields_set:
+        protected_fields = self.model_fields_set - {"base_revision_number"}
+        if not protected_fields:
             raise ValueError("at least one protected field is required")
         return self
 
     def merge_onto(self, current: Route) -> Route:
         base = current.model_dump(mode="python")
         for key in self.model_fields_set:
-            if key == "deleted":
+            if key in {"deleted", "base_revision_number"}:
                 continue
             base[key] = getattr(self, key)
         if "deleted" in self.model_fields_set and self.deleted:

@@ -206,6 +206,15 @@ def apply_descriptive_edit(
     return latest.revision_number, updated.description, updated.season_note
 
 
+def current_applied_revision_number(session: Session, route_id: uuid.UUID) -> int | None:
+    return session.scalar(
+        select(func.max(RouteRevisionRecord.revision_number)).where(
+            RouteRevisionRecord.route_id == route_id,
+            RouteRevisionRecord.application_status == "applied",
+        )
+    )
+
+
 def list_route_revisions(session: Session, route_id: uuid.UUID) -> list[RouteRevision]:
     rows = session.scalars(
         select(RouteRevisionRecord)
