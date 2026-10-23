@@ -92,6 +92,35 @@
         "title": "Completeness",
         "type": "string"
       },
+      "CreateShareLinkResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "share_token": {
+            "title": "Share Token",
+            "type": "string"
+          }
+        },
+        "required": [
+          "share_token"
+        ],
+        "title": "CreateShareLinkResponse",
+        "type": "object"
+      },
+      "CreateTripRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "plan_run_id": {
+            "minLength": 1,
+            "title": "Plan Run Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "plan_run_id"
+        ],
+        "title": "CreateTripRequest",
+        "type": "object"
+      },
       "DescriptiveEditRequest": {
         "additionalProperties": false,
         "properties": {
@@ -1377,6 +1406,66 @@
         "title": "RouteType",
         "type": "string"
       },
+      "SharedPlanSnapshot": {
+        "additionalProperties": false,
+        "properties": {
+          "components": {
+            "additionalProperties": true,
+            "title": "Components",
+            "type": "object"
+          },
+          "confidence": {
+            "title": "Confidence",
+            "type": "string"
+          },
+          "explanation": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Explanation",
+            "type": "array"
+          },
+          "origin_region": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Origin Region"
+          },
+          "plan_date": {
+            "title": "Plan Date",
+            "type": "string"
+          },
+          "plan_run_id": {
+            "title": "Plan Run Id",
+            "type": "string"
+          },
+          "recommendation": {
+            "title": "Recommendation",
+            "type": "string"
+          },
+          "route_id": {
+            "title": "Route Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "plan_run_id",
+          "route_id",
+          "plan_date",
+          "recommendation",
+          "confidence",
+          "components",
+          "explanation",
+          "origin_region"
+        ],
+        "title": "SharedPlanSnapshot",
+        "type": "object"
+      },
       "TransitAccessibility": {
         "enum": [
           "transit_friendly",
@@ -1385,6 +1474,150 @@
         ],
         "title": "TransitAccessibility",
         "type": "string"
+      },
+      "TripCapabilityStatus": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "TripCapabilityStatus",
+        "type": "object"
+      },
+      "TripDetailResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "components": {
+            "additionalProperties": true,
+            "title": "Components",
+            "type": "object"
+          },
+          "confidence": {
+            "title": "Confidence",
+            "type": "string"
+          },
+          "explanation": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Explanation",
+            "type": "array"
+          },
+          "last_change_summary": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Change Summary"
+          },
+          "latest_plan_run_id": {
+            "title": "Latest Plan Run Id",
+            "type": "string"
+          },
+          "plan_date": {
+            "title": "Plan Date",
+            "type": "string"
+          },
+          "recommendation": {
+            "title": "Recommendation",
+            "type": "string"
+          },
+          "route_id": {
+            "title": "Route Id",
+            "type": "string"
+          },
+          "trip_id": {
+            "title": "Trip Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "trip_id",
+          "route_id",
+          "latest_plan_run_id",
+          "plan_date",
+          "recommendation",
+          "confidence",
+          "last_change_summary",
+          "components",
+          "explanation"
+        ],
+        "title": "TripDetailResponse",
+        "type": "object"
+      },
+      "TripListItem": {
+        "additionalProperties": false,
+        "properties": {
+          "last_change_summary": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Change Summary"
+          },
+          "latest_plan_run_id": {
+            "title": "Latest Plan Run Id",
+            "type": "string"
+          },
+          "plan_date": {
+            "title": "Plan Date",
+            "type": "string"
+          },
+          "recommendation": {
+            "title": "Recommendation",
+            "type": "string"
+          },
+          "route_id": {
+            "title": "Route Id",
+            "type": "string"
+          },
+          "trip_id": {
+            "title": "Trip Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "trip_id",
+          "route_id",
+          "latest_plan_run_id",
+          "plan_date",
+          "recommendation",
+          "last_change_summary"
+        ],
+        "title": "TripListItem",
+        "type": "object"
+      },
+      "TripListResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "trips": {
+            "items": {
+              "$ref": "#/components/schemas/TripListItem"
+            },
+            "title": "Trips",
+            "type": "array"
+          }
+        },
+        "required": [
+          "trips"
+        ],
+        "title": "TripListResponse",
+        "type": "object"
       },
       "ValidationError": {
         "properties": {
@@ -2163,6 +2396,304 @@
         "summary": "Post Route Protected Edit",
         "tags": [
           "routes"
+        ]
+      }
+    },
+    "/shares/{share_token}": {
+      "get": {
+        "operationId": "get_shared_plan_shares__share_token__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "share_token",
+            "required": true,
+            "schema": {
+              "title": "Share Token",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SharedPlanSnapshot"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Shared Plan",
+        "tags": [
+          "shares"
+        ]
+      }
+    },
+    "/trips": {
+      "get": {
+        "operationId": "list_trips_trips_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TripListResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Trips",
+        "tags": [
+          "trips"
+        ]
+      },
+      "post": {
+        "operationId": "save_trip_trips_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTripRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TripListItem"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Save Trip",
+        "tags": [
+          "trips"
+        ]
+      }
+    },
+    "/trips/capability": {
+      "delete": {
+        "operationId": "delete_trip_capability_trips_capability_delete",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Delete Trip Capability",
+        "tags": [
+          "trips"
+        ]
+      },
+      "get": {
+        "operationId": "ensure_trip_capability_trips_capability_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TripCapabilityStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Ensure Trip Capability",
+        "tags": [
+          "trips"
+        ]
+      }
+    },
+    "/trips/{trip_id}": {
+      "delete": {
+        "operationId": "delete_trip_trips__trip_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "trip_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Trip Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete Trip",
+        "tags": [
+          "trips"
+        ]
+      },
+      "get": {
+        "operationId": "get_trip_trips__trip_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "trip_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Trip Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TripDetailResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Trip",
+        "tags": [
+          "trips"
+        ]
+      }
+    },
+    "/trips/{trip_id}/reevaluate": {
+      "post": {
+        "operationId": "reevaluate_trip_trips__trip_id__reevaluate_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "trip_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Trip Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TripDetailResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reevaluate Trip",
+        "tags": [
+          "trips"
+        ]
+      }
+    },
+    "/trips/{trip_id}/share": {
+      "post": {
+        "operationId": "create_trip_share_link_trips__trip_id__share_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "trip_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Trip Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateShareLinkResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Trip Share Link",
+        "tags": [
+          "trips"
         ]
       }
     }

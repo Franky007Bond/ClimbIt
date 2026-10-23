@@ -57,6 +57,26 @@ export type ClosureStatus = 'none_known' | 'active';
 export type Completeness = 'complete' | 'incomplete';
 
 /**
+ * CreateShareLinkResponse
+ */
+export type CreateShareLinkResponse = {
+    /**
+     * Share Token
+     */
+    share_token: string;
+};
+
+/**
+ * CreateTripRequest
+ */
+export type CreateTripRequest = {
+    /**
+     * Plan Run Id
+     */
+    plan_run_id: string;
+};
+
+/**
  * DescriptiveEditRequest
  */
 export type DescriptiveEditRequest = {
@@ -665,9 +685,147 @@ export type RouteSearchResponse = {
 export type RouteType = 'klettersteig' | 'alpine_hike' | 'outdoor_climbing';
 
 /**
+ * SharedPlanSnapshot
+ */
+export type SharedPlanSnapshot = {
+    /**
+     * Components
+     */
+    components: {
+        [key: string]: unknown;
+    };
+    /**
+     * Confidence
+     */
+    confidence: string;
+    /**
+     * Explanation
+     */
+    explanation: Array<string>;
+    /**
+     * Origin Region
+     */
+    origin_region: string | null;
+    /**
+     * Plan Date
+     */
+    plan_date: string;
+    /**
+     * Plan Run Id
+     */
+    plan_run_id: string;
+    /**
+     * Recommendation
+     */
+    recommendation: string;
+    /**
+     * Route Id
+     */
+    route_id: string;
+};
+
+/**
  * TransitAccessibility
  */
 export type TransitAccessibility = 'transit_friendly' | 'limited' | 'unknown';
+
+/**
+ * TripCapabilityStatus
+ */
+export type TripCapabilityStatus = {
+    /**
+     * Status
+     */
+    status: string;
+};
+
+/**
+ * TripDetailResponse
+ */
+export type TripDetailResponse = {
+    /**
+     * Components
+     */
+    components: {
+        [key: string]: unknown;
+    };
+    /**
+     * Confidence
+     */
+    confidence: string;
+    /**
+     * Explanation
+     */
+    explanation: Array<string>;
+    /**
+     * Last Change Summary
+     */
+    last_change_summary: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Latest Plan Run Id
+     */
+    latest_plan_run_id: string;
+    /**
+     * Plan Date
+     */
+    plan_date: string;
+    /**
+     * Recommendation
+     */
+    recommendation: string;
+    /**
+     * Route Id
+     */
+    route_id: string;
+    /**
+     * Trip Id
+     */
+    trip_id: string;
+};
+
+/**
+ * TripListItem
+ */
+export type TripListItem = {
+    /**
+     * Last Change Summary
+     */
+    last_change_summary: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Latest Plan Run Id
+     */
+    latest_plan_run_id: string;
+    /**
+     * Plan Date
+     */
+    plan_date: string;
+    /**
+     * Recommendation
+     */
+    recommendation: string;
+    /**
+     * Route Id
+     */
+    route_id: string;
+    /**
+     * Trip Id
+     */
+    trip_id: string;
+};
+
+/**
+ * TripListResponse
+ */
+export type TripListResponse = {
+    /**
+     * Trips
+     */
+    trips: Array<TripListItem>;
+};
 
 /**
  * ValidationError
@@ -1117,3 +1275,226 @@ export type PostRouteProtectedEditRoutesRouteIdProtectedEditsPostResponses = {
 };
 
 export type PostRouteProtectedEditRoutesRouteIdProtectedEditsPostResponse = PostRouteProtectedEditRoutesRouteIdProtectedEditsPostResponses[keyof PostRouteProtectedEditRoutesRouteIdProtectedEditsPostResponses];
+
+export type GetSharedPlanSharesShareTokenGetData = {
+    body?: never;
+    path: {
+        /**
+         * Share Token
+         */
+        share_token: string;
+    };
+    query?: never;
+    url: '/shares/{share_token}';
+};
+
+export type GetSharedPlanSharesShareTokenGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetSharedPlanSharesShareTokenGetError = GetSharedPlanSharesShareTokenGetErrors[keyof GetSharedPlanSharesShareTokenGetErrors];
+
+export type GetSharedPlanSharesShareTokenGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: SharedPlanSnapshot;
+};
+
+export type GetSharedPlanSharesShareTokenGetResponse = GetSharedPlanSharesShareTokenGetResponses[keyof GetSharedPlanSharesShareTokenGetResponses];
+
+export type ListTripsTripsGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/trips';
+};
+
+export type ListTripsTripsGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: TripListResponse;
+};
+
+export type ListTripsTripsGetResponse = ListTripsTripsGetResponses[keyof ListTripsTripsGetResponses];
+
+export type SaveTripTripsPostData = {
+    body: CreateTripRequest;
+    path?: never;
+    query?: never;
+    url: '/trips';
+};
+
+export type SaveTripTripsPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type SaveTripTripsPostError = SaveTripTripsPostErrors[keyof SaveTripTripsPostErrors];
+
+export type SaveTripTripsPostResponses = {
+    /**
+     * Successful Response
+     */
+    201: TripListItem;
+};
+
+export type SaveTripTripsPostResponse = SaveTripTripsPostResponses[keyof SaveTripTripsPostResponses];
+
+export type DeleteTripCapabilityTripsCapabilityDeleteData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/trips/capability';
+};
+
+export type DeleteTripCapabilityTripsCapabilityDeleteResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DeleteTripCapabilityTripsCapabilityDeleteResponse = DeleteTripCapabilityTripsCapabilityDeleteResponses[keyof DeleteTripCapabilityTripsCapabilityDeleteResponses];
+
+export type EnsureTripCapabilityTripsCapabilityGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/trips/capability';
+};
+
+export type EnsureTripCapabilityTripsCapabilityGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: TripCapabilityStatus;
+};
+
+export type EnsureTripCapabilityTripsCapabilityGetResponse = EnsureTripCapabilityTripsCapabilityGetResponses[keyof EnsureTripCapabilityTripsCapabilityGetResponses];
+
+export type DeleteTripTripsTripIdDeleteData = {
+    body?: never;
+    path: {
+        /**
+         * Trip Id
+         */
+        trip_id: string;
+    };
+    query?: never;
+    url: '/trips/{trip_id}';
+};
+
+export type DeleteTripTripsTripIdDeleteErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type DeleteTripTripsTripIdDeleteError = DeleteTripTripsTripIdDeleteErrors[keyof DeleteTripTripsTripIdDeleteErrors];
+
+export type DeleteTripTripsTripIdDeleteResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DeleteTripTripsTripIdDeleteResponse = DeleteTripTripsTripIdDeleteResponses[keyof DeleteTripTripsTripIdDeleteResponses];
+
+export type GetTripTripsTripIdGetData = {
+    body?: never;
+    path: {
+        /**
+         * Trip Id
+         */
+        trip_id: string;
+    };
+    query?: never;
+    url: '/trips/{trip_id}';
+};
+
+export type GetTripTripsTripIdGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetTripTripsTripIdGetError = GetTripTripsTripIdGetErrors[keyof GetTripTripsTripIdGetErrors];
+
+export type GetTripTripsTripIdGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: TripDetailResponse;
+};
+
+export type GetTripTripsTripIdGetResponse = GetTripTripsTripIdGetResponses[keyof GetTripTripsTripIdGetResponses];
+
+export type ReevaluateTripTripsTripIdReevaluatePostData = {
+    body?: never;
+    path: {
+        /**
+         * Trip Id
+         */
+        trip_id: string;
+    };
+    query?: never;
+    url: '/trips/{trip_id}/reevaluate';
+};
+
+export type ReevaluateTripTripsTripIdReevaluatePostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ReevaluateTripTripsTripIdReevaluatePostError = ReevaluateTripTripsTripIdReevaluatePostErrors[keyof ReevaluateTripTripsTripIdReevaluatePostErrors];
+
+export type ReevaluateTripTripsTripIdReevaluatePostResponses = {
+    /**
+     * Successful Response
+     */
+    200: TripDetailResponse;
+};
+
+export type ReevaluateTripTripsTripIdReevaluatePostResponse = ReevaluateTripTripsTripIdReevaluatePostResponses[keyof ReevaluateTripTripsTripIdReevaluatePostResponses];
+
+export type CreateTripShareLinkTripsTripIdSharePostData = {
+    body?: never;
+    path: {
+        /**
+         * Trip Id
+         */
+        trip_id: string;
+    };
+    query?: never;
+    url: '/trips/{trip_id}/share';
+};
+
+export type CreateTripShareLinkTripsTripIdSharePostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateTripShareLinkTripsTripIdSharePostError = CreateTripShareLinkTripsTripIdSharePostErrors[keyof CreateTripShareLinkTripsTripIdSharePostErrors];
+
+export type CreateTripShareLinkTripsTripIdSharePostResponses = {
+    /**
+     * Successful Response
+     */
+    200: CreateShareLinkResponse;
+};
+
+export type CreateTripShareLinkTripsTripIdSharePostResponse = CreateTripShareLinkTripsTripIdSharePostResponses[keyof CreateTripShareLinkTripsTripIdSharePostResponses];

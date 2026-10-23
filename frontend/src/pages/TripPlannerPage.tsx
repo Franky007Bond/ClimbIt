@@ -4,10 +4,7 @@ import { useSearchParams } from 'react-router-dom'
 import { createPlanRoutesRouteIdPlansPost } from '../api/generated/sdk.gen'
 import type { PlanResponse } from '../api/generated/types.gen'
 import '../api/client'
-
-function recommendationClass(recommendation: string): string {
-  return `trip-planner-rec trip-planner-rec--${recommendation}`
-}
+import { recommendationClass } from '../features/trips/recommendationClass'
 
 export function TripPlannerPage() {
   const [searchParams] = useSearchParams()

@@ -542,3 +542,57 @@ main p {
   border-top: 1px solid var(--border);
   padding-top: 1rem;
 }
+
+.my-trips {
+  display: grid;
+  gap: 1.25rem;
+  max-width: 52rem;
+}
+
+.my-trips-lead {
+  color: var(--muted);
+}
+
+.my-trips-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.my-trips-card {
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.my-trips-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.my-trips-detail,
+.shared-plan {
+  max-width: 52rem;
+}
+
+.my-trips-changes {
+  font-size: 0.85rem;
+  overflow: auto;
+}
+
+.map-attribution {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.25rem;
+  z-index: 1000;
+  font-size: 0.75rem;
+  background: rgb(255 255 255 / 0.85);
+  padding: 0.15rem 0.35rem;
+  border-radius: 0.25rem;
+  pointer-events: auto;
+}
