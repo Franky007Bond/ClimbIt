@@ -49,6 +49,11 @@ def reset_tracing_for_tests() -> None:
     """Allow tests to install a custom TracerProvider."""
     global _CONFIGURED
     _CONFIGURED = False
+    # OpenTelemetry allows only one global provider unless the Once gate is cleared.
+    from opentelemetry import trace as trace_api
+
+    trace_api._TRACER_PROVIDER_SET_ONCE._done = False  # noqa: SLF001
+    trace_api._TRACER_PROVIDER = None  # noqa: SLF001
 
 
 def install_tracer_provider(provider: TracerProvider) -> None:

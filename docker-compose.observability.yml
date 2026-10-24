@@ -1,0 +1,81 @@
+# Optional observability stack (spec section 7). Use:
+#   docker compose -f docker-compose.yml -f docker-compose.observability.yml --profile observability up -d
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.114.0
+    profiles: [observability]
+    restart: unless-stopped
+    command: ["--config=/etc/otelcol/config.yaml"]
+    volumes:
+      - ./observability/otel-collector-config.yaml:/etc/otelcol/config.yaml:ro
+    ports:
+      - "127.0.0.1:4318:4318"
+      - "127.0.0.1:8889:8889"
+      - "127.0.0.1:13133:13133"
+    depends_on:
+      tempo:
+        condition: service_started
+      loki:
+        condition: service_started
+
+  tempo:
+    image: grafana/tempo:2.6.1
+    profiles: [observability]
+    restart: unless-stopped
+    command: ["-config.file=/etc/tempo.yaml"]
+    volumes:
+      - ./observability/tempo.yaml:/etc/tempo.yaml:ro
+      - climbit_tempo_data:/var/tempo
+    ports:
+      - "127.0.0.1:3200:3200"
+
+  loki:
+    image: grafana/loki:3.2.1
+    profiles: [observability]
+    restart: unless-stopped
+    command: ["-config.file=/etc/loki/loki.yaml"]
+    volumes:
+      - ./observability/loki.yaml:/etc/loki/loki.yaml:ro
+      - climbit_loki_data:/loki
+    ports:
+      - "127.0.0.1:3100:3100"
+
+  prometheus:
+    image: prom/prometheus:v3.0.1
+    profiles: [observability]
+    restart: unless-stopped
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.retention.time=168h
+    volumes:
+      - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - climbit_prometheus_data:/prometheus
+    ports:
+      - "127.0.0.1:9090:9090"
+
+  grafana:
+    image: grafana/grafana:11.3.1
+    profiles: [observability]
+    restart: unless-stopped
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+    volumes:
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - climbit_grafana_data:/var/lib/grafana
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      - prometheus
+      - loki
+      - tempo
+
+volumes:
+  climbit_tempo_data:
+    name: climbit_tempo_data
+  climbit_loki_data:
+    name: climbit_loki_data
+  climbit_prometheus_data:
+    name: climbit_prometheus_data
+  climbit_grafana_data:
+    name: climbit_grafana_data

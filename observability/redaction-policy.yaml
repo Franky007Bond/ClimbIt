@@ -1,0 +1,6 @@
+# Documented redaction policy (implemented by processors.transform/redaction in otel-collector-config.yaml).
+# Case-insensitive; (?i) must lead the pattern for Python re contract tests (OTEL uses the same string).
+sensitive_key_pattern: "(?i).*(authorization|cookie|origin|body).*"
+sensitive_value_patterns:
+  - "Bearer\\s+\\S+"
+  - "Basic\\s+\\S+"
