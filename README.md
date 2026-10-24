@@ -1,10 +1,45 @@
 # ClimbIt
 
-From the repository root, `docker compose up -d --build` starts the API and PostGIS. Compose applies pending migrations before the API serves traffic.
+Alpine trip planning: routes, weather, transit, gear, and explainable safety recommendations.
 
-`GET /health` is process liveness. `GET /ready` is database and migration readiness. Host uvicorn still starts with `DATABASE_URL` unset (`/health` 200, `/ready` 503). Logs are JSON on stderr or stdout.
+## Quick start
 
-`uv run pytest` and `uv run uvicorn app.main:app --host 127.0.0.1 --port 8000` from `backend/` still do not need a database. Host uvicorn still starts with `DATABASE_URL` unset. Host pytest without `DATABASE_URL` skips the migration test.
+From the repository root:
+
+```powershell
+docker compose up -d --build
+```
+
+- API: http://127.0.0.1:8000 (`GET /health`, `GET /ready`)
+- Frontend: http://127.0.0.1:5173
+- PostGIS: `127.0.0.1:5432`
+
+Load seed routes (optional):
+
+```powershell
+cd backend
+$env:DATABASE_URL="postgresql://climbit:climbit@127.0.0.1:5432/climbit"
+uv run python -m app.seed
+```
+
+Observability profile (Grafana, alerts, on-call worker):
+
+```powershell
+docker compose -f docker-compose.yml -f docker-compose.observability.yml --profile observability up -d
+```
+
+## Documentation
+
+| Topic | Link |
+| --- | --- |
+| Product specification | [`_docs/specs.md`](_docs/specs.md) |
+| Public task tracker | [GitHub Issues](https://github.com/Franky007Bond/ClimbIt/issues) |
+| Agent entry point | [`AGENTS.MD`](AGENTS.MD) |
+| Course / peer review | [`_docs/course-evidence.md`](_docs/course-evidence.md) |
+| Agent evidence index | [`_docs/evidence/README.md`](_docs/evidence/README.md) |
+| Deployment & rollback | [`_docs/operations/deployment.md`](_docs/operations/deployment.md) |
+| Deploy rollback evidence | [`_docs/operations/evidence/deploy-rollback-2026-10-24.md`](_docs/operations/evidence/deploy-rollback-2026-10-24.md) |
+| CI | [`_docs/ci.md`](_docs/ci.md) |
 
 ## Backend
 
@@ -13,10 +48,7 @@ From `backend/`:
 ```powershell
 uv run pytest
 uv run uvicorn app.main:app --host 127.0.0.1 --port 8000
-uv run python -m app.seed
 ```
-
-`uv run python -m app.seed` requires `DATABASE_URL` (Compose does not load seed data automatically). Example host URL for the published Compose port: `postgresql://climbit:climbit@127.0.0.1:5432/climbit`.
 
 ## Frontend
 
