@@ -1,0 +1,62 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+    timeout: 5s
+    send_batch_size: 512
+  probabilistic_sampler:
+    sampling_percentage: 100
+  transform/redaction:
+    error_mode: ignore
+    trace_statements:
+      - context: span
+        statements:
+          - delete_matching_keys(attributes, "(?i).*(authorization|cookie|origin|body).*")
+          - replace_all_patterns(attributes, "value", "Bearer\\s+\\S+", "[REDACTED]")
+          - replace_all_patterns(attributes, "value", "Basic\\s+\\S+", "[REDACTED]")
+    log_statements:
+      - context: log
+        statements:
+          - delete_matching_keys(attributes, "(?i).*(authorization|cookie|origin|body).*")
+          - replace_pattern(body, "Bearer\\s+\\S+", "[REDACTED]")
+          - replace_pattern(body, "Basic\\s+\\S+", "[REDACTED]")
+    metric_statements:
+      - context: datapoint
+        statements:
+          - delete_matching_keys(attributes, "(?i).*(authorization|cookie|origin|body).*")
+
+exporters:
+  otlp/tempo:
+    endpoint: tempo:4317
+    tls:
+      insecure: true
+  otlphttp/loki:
+    endpoint: http://loki:3100/otlp
+  prometheus:
+    endpoint: 0.0.0.0:8889
+
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+
+service:
+  extensions: [health_check]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [probabilistic_sampler, transform/redaction, batch]
+      exporters: [otlp/tempo]
+    metrics:
+      receivers: [otlp]
+      processors: [transform/redaction, batch]
+      exporters: [prometheus]
+    logs:
+      receivers: [otlp]
+      processors: [transform/redaction, batch]
+      exporters: [otlphttp/loki]
