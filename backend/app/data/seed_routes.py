@@ -6,6 +6,8 @@ from app.data.seed_routes_allgaeu import ALLGAEU_CATALOG_SLUGS
 from app.data.seed_routes_allgaeu import build_allgaeu_catalog_routes
 from app.data.seed_routes_dolomites import DOLOMITES_CATALOG_SLUGS
 from app.data.seed_routes_dolomites import build_dolomites_catalog_routes
+from app.data.seed_routes_french_swiss import FRENCH_SWISS_CATALOG_SLUGS
+from app.data.seed_routes_french_swiss import build_french_swiss_catalog_routes
 from app.data.seed_routes_tyrol import TYROL_CATALOG_SLUGS
 from app.data.seed_routes_tyrol import build_tyrol_catalog_routes
 from app.domain.difficulty import map_difficulty
@@ -39,11 +41,15 @@ SEED_FIXTURE_SLUGS = (
     QUARANTINED_OUTDOOR_CLIMBING_SLUG,
 )
 
+UNSUPPORTED_PYRENEES_DEMO_SLUG = "unsupported-pyrenees-demo"
+
 SEED_SLUGS = (
     SEED_FIXTURE_SLUGS
     + ALLGAEU_CATALOG_SLUGS
     + TYROL_CATALOG_SLUGS
     + DOLOMITES_CATALOG_SLUGS
+    + FRENCH_SWISS_CATALOG_SLUGS
+    + (UNSUPPORTED_PYRENEES_DEMO_SLUG,)
 )
 
 ALLGAEU_LAUNCH_SLUGS = (
@@ -55,10 +61,15 @@ TYROL_LAUNCH_SLUGS = TYROL_CATALOG_SLUGS
 
 DOLOMITES_LAUNCH_SLUGS = DOLOMITES_CATALOG_SLUGS
 
+FRENCH_SWISS_LAUNCH_SLUGS = (PUBLISHED_ALPINE_HIKE_SLUG,) + FRENCH_SWISS_CATALOG_SLUGS
+
 ALLGAEU = Region(name="Allgäu", country="DE", coverage=RegionCoverage.SUPPORTED)
 TYROL = Region(name="Tyrol", country="AT", coverage=RegionCoverage.SUPPORTED)
 DOLOMITES = Region(name="Dolomites", country="IT", coverage=RegionCoverage.SUPPORTED)
 CHAMONIX = Region(name="Chamonix", country="FR", coverage=RegionCoverage.SAMPLE)
+ZERMATT = Region(name="Zermatt", country="CH", coverage=RegionCoverage.SAMPLE)
+GRIMSEL = Region(name="Grimsel", country="CH", coverage=RegionCoverage.SAMPLE)
+PYRENEES = Region(name="Pyrenees", country="FR", coverage=RegionCoverage.UNSUPPORTED)
 
 _ALPENVEREIN_LINK = "https://www.alpenverein.de/"
 
@@ -92,13 +103,28 @@ def _hinterstein_blaustein_geometry() -> tuple[Point, LineString]:
     return trailhead, linestring
 
 
-def _chamonix_line() -> LineString:
-    return LineString(
+def _grand_balcon_sud_geometry() -> tuple[Point, LineString]:
+    trailhead = Point(longitude=6.865, latitude=45.923)
+    linestring = LineString(
         points=[
-            Point(longitude=6.86, latitude=45.92),
-            Point(longitude=6.88, latitude=45.93),
+            trailhead,
+            Point(longitude=6.870, latitude=45.928),
+            Point(longitude=6.875, latitude=45.933),
         ]
     )
+    return trailhead, linestring
+
+
+def _pyrenees_demo_geometry() -> tuple[Point, LineString]:
+    trailhead = Point(longitude=0.142, latitude=42.694)
+    linestring = LineString(
+        points=[
+            trailhead,
+            Point(longitude=0.148, latitude=42.698),
+            Point(longitude=0.154, latitude=42.702),
+        ]
+    )
+    return trailhead, linestring
 
 
 def _base_route(**overrides: object) -> Route:
@@ -144,7 +170,8 @@ def build_seed_routes() -> list[tuple[uuid.UUID, Route]]:
     )
     hindelanger_trailhead, hindelanger_line = _hindelanger_geometry()
     blaustein_trailhead, blaustein_line = _hinterstein_blaustein_geometry()
-    chamonix_line = _chamonix_line()
+    grand_balcon_trailhead, grand_balcon_line = _grand_balcon_sud_geometry()
+    pyrenees_trailhead, pyrenees_line = _pyrenees_demo_geometry()
 
     published_klettersteig = _base_route(
         name="Hindelanger Klettersteig",
@@ -174,22 +201,28 @@ def build_seed_routes() -> list[tuple[uuid.UUID, Route]]:
         official_source_links=[_ALPENVEREIN_LINK],
     )
     published_alpine_hike = _base_route(
-        name="Seed Published Alpine Hike",
+        name="Grand Balcon Sud",
         route_type=RouteType.ALPINE_HIKE,
         region=CHAMONIX,
         publication=Publication.PUBLISHED,
-        trailhead=chamonix_line.points[0],
-        linestring=chamonix_line,
-        elevation_min_m=1000,
-        elevation_max_m=1600,
-        elevation_gain_m=600,
-        elevation_loss_m=600,
-        duration_minutes=240,
+        trailhead=grand_balcon_trailhead,
+        linestring=grand_balcon_line,
+        elevation_min_m=1035,
+        elevation_max_m=2150,
+        elevation_gain_m=650,
+        elevation_loss_m=650,
+        duration_minutes=360,
         original_difficulty_value="T3",
         original_difficulty_scale="SAC",
         difficulty=alpine_hike_difficulty,
         completeness=Completeness.COMPLETE,
-        description="Seed example published alpine hike. Not a live catalog entry.",
+        season_months={6, 7, 8, 9},
+        description=(
+            "Classic balcony traverse above the Chamonix valley with steady "
+            "paths, short rocky steps, and views toward Mont Blanc."
+        ),
+        transit_accessibility=TransitAccessibility.TRANSIT_FRIENDLY,
+        official_source_links=["https://www.ffme.fr/"],
     )
     published_outdoor_climbing = _base_route(
         name="Blaustein",
@@ -242,7 +275,40 @@ def build_seed_routes() -> list[tuple[uuid.UUID, Route]]:
         (seed_route_id(QUARANTINED_ALPINE_HIKE_SLUG), quarantined_alpine_hike),
         (seed_route_id(QUARANTINED_OUTDOOR_CLIMBING_SLUG), quarantined_outdoor_climbing),
     ]
+    unsupported_pyrenees_demo = _base_route(
+        name="Pic du Midi d'Ossau",
+        route_type=RouteType.ALPINE_HIKE,
+        region=PYRENEES,
+        publication=Publication.PUBLISHED,
+        trailhead=pyrenees_trailhead,
+        linestring=pyrenees_line,
+        elevation_min_m=1800,
+        elevation_max_m=2884,
+        elevation_gain_m=1084,
+        elevation_loss_m=1084,
+        duration_minutes=480,
+        original_difficulty_value="T4",
+        original_difficulty_scale="SAC",
+        difficulty=map_difficulty(RouteType.ALPINE_HIKE, "T4", "SAC"),
+        completeness=Completeness.COMPLETE,
+        season_months={6, 7, 8, 9},
+        description=(
+            "Pyrenean summit classic from the Gabas trailhead with steep "
+            "scree and a narrow rocky crest outside the launch coverage set."
+        ),
+        transit_accessibility=TransitAccessibility.LIMITED,
+        official_source_links=["https://www.ffme.fr/"],
+    )
+
     allgaeu_catalog = build_allgaeu_catalog_routes(_base_route)
     tyrol_catalog = build_tyrol_catalog_routes(_base_route)
     dolomites_catalog = build_dolomites_catalog_routes(_base_route)
-    return fixtures + allgaeu_catalog + tyrol_catalog + dolomites_catalog
+    french_swiss_catalog = build_french_swiss_catalog_routes(_base_route)
+    return (
+        fixtures
+        + allgaeu_catalog
+        + tyrol_catalog
+        + dolomites_catalog
+        + french_swiss_catalog
+        + [(seed_route_id(UNSUPPORTED_PYRENEES_DEMO_SLUG), unsupported_pyrenees_demo)]
+    )

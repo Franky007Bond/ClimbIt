@@ -19,7 +19,9 @@ from app.data.seed_routes import SEED_NAMESPACE
 from app.data.seed_routes import SEED_SLUGS
 from app.data.seed_routes import build_seed_routes
 from app.data.seed_routes_allgaeu import ALLGAEU_LAUNCH_PUBLISHED_COUNT
+from app.data.seed_routes import UNSUPPORTED_PYRENEES_DEMO_SLUG
 from app.data.seed_routes_dolomites import DOLOMITES_LAUNCH_PUBLISHED_COUNT
+from app.data.seed_routes_french_swiss import FRENCH_SWISS_LAUNCH_PUBLISHED_COUNT
 from app.data.seed_routes_tyrol import TYROL_LAUNCH_PUBLISHED_COUNT
 from app.data.seed_routes import seed_route_id
 from app.db import create_sessionmaker
@@ -235,6 +237,7 @@ def test_seed_row_contents(session) -> None:
     assert alpine is not None
     assert alpine.route_type is RouteType.ALPINE_HIKE
     assert alpine.publication is Publication.PUBLISHED
+    assert alpine.name == "Grand Balcon Sud"
     assert alpine.region.name == "Chamonix"
     assert alpine.region.country == "FR"
     assert alpine.region.coverage is RegionCoverage.SAMPLE
@@ -324,6 +327,42 @@ def test_seed_published_dolomites_count(session) -> None:
         )
     ).scalar_one()
     assert rows == DOLOMITES_LAUNCH_PUBLISHED_COUNT
+
+
+def test_seed_published_french_swiss_sample_count(session) -> None:
+    seed(session)
+    session.commit()
+    rows = session.execute(
+        text(
+            """
+            SELECT count(*)
+            FROM routes
+            WHERE publication = 'published'
+              AND region_coverage = 'sample'
+            """
+        )
+    ).scalar_one()
+    assert rows == FRENCH_SWISS_LAUNCH_PUBLISHED_COUNT
+
+
+def test_seed_published_unsupported_demo_count(session) -> None:
+    seed(session)
+    session.commit()
+    rows = session.execute(
+        text(
+            """
+            SELECT count(*)
+            FROM routes
+            WHERE publication = 'published'
+              AND region_coverage = 'unsupported'
+            """
+        )
+    ).scalar_one()
+    assert rows == 1
+    loaded = get_route(session, seed_route_id(UNSUPPORTED_PYRENEES_DEMO_SLUG))
+    assert loaded is not None
+    assert loaded.region.name == "Pyrenees"
+    assert loaded.region.country == "FR"
 
 
 def test_save_route_still_assigns_new_uuid(session) -> None:
