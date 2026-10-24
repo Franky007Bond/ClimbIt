@@ -604,6 +604,60 @@ export type RevisionDetailResponse = {
 };
 
 /**
+ * ElevationProfilePoint
+ */
+export type ElevationProfilePoint = {
+    /**
+     * Distance M
+     */
+    distance_m: number;
+    /**
+     * Elevation M
+     */
+    elevation_m: number;
+};
+
+/**
+ * ElevationProfile
+ */
+export type ElevationProfile = {
+    /**
+     * Points
+     */
+    points: Array<ElevationProfilePoint>;
+    /**
+     * Synthesized
+     */
+    synthesized: boolean;
+};
+
+/**
+ * TrailheadTransitConnection
+ */
+export type TrailheadTransitConnection = {
+    /**
+     * Distance M
+     */
+    distance_m: number;
+    /**
+     * Hub Id
+     */
+    hub_id: string;
+    /**
+     * Latitude
+     */
+    latitude: number;
+    /**
+     * Longitude
+     */
+    longitude: number;
+    /**
+     * Stop Name
+     */
+    stop_name: string;
+};
+
+/**
  * RouteDetail
  */
 export type RouteDetail = {
@@ -652,6 +706,10 @@ export type RouteDetail = {
      */
     elevation_min_m: number | null;
     /**
+     * Elevation Profile
+     */
+    elevation_profile: ElevationProfile | null;
+    /**
      * Gpx
      */
     gpx: string | null;
@@ -685,6 +743,10 @@ export type RouteDetail = {
      */
     technical_minutes: number | null;
     trailhead: Point | null;
+    /**
+     * Trailhead Transit Connection
+     */
+    trailhead_transit_connection: TrailheadTransitConnection | null;
     transit_accessibility: TransitAccessibility;
 };
 

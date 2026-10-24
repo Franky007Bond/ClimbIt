@@ -1,12 +1,17 @@
 import { useEffect } from 'react'
 import { CircleMarker, Polyline, useMap } from 'react-leaflet'
-import type { LineString, Point } from '../../api/generated/types.gen'
+import type {
+  LineString,
+  Point,
+  TrailheadTransitConnection,
+} from '../../api/generated/types.gen'
 import { ClimbItMapContainer } from '../map/ClimbItMapContainer'
 import { DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM } from '../map/mapConstants'
 
 type RouteDetailMapProps = {
   linestring: LineString | null
   trailhead: Point | null
+  trailheadTransitConnection: TrailheadTransitConnection | null
 }
 
 function toLatLng(point: Point): [number, number] {
@@ -16,16 +21,28 @@ function toLatLng(point: Point): [number, number] {
 function FitMapToRoute({
   linestring,
   trailhead,
+  trailheadTransitConnection,
 }: {
   linestring: LineString | null
   trailhead: Point | null
+  trailheadTransitConnection: TrailheadTransitConnection | null
 }) {
   const map = useMap()
 
   useEffect(() => {
     const points = linestring?.points ?? []
-    if (points.length >= 2) {
-      map.fitBounds(points.map(toLatLng), { padding: [32, 32] })
+    const boundsPoints = [...points]
+    if (trailhead) {
+      boundsPoints.push(trailhead)
+    }
+    if (trailheadTransitConnection) {
+      boundsPoints.push({
+        latitude: trailheadTransitConnection.latitude,
+        longitude: trailheadTransitConnection.longitude,
+      })
+    }
+    if (boundsPoints.length >= 2) {
+      map.fitBounds(boundsPoints.map(toLatLng), { padding: [32, 32] })
       return
     }
     if (trailhead) {
@@ -33,23 +50,57 @@ function FitMapToRoute({
       return
     }
     map.setView(DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM)
-  }, [map, linestring, trailhead])
+  }, [map, linestring, trailhead, trailheadTransitConnection])
 
   return null
 }
 
-export function RouteDetailMap({ linestring, trailhead }: RouteDetailMapProps) {
+export function RouteDetailMap({
+  linestring,
+  trailhead,
+  trailheadTransitConnection,
+}: RouteDetailMapProps) {
   const points = linestring?.points ?? []
   const polylinePositions =
     points.length >= 2 ? points.map(toLatLng) : null
 
   return (
     <ClimbItMapContainer className="route-detail-map" scrollWheelZoom>
-      <FitMapToRoute linestring={linestring} trailhead={trailhead} />
+      <FitMapToRoute
+        linestring={linestring}
+        trailhead={trailhead}
+        trailheadTransitConnection={trailheadTransitConnection}
+      />
       {polylinePositions ? (
         <Polyline
           positions={polylinePositions}
           pathOptions={{ color: '#2563eb', weight: 4 }}
+        />
+      ) : null}
+      {trailheadTransitConnection ? (
+        <Polyline
+          positions={[
+            [
+              trailheadTransitConnection.latitude,
+              trailheadTransitConnection.longitude,
+            ],
+            ...(trailhead ? [toLatLng(trailhead)] : []),
+          ]}
+          pathOptions={{ color: '#f59e0b', weight: 3, dashArray: '6 8' }}
+        />
+      ) : null}
+      {trailheadTransitConnection ? (
+        <CircleMarker
+          center={[
+            trailheadTransitConnection.latitude,
+            trailheadTransitConnection.longitude,
+          ]}
+          radius={7}
+          pathOptions={{
+            color: '#f59e0b',
+            fillColor: '#fbbf24',
+            fillOpacity: 0.9,
+          }}
         />
       ) : null}
       {trailhead ? (

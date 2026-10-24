@@ -7,6 +7,7 @@ import {
   formatDifficultyScale,
   normalizedDifficultyGrade,
 } from './difficultyDisplay'
+import { ElevationProfileChart } from './ElevationProfileChart'
 import { RouteDetailMap } from './RouteDetailMap'
 
 type RouteDetailContentProps = {
@@ -99,6 +100,47 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
           )}
         </section>
 
+        {route.elevation_profile ? (
+          <ElevationProfileChart profile={route.elevation_profile} />
+        ) : null}
+
+        {route.trailhead_transit_connection ? (
+          <section
+            className="route-detail-section"
+            aria-labelledby="route-detail-transit-heading"
+          >
+            <h2
+              id="route-detail-transit-heading"
+              className="route-detail-section-title"
+            >
+              <FormattedMessage id="routeDetail.section.transitConnection" />
+            </h2>
+            <dl className="route-detail-dl">
+              <div className="route-detail-dl-row">
+                <dt>
+                  <FormattedMessage id="routeDetail.transit.stopName" />
+                </dt>
+                <dd>{route.trailhead_transit_connection.stop_name}</dd>
+              </div>
+              <div className="route-detail-dl-row">
+                <dt>
+                  <FormattedMessage id="routeDetail.transit.distance" />
+                </dt>
+                <dd>
+                  <FormattedMessage
+                    id="routeDetail.transit.distanceKm"
+                    values={{
+                      km: (
+                        route.trailhead_transit_connection.distance_m / 1000
+                      ).toFixed(1),
+                    }}
+                  />
+                </dd>
+              </div>
+            </dl>
+          </section>
+        ) : null}
+
         <section
           className="route-detail-section"
           aria-labelledby="route-detail-trailhead-heading"
@@ -163,6 +205,7 @@ export function RouteDetailContent({ route }: RouteDetailContentProps) {
         <RouteDetailMap
           linestring={route.linestring}
           trailhead={route.trailhead}
+          trailheadTransitConnection={route.trailhead_transit_connection}
         />
       </section>
     </div>
