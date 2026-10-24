@@ -128,15 +128,6 @@
         "title": "ClosureStatus",
         "type": "string"
       },
-      "ClosureEffectiveStatus": {
-        "enum": [
-          "none_known",
-          "active",
-          "expired"
-        ],
-        "title": "ClosureEffectiveStatus",
-        "type": "string"
-      },
       "Completeness": {
         "enum": [
           "complete",
@@ -330,6 +321,48 @@
           "mapping_version"
         ],
         "title": "Difficulty",
+        "type": "object"
+      },
+      "ElevationProfile": {
+        "additionalProperties": false,
+        "properties": {
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/ElevationProfilePoint"
+            },
+            "title": "Points",
+            "type": "array"
+          },
+          "synthesized": {
+            "default": true,
+            "title": "Synthesized",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "points"
+        ],
+        "title": "ElevationProfile",
+        "type": "object"
+      },
+      "ElevationProfilePoint": {
+        "additionalProperties": false,
+        "properties": {
+          "distance_m": {
+            "minimum": 0.0,
+            "title": "Distance M",
+            "type": "number"
+          },
+          "elevation_m": {
+            "title": "Elevation M",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "distance_m",
+          "elevation_m"
+        ],
+        "title": "ElevationProfilePoint",
         "type": "object"
       },
       "FieldDiffItem": {
@@ -546,6 +579,18 @@
       "PlanResponse": {
         "additionalProperties": false,
         "properties": {
+          "avalanche": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avalanche"
+          },
           "components": {
             "additionalProperties": true,
             "title": "Components",
@@ -596,17 +641,6 @@
             "title": "Plan Run Id",
             "type": "string"
           },
-          "trace_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Trace Id"
-          },
           "recommendation": {
             "title": "Recommendation",
             "type": "string"
@@ -624,17 +658,16 @@
             "title": "Thunderstorm",
             "type": "object"
           },
-          "avalanche": {
+          "trace_id": {
             "anyOf": [
               {
-                "additionalProperties": true,
-                "type": "object"
+                "type": "string"
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Avalanche"
+            "title": "Trace Id"
           },
           "trailhead_timezone": {
             "title": "Trailhead Timezone",
@@ -1150,88 +1183,6 @@
         "title": "RevisionDetailResponse",
         "type": "object"
       },
-      "ElevationProfilePoint": {
-        "additionalProperties": false,
-        "properties": {
-          "distance_m": {
-            "minimum": 0.0,
-            "title": "Distance M",
-            "type": "number"
-          },
-          "elevation_m": {
-            "title": "Elevation M",
-            "type": "integer"
-          }
-        },
-        "required": [
-          "distance_m",
-          "elevation_m"
-        ],
-        "title": "ElevationProfilePoint",
-        "type": "object"
-      },
-      "ElevationProfile": {
-        "additionalProperties": false,
-        "properties": {
-          "points": {
-            "items": {
-              "$ref": "#/components/schemas/ElevationProfilePoint"
-            },
-            "title": "Points",
-            "type": "array"
-          },
-          "synthesized": {
-            "default": true,
-            "title": "Synthesized",
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "points",
-          "synthesized"
-        ],
-        "title": "ElevationProfile",
-        "type": "object"
-      },
-      "TrailheadTransitConnection": {
-        "additionalProperties": false,
-        "properties": {
-          "distance_m": {
-            "minimum": 0.0,
-            "title": "Distance M",
-            "type": "number"
-          },
-          "hub_id": {
-            "title": "Hub Id",
-            "type": "string"
-          },
-          "latitude": {
-            "maximum": 90.0,
-            "minimum": -90.0,
-            "title": "Latitude",
-            "type": "number"
-          },
-          "longitude": {
-            "maximum": 180.0,
-            "minimum": -180.0,
-            "title": "Longitude",
-            "type": "number"
-          },
-          "stop_name": {
-            "title": "Stop Name",
-            "type": "string"
-          }
-        },
-        "required": [
-          "hub_id",
-          "stop_name",
-          "latitude",
-          "longitude",
-          "distance_m"
-        ],
-        "title": "TrailheadTransitConnection",
-        "type": "object"
-      },
       "RouteDetail": {
         "additionalProperties": false,
         "properties": {
@@ -1263,7 +1214,12 @@
           "closure_effective_status": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/ClosureEffectiveStatus"
+                "enum": [
+                  "none_known",
+                  "active",
+                  "expired"
+                ],
+                "type": "string"
               },
               {
                 "type": "null"
@@ -1369,8 +1325,7 @@
               {
                 "type": "null"
               }
-            ],
-            "title": "Elevation Profile"
+            ]
           },
           "gpx": {
             "anyOf": [
@@ -1469,8 +1424,7 @@
               {
                 "type": "null"
               }
-            ],
-            "title": "Trailhead Transit Connection"
+            ]
           },
           "transit_accessibility": {
             "$ref": "#/components/schemas/TransitAccessibility"
@@ -1497,15 +1451,13 @@
           "elevation_max_m",
           "elevation_gain_m",
           "elevation_loss_m",
-          "elevation_profile",
           "approach_minutes",
           "technical_minutes",
           "descent_minutes",
           "season_note",
           "description",
           "official_source_links",
-          "closure_assessment",
-          "trailhead_transit_connection"
+          "closure_assessment"
         ],
         "title": "RouteDetail",
         "type": "object"
@@ -1682,6 +1634,47 @@
           "origin_region"
         ],
         "title": "SharedPlanSnapshot",
+        "type": "object"
+      },
+      "TrailheadTransitConnection": {
+        "additionalProperties": false,
+        "properties": {
+          "distance_m": {
+            "minimum": 0.0,
+            "title": "Distance M",
+            "type": "number"
+          },
+          "hub_id": {
+            "minLength": 1,
+            "title": "Hub Id",
+            "type": "string"
+          },
+          "latitude": {
+            "maximum": 90.0,
+            "minimum": -90.0,
+            "title": "Latitude",
+            "type": "number"
+          },
+          "longitude": {
+            "maximum": 180.0,
+            "minimum": -180.0,
+            "title": "Longitude",
+            "type": "number"
+          },
+          "stop_name": {
+            "minLength": 1,
+            "title": "Stop Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "hub_id",
+          "stop_name",
+          "latitude",
+          "longitude",
+          "distance_m"
+        ],
+        "title": "TrailheadTransitConnection",
         "type": "object"
       },
       "TransitAccessibility": {

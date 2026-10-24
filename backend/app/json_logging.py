@@ -68,6 +68,10 @@ async def log_http_access(request: Request, call_next) -> Response:
     path = request.url.path
     if path not in _PROBE_PATHS:
         trace_id = current_trace_id()
+        if trace_id is None:
+            header_trace = response.headers.get("X-Trace-Id")
+            if header_trace:
+                trace_id = header_trace
         extra: dict[str, object] = {
             "method": request.method,
             "path": path,

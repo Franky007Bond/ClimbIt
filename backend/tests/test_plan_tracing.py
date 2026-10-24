@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+from collections.abc import Iterator
 
 import pytest
 from opentelemetry import trace
@@ -47,16 +48,43 @@ def memory_span_exporter(monkeypatch: pytest.MonkeyPatch) -> InMemorySpanExporte
     tracing_mod.reset_tracing_for_tests()
 
 
-def _json_log_lines(caplog, logger_name: str) -> list[dict[str, object]]:
+def _json_log_lines(records: list[logging.LogRecord], logger_name: str) -> list[dict[str, object]]:
     formatter = JsonFormatter()
     lines: list[dict[str, object]] = []
-    for record in caplog.records:
+    for record in records:
         if record.name != logger_name:
             continue
         if record.levelno < logging.INFO:
             continue
         lines.append(json.loads(formatter.format(record)))
     return lines
+
+
+class _AccessLogCollector(logging.Handler):
+    def __init__(self) -> None:
+        super().__init__(level=logging.INFO)
+        self.records: list[logging.LogRecord] = []
+
+    def emit(self, record: logging.LogRecord) -> None:
+        self.records.append(record)
+
+
+@pytest.fixture
+def access_log_collector() -> Iterator[_AccessLogCollector]:
+    collector = _AccessLogCollector()
+    logger = logging.getLogger(ACCESS_LOGGER_NAME)
+    prior_disabled = logger.disabled
+    prior_propagate = logger.propagate
+    logger.disabled = False
+    logger.propagate = False
+    logger.setLevel(logging.INFO)
+    logger.addHandler(collector)
+    try:
+        yield collector
+    finally:
+        logger.removeHandler(collector)
+        logger.disabled = prior_disabled
+        logger.propagate = prior_propagate
 
 
 @pytest.fixture
@@ -71,11 +99,10 @@ def traced_seeded_client(
 def test_plan_response_trace_id_matches_logs_and_spans(
     traced_seeded_client,
     memory_span_exporter: InMemorySpanExporter,
+    access_log_collector: _AccessLogCollector,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-    caplog.set_level(logging.INFO)
     caplog.set_level(logging.INFO, logger=PLANNING_LOGGER_NAME)
-    caplog.set_level(logging.INFO, logger=ACCESS_LOGGER_NAME)
     route_id = seed_route_id(PUBLISHED_ALPINE_HIKE_SLUG)
     response = traced_seeded_client.post(
         f"/routes/{route_id}/plans",
@@ -88,9 +115,10 @@ def test_plan_response_trace_id_matches_logs_and_spans(
     assert len(trace_id) == 32
     assert trace_id.islower()
 
-    access_logs = _json_log_lines(caplog, ACCESS_LOGGER_NAME)
-    planning_logs = _json_log_lines(caplog, PLANNING_LOGGER_NAME)
+    access_logs = _json_log_lines(access_log_collector.records, ACCESS_LOGGER_NAME)
+    planning_logs = _json_log_lines(caplog.records, PLANNING_LOGGER_NAME)
     assert any(line.get("trace_id") == trace_id for line in access_logs)
+    assert response.headers.get("X-Trace-Id") == trace_id
     if planning_logs:
         assert any(line.get("trace_id") == trace_id for line in planning_logs)
 
