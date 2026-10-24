@@ -79,6 +79,11 @@ export type ClosureReviewStatus = 'unreviewed' | 'reviewed';
 export type ClosureStatus = 'none_known' | 'active';
 
 /**
+ * ClosureEffectiveStatus
+ */
+export type ClosureEffectiveStatus = 'none_known' | 'active' | 'expired';
+
+/**
  * Completeness
  */
 export type Completeness = 'complete' | 'incomplete';
@@ -608,6 +613,10 @@ export type RouteDetail = {
     approach_minutes: number | null;
     assessment: Assessment;
     closure_assessment: ClosureAssessment | null;
+    /**
+     * Closure Effective Status
+     */
+    closure_effective_status?: ClosureEffectiveStatus | null;
     completeness: Completeness;
     /**
      * Descent Minutes

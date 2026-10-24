@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from app.api.schemas.route_search import RouteSearchItem
 from app.domain.closure import ClosureAssessment
+from app.domain.closure import EffectiveStatus
 from app.domain.route import LineString
 from app.domain.route import NonNegativeMeters
 from app.domain.route import Point
@@ -23,3 +24,4 @@ class RouteDetail(RouteSearchItem):
     description: str
     official_source_links: list[str]
     closure_assessment: ClosureAssessment | None
+    closure_effective_status: EffectiveStatus | None = None

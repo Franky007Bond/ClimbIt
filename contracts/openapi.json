@@ -128,6 +128,15 @@
         "title": "ClosureStatus",
         "type": "string"
       },
+      "ClosureEffectiveStatus": {
+        "enum": [
+          "none_known",
+          "active",
+          "expired"
+        ],
+        "title": "ClosureEffectiveStatus",
+        "type": "string"
+      },
       "Completeness": {
         "enum": [
           "complete",
@@ -1156,6 +1165,17 @@
                 "type": "null"
               }
             ]
+          },
+          "closure_effective_status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ClosureEffectiveStatus"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Closure Effective Status"
           },
           "completeness": {
             "$ref": "#/components/schemas/Completeness"
