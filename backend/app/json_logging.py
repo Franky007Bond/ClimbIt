@@ -4,7 +4,10 @@ import sys
 
 from fastapi import Request, Response
 
+from app.telemetry.tracing import current_trace_id
+
 ACCESS_LOGGER_NAME = "app.access"
+PLANNING_LOGGER_NAME = "app.planning"
 _PROBE_PATHS = frozenset({"/health", "/ready"})
 _JSON_HANDLER_MARK = "_climbit_json_handler"
 
@@ -27,6 +30,12 @@ class JsonFormatter(logging.Formatter):
         message = record.getMessage()
         if message:
             payload["message"] = message
+        trace_id = getattr(record, "trace_id", None) or current_trace_id()
+        if trace_id:
+            payload["trace_id"] = trace_id
+        event = getattr(record, "event", None)
+        if event is not None:
+            payload["event"] = event
         return json.dumps(payload, ensure_ascii=True)
 
 
@@ -58,12 +67,16 @@ async def log_http_access(request: Request, call_next) -> Response:
     response = await call_next(request)
     path = request.url.path
     if path not in _PROBE_PATHS:
+        trace_id = current_trace_id()
+        extra: dict[str, object] = {
+            "method": request.method,
+            "path": path,
+            "status_code": response.status_code,
+        }
+        if trace_id is not None:
+            extra["trace_id"] = trace_id
         logging.getLogger(ACCESS_LOGGER_NAME).info(
             "request",
-            extra={
-                "method": request.method,
-                "path": path,
-                "status_code": response.status_code,
-            },
+            extra=extra,
         )
     return response

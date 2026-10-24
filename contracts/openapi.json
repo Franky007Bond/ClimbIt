@@ -596,6 +596,17 @@
             "title": "Plan Run Id",
             "type": "string"
           },
+          "trace_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trace Id"
+          },
           "recommendation": {
             "title": "Recommendation",
             "type": "string"
@@ -648,6 +659,7 @@
         },
         "required": [
           "plan_run_id",
+          "trace_id",
           "route_id",
           "plan_date",
           "trailhead_timezone",

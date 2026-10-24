@@ -237,6 +237,9 @@ dependencies = [
     { name = "bcrypt" },
     { name = "fastapi", extra = ["standard"] },
     { name = "geoalchemy2" },
+    { name = "opentelemetry-api" },
+    { name = "opentelemetry-exporter-otlp-proto-http" },
+    { name = "opentelemetry-sdk" },
     { name = "psycopg", extra = ["binary"] },
     { name = "sqlalchemy" },
 ]
@@ -253,6 +256,9 @@ requires-dist = [
     { name = "bcrypt", specifier = ">=5.0.0" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.156.8" },
     { name = "geoalchemy2", specifier = ">=0.20.0" },
+    { name = "opentelemetry-api", specifier = ">=1.45.1" },
+    { name = "opentelemetry-exporter-otlp-proto-http", specifier = ">=1.45.1" },
+    { name = "opentelemetry-sdk", specifier = ">=1.45.1" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.3.6" },
     { name = "sqlalchemy", specifier = ">=2.1.6" },
 ]
