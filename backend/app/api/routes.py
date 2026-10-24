@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+import os
 import uuid
 
-from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request
+from fastapi import APIRouter, Depends, File, Form, Header, HTTPException, Query, Request, UploadFile
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
@@ -16,13 +17,24 @@ from app.api.schemas.route_protected_edit import ProtectedEditResponse
 from app.api.route_search_filters import RouteSearchFilterError
 from app.api.route_search_filters import difficulty_values_in_filter
 from app.api.route_search_filters import parse_difficulty_filter
+from app.api.schemas.gpx_upload import GpxUploadResponse
 from app.api.schemas.route_detail import RouteDetail
 from app.api.schemas.route_search import PositiveMinutesQuery
 from app.api.schemas.route_search import RouteSearchItem
 from app.api.schemas.route_search import RouteSearchResponse
 from app.api.schemas.route_search import SeasonMonthQuery
+from app.domain.route import Assessment
+from app.domain.route import Completeness
+from app.domain.route import Provenance
+from app.domain.route import Publication
+from app.domain.route import Region
+from app.domain.route import RegionCoverage
+from app.domain.route import Route
 from app.domain.route import RouteType
 from app.domain.route import TransitAccessibility
+from app.gpx.process import GPX_DEFAULT_DESCRIPTION
+from app.gpx.process import GpxValidationError
+from app.gpx.process import process_gpx_upload
 from app.models.route import RouteRecord
 from app.repositories.routes import RouteSearchCriteria
 from app.repositories.routes import _point_from_element
@@ -30,10 +42,117 @@ from app.repositories.routes import difficulty_from_route_record
 from app.repositories.routes import get_published_route_by_id
 from app.repositories.routes import record_to_route
 from app.repositories.routes import apply_descriptive_edit
+from app.repositories.routes import save_route
 from app.repositories.routes import search_routes
 from app.repositories.routes import submit_protected_edit
 
 router = APIRouter(tags=["routes"])
+
+_DEFAULT_MAX_GPX_UPLOAD_BYTES = 10 * 1024 * 1024
+
+
+def _max_gpx_upload_bytes() -> int:
+    raw = os.environ.get("MAX_GPX_UPLOAD_BYTES", str(_DEFAULT_MAX_GPX_UPLOAD_BYTES))
+    return int(raw)
+
+
+def _normalize_gpx_form_description(description: str | None) -> str:
+    if description is None:
+        return GPX_DEFAULT_DESCRIPTION
+    stripped = description.strip()
+    if not stripped:
+        raise HTTPException(status_code=422, detail="description must be non-empty after strip")
+    return stripped
+
+
+def _normalize_gpx_form_region(name: str, country: str) -> Region:
+    try:
+        return Region(name=name, country=country, coverage=RegionCoverage.UNSUPPORTED)
+    except ValidationError as exc:
+        raise HTTPException(status_code=422, detail=exc.errors()) from exc
+
+
+@router.post(
+    "/routes/gpx-upload",
+    response_model=GpxUploadResponse,
+    status_code=201,
+)
+async def post_gpx_upload(
+    request: Request,
+    file: UploadFile = File(...),
+    name: str = Form(...),
+    route_type: RouteType = Form(...),
+    region_name: str = Form(...),
+    region_country: str = Form(...),
+    description: str | None = Form(default=None),
+    session: Session = Depends(get_db_session),
+    x_climbit_anonymous_id: str | None = Header(default=None, alias="X-ClimbIt-Anonymous-Id"),
+) -> GpxUploadResponse:
+    enforce_wiki_anonymous_rate_limit(request)
+    raw = await file.read()
+    if len(raw) > _max_gpx_upload_bytes():
+        raise HTTPException(status_code=413, detail="GPX file exceeds maximum upload size")
+
+    try:
+        processed = process_gpx_upload(raw)
+    except GpxValidationError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+    route_name = name.strip()
+    if not route_name:
+        raise HTTPException(status_code=422, detail="name must be non-empty after strip")
+
+    region = _normalize_gpx_form_region(region_name, region_country)
+    stored_description = _normalize_gpx_form_description(description)
+
+    route = Route(
+        name=route_name,
+        route_type=route_type,
+        region=region,
+        publication=Publication.QUARANTINED,
+        trailhead=processed.trailhead,
+        linestring=processed.linestring,
+        gpx=processed.gpx_xml,
+        elevation_min_m=processed.elevation_min_m,
+        elevation_max_m=processed.elevation_max_m,
+        elevation_gain_m=processed.elevation_gain_m,
+        elevation_loss_m=processed.elevation_loss_m,
+        duration_minutes=None,
+        approach_minutes=None,
+        technical_minutes=None,
+        descent_minutes=None,
+        duration_is_estimated=False,
+        original_difficulty_value=None,
+        original_difficulty_scale=None,
+        difficulty=None,
+        closure_assessment=None,
+        season_months=set(),
+        season_note=None,
+        description=stored_description,
+        transit_accessibility=TransitAccessibility.UNKNOWN,
+        official_source_links=[],
+        provenance=Provenance.GPX_UPLOAD,
+        completeness=Completeness.INCOMPLETE,
+        assessment=Assessment.UNASSESSED,
+    )
+
+    author_ref = None
+    if x_climbit_anonymous_id is not None:
+        stripped = x_climbit_anonymous_id.strip()
+        author_ref = stripped or None
+
+    route_id = save_route(
+        session,
+        route,
+        author_kind="anonymous",
+        author_ref=author_ref,
+    )
+    session.commit()
+    return GpxUploadResponse(
+        id=route_id,
+        publication=Publication.QUARANTINED,
+        provenance=Provenance.GPX_UPLOAD,
+    )
 
 
 def _record_to_search_item(session: Session, record: RouteRecord) -> RouteSearchItem:
