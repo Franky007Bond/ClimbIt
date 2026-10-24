@@ -31,5 +31,6 @@ class PlanResponse(BaseModel):
     daylight: dict[str, Any]
     explanation: list[str]
     thunderstorm: dict[str, Any]
+    avalanche: dict[str, Any] | None
     transit_summary: str
     origin_region: str | None
