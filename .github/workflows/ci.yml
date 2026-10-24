@@ -45,3 +45,33 @@ jobs:
         env:
           DATABASE_URL: postgresql://climbit:climbit@127.0.0.1:5432/climbit
         run: uv run --frozen pytest
+
+  security-scan:
+    name: security-scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          working-directory: backend
+          enable-cache: false
+
+      - name: Dependency audit
+        working-directory: backend
+        run: |
+          uv export --frozen --no-dev --no-hashes --format requirements.txt -o /tmp/requirements.txt
+          uv tool run pip-audit -r /tmp/requirements.txt
+
+      - name: Build API image
+        run: docker build -t climbit-api:ci -f backend/Dockerfile backend
+
+      - name: Container vulnerability scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: climbit-api:ci
+          format: table
+          exit-code: 1
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true

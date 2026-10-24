@@ -42,6 +42,7 @@ from app.repositories.routes import difficulty_from_route_record
 from app.repositories.routes import get_published_route_by_id
 from app.repositories.routes import record_to_route
 from app.repositories.routes import apply_descriptive_edit
+from app.security.free_text import sanitize_free_text
 from app.repositories.routes import save_route
 from app.repositories.routes import search_routes
 from app.repositories.routes import submit_protected_edit
@@ -59,7 +60,7 @@ def _max_gpx_upload_bytes() -> int:
 def _normalize_gpx_form_description(description: str | None) -> str:
     if description is None:
         return GPX_DEFAULT_DESCRIPTION
-    stripped = description.strip()
+    stripped = sanitize_free_text(description)
     if not stripped:
         raise HTTPException(status_code=422, detail="description must be non-empty after strip")
     return stripped
@@ -266,7 +267,7 @@ def _normalize_descriptive_edit(body: DescriptiveEditRequest) -> tuple[str | Non
     if update_description:
         if body.description is None:
             raise HTTPException(status_code=422, detail="description must be a non-empty string")
-        description = body.description.strip()
+        description = sanitize_free_text(body.description)
         if not description:
             raise HTTPException(
                 status_code=422,
@@ -276,7 +277,7 @@ def _normalize_descriptive_edit(body: DescriptiveEditRequest) -> tuple[str | Non
         if body.season_note is None:
             season_note = None
         else:
-            season_note = body.season_note.strip()
+            season_note = sanitize_free_text(body.season_note)
             if not season_note:
                 raise HTTPException(
                     status_code=422,

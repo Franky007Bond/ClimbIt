@@ -11,6 +11,7 @@ from typing import Any
 from typing import Protocol
 
 from app.osm.manifest import OsmElementType
+from app.security.outbound import assert_allowed_outbound_url
 
 logger = logging.getLogger(__name__)
 
@@ -92,6 +93,7 @@ class UrllibOverpassClient:
 
 
 def _post_overpass_query(api_url: str, query: str) -> dict[str, Any]:
+    assert_allowed_outbound_url(api_url)
     body = query.encode("utf-8")
     request = urllib.request.Request(
         api_url,
