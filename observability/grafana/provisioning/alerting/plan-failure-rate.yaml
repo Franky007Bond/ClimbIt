@@ -1,0 +1,65 @@
+apiVersion: 1
+groups:
+  - orgId: 1
+    name: climbit-user-impact
+    folder: ClimbIt
+    interval: 1m
+    rules:
+      - uid: climbit-plan-failure-rate
+        title: Trip plan failure rate above 5%
+        condition: B
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: climbit-prometheus
+            model:
+              editorMode: code
+              expr: |
+                sum(rate(climbit_plan_requests_total{result="failure"}[5m]))
+                /
+                clamp_min(sum(rate(climbit_plan_requests_total[5m])), 1e-9)
+              instant: true
+              intervalMs: 1000
+              legendFormat: failure_ratio
+              refId: A
+          - refId: B
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0.05
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - B
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              refId: B
+              type: threshold
+        noDataState: NoData
+        execErrState: Alerting
+        for: 5m
+        annotations:
+          summary: Trip plan failure rate exceeded 5% for five minutes
+          service: climbit-api
+          environment: local
+          version: dev
+          owner: platform-oncall
+          dashboard_url: http://127.0.0.1:3000/d/climbit-planning/climbit-planning-system
+        labels:
+          severity: critical
+          alertname: TripPlanFailureRateHigh
