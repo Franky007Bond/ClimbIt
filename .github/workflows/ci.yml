@@ -75,6 +75,9 @@ jobs:
           working-directory: backend
           enable-cache: false
 
+      - name: PostgreSQL client tools
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
       - name: Integration tests
         working-directory: backend
         env:

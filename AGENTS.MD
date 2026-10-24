@@ -4,6 +4,7 @@ Documents
 
 - `_docs/process.md` - how work is organized
 - `_docs/ci.md` - pull-request CI jobs and reading failed checks
+- `_docs/operations/backup-restore.md` - EU database backup destination and restore procedure
 
 Commands
 
