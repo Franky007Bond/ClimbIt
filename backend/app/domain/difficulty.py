@@ -8,7 +8,9 @@ from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 
 from app.domain.route import RouteType
 
-_MAPPINGS_PATH = Path(__file__).resolve().parent.parent / "data" / "difficulty_mappings.json"
+_MAPPINGS_PATH = (
+    Path(__file__).resolve().parent.parent / "data" / "difficulty_mappings.json"
+)
 
 
 @cache
@@ -99,10 +101,14 @@ class Difficulty(BaseModel):
                 or self.structured_value is not None
                 or self.mapped_huebler is not None
             ):
-                raise ValueError("unmapped difficulty cannot carry structured mapping fields")
+                raise ValueError(
+                    "unmapped difficulty cannot carry structured mapping fields"
+                )
             return self
         if self.structured_scale is None or self.structured_value is None:
-            raise ValueError("mapped difficulty requires structured_scale and structured_value")
+            raise ValueError(
+                "mapped difficulty requires structured_scale and structured_value"
+            )
         if self.route_type is RouteType.KLETTERSTEIG:
             if self.mapped_huebler is None:
                 raise ValueError("klettersteig mapping requires mapped_huebler")
@@ -150,7 +156,9 @@ def map_difficulty(
         return unmapped(value, scale)
 
     entry = entries[key]
-    mapped = entry.get("mapped_huebler") if scale_data.get("assign_mapped_huebler") else None
+    mapped = (
+        entry.get("mapped_huebler") if scale_data.get("assign_mapped_huebler") else None
+    )
     return Difficulty(
         route_type=route_type,
         original_value=value,
@@ -179,7 +187,9 @@ def is_harder(a: Difficulty, b: Difficulty) -> bool:
     ):
         raise TypeError("cannot compare unmapped difficulty")
     if a.structured_scale in table["incomparable_structured_scales"]:
-        raise TypeError("cannot compare grades on a scale without an order table in this issue")
+        raise TypeError(
+            "cannot compare grades on a scale without an order table in this issue"
+        )
     order: list[str] = table["scales"][a.structured_scale]["order"]
     try:
         return order.index(a.structured_value) > order.index(b.structured_value)

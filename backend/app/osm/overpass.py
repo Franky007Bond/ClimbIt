@@ -33,7 +33,9 @@ class OverpassHttpStatusError(OverpassError):
 
 
 class OverpassClient(Protocol):
-    def fetch_element(self, osm_type: OsmElementType, osm_id: int) -> dict[str, Any]: ...
+    def fetch_element(
+        self, osm_type: OsmElementType, osm_id: int
+    ) -> dict[str, Any]: ...
 
 
 def overpass_api_url() -> str:
@@ -102,7 +104,9 @@ def _post_overpass_query(api_url: str, query: str) -> dict[str, Any]:
         headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
     try:
-        with urllib.request.urlopen(request, timeout=OVERPASS_HTTP_TIMEOUT_SECONDS) as response:
+        with urllib.request.urlopen(
+            request, timeout=OVERPASS_HTTP_TIMEOUT_SECONDS
+        ) as response:
             raw = response.read()
     except urllib.error.HTTPError as exc:
         raise OverpassHttpStatusError(exc.code) from exc

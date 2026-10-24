@@ -43,5 +43,7 @@ def get_shared_plan(
     payload_text = str(snapshot)
     forbidden = ("climbit_trip_capability", "capability_id")
     if any(marker in payload_text for marker in forbidden):
-        raise HTTPException(status_code=500, detail="Shared snapshot would leak capability")
+        raise HTTPException(
+            status_code=500, detail="Shared snapshot would leak capability"
+        )
     return SharedPlanSnapshot(**snapshot)

@@ -19,7 +19,9 @@ pytestmark = pytest.mark.skipif(
 pytest_plugins = ["tests.test_route_search"]
 
 
-def test_published_route_returns_detail_with_geometry(seeded_client: TestClient) -> None:
+def test_published_route_returns_detail_with_geometry(
+    seeded_client: TestClient,
+) -> None:
     route_id = seed_route_id(PUBLISHED_ALPINE_HIKE_SLUG)
     response = seeded_client.get(f"/routes/{route_id}")
     assert response.status_code == 200
@@ -67,7 +69,9 @@ def test_invalid_route_id_returns_422(seeded_client: TestClient) -> None:
     assert response.status_code == 422
 
 
-def test_published_klettersteig_duration_is_estimated(seeded_client: TestClient) -> None:
+def test_published_klettersteig_duration_is_estimated(
+    seeded_client: TestClient,
+) -> None:
     route_id = seed_route_id(PUBLISHED_KLETTERSTEIG_SLUG)
     response = seeded_client.get(f"/routes/{route_id}")
     assert response.status_code == 200

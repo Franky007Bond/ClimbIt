@@ -9,7 +9,6 @@ from fastapi.testclient import TestClient
 from app.data.seed_routes import PUBLISHED_ALPINE_HIKE_SLUG
 from app.data.seed_routes import seed_route_id
 from app.db import create_sessionmaker
-from app.main import app
 from app.repositories.routes import current_applied_revision_number
 from tests.test_route_search import _operator_url
 
@@ -22,7 +21,9 @@ pytest_plugins = ["tests.test_route_search"]
 
 TEST_USERNAME = "operator"
 TEST_PASSWORD = "test-password"
-TEST_HASH = bcrypt.hashpw(TEST_PASSWORD.encode("utf-8"), bcrypt.gensalt(rounds=4)).decode()
+TEST_HASH = bcrypt.hashpw(
+    TEST_PASSWORD.encode("utf-8"), bcrypt.gensalt(rounds=4)
+).decode()
 
 
 @pytest.fixture(autouse=True)

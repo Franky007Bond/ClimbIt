@@ -25,7 +25,10 @@ def _haversine_m(a: Point, b: Point) -> float:
     lat2, lon2 = math.radians(b.latitude), math.radians(b.longitude)
     dlat = lat2 - lat1
     dlon = lon2 - lon1
-    h = math.sin(dlat / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
+    h = (
+        math.sin(dlat / 2) ** 2
+        + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
+    )
     return 2 * radius * math.asin(min(1.0, math.sqrt(h)))
 
 
@@ -38,7 +41,9 @@ def build_elevation_profile(route: Route) -> ElevationProfile | None:
     points = route.linestring.points
     cumulative = [0.0]
     for index in range(1, len(points)):
-        cumulative.append(cumulative[-1] + _haversine_m(points[index - 1], points[index]))
+        cumulative.append(
+            cumulative[-1] + _haversine_m(points[index - 1], points[index])
+        )
     total = cumulative[-1]
     if total <= 0:
         return None
@@ -53,6 +58,8 @@ def build_elevation_profile(route: Route) -> ElevationProfile | None:
         else:
             elevation = min_e + (max_e - min_e) * math.sin(math.pi * fraction)
         profile.append(
-            ElevationProfilePoint(distance_m=round(distance, 1), elevation_m=int(round(elevation)))
+            ElevationProfilePoint(
+                distance_m=round(distance, 1), elevation_m=int(round(elevation))
+            )
         )
     return ElevationProfile(points=tuple(profile), synthesized=True)

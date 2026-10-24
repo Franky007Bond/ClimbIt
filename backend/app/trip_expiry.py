@@ -3,7 +3,6 @@ from __future__ import annotations
 import os
 from datetime import datetime
 from datetime import timedelta
-from datetime import timezone
 
 
 def trip_inactivity_days() -> int:

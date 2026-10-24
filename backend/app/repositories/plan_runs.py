@@ -20,9 +20,12 @@ def _parse_source_timestamps(raw: dict) -> dict[str, datetime | None]:
     return parsed
 
 
-def _serialize_source_timestamps(stamps: dict[str, datetime | None]) -> dict[str, str | None]:
+def _serialize_source_timestamps(
+    stamps: dict[str, datetime | None],
+) -> dict[str, str | None]:
     return {
-        key: value.isoformat() if value is not None else None for key, value in stamps.items()
+        key: value.isoformat() if value is not None else None
+        for key, value in stamps.items()
     }
 
 

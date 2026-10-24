@@ -23,7 +23,9 @@ _ROUTE_ID = re.compile(
 
 
 def _service_resource() -> Resource:
-    service_name = os.environ.get("OTEL_SERVICE_NAME", "climbit-api").strip() or "climbit-api"
+    service_name = (
+        os.environ.get("OTEL_SERVICE_NAME", "climbit-api").strip() or "climbit-api"
+    )
     service_version = os.environ.get("OTEL_SERVICE_VERSION", "dev").strip() or "dev"
     environment = os.environ.get("CLIMBIT_ENVIRONMENT", "local").strip() or "local"
     return Resource.create(
@@ -37,7 +39,13 @@ def _service_resource() -> Resource:
 
 def reset_metrics_for_tests() -> None:
     """Allow tests to install a custom MeterProvider."""
-    global _CONFIGURED, _meter, _http_requests, _plan_requests, _wiki_requests, _integration_calls
+    global \
+        _CONFIGURED, \
+        _meter, \
+        _http_requests, \
+        _plan_requests, \
+        _wiki_requests, \
+        _integration_calls
     _CONFIGURED = False
     _meter = None
     _http_requests = None

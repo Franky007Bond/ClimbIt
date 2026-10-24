@@ -32,9 +32,15 @@ class TripRecord(Base):
         ForeignKey("plan_runs.id", ondelete="RESTRICT"),
         nullable=False,
     )
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
-    last_activity_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
-    deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )
+    last_activity_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )
+    deleted_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
     last_change_summary: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
 
 
@@ -51,7 +57,9 @@ class TripPlanRunRecord(Base):
         ForeignKey("plan_runs.id", ondelete="RESTRICT"),
         primary_key=True,
     )
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )
 
 
 class TripShareLinkRecord(Base):
@@ -69,7 +77,9 @@ class TripShareLinkRecord(Base):
         nullable=False,
     )
     token_hash: Mapped[str] = mapped_column(nullable=False, unique=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )
     invalidated_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True),
         nullable=True,

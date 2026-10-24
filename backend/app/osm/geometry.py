@@ -70,7 +70,7 @@ def _geometry_points(
             try:
                 latitude = float(lat)
                 longitude = float(lon)
-            except (TypeError, ValueError):
+            except TypeError, ValueError:
                 continue
             elevation = _node_elevation(item)
             points.append((longitude, latitude, elevation))
@@ -93,7 +93,7 @@ def _geometry_points(
             try:
                 latitude = float(lat)
                 longitude = float(lon)
-            except (TypeError, ValueError):
+            except TypeError, ValueError:
                 continue
             points.append((longitude, latitude, _node_elevation(node)))
         return points

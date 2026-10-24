@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -26,7 +25,9 @@ def collector_config() -> dict:
     return yaml.safe_load(COLLECTOR_CONFIG.read_text(encoding="utf-8"))
 
 
-def test_collector_config_declares_redaction_sampling_and_pipelines(collector_config: dict) -> None:
+def test_collector_config_declares_redaction_sampling_and_pipelines(
+    collector_config: dict,
+) -> None:
     processors = collector_config["processors"]
     assert "transform/redaction" in processors
     assert "probabilistic_sampler" in processors
@@ -46,7 +47,11 @@ def test_loki_and_tempo_retention_about_seven_days() -> None:
 def test_redaction_policy_removes_origin_authorization_and_body_from_exported_attributes(
     collector_config: dict,
 ) -> None:
-    policy = yaml.safe_load((REPO_ROOT / "observability" / "redaction-policy.yaml").read_text(encoding="utf-8"))
+    policy = yaml.safe_load(
+        (REPO_ROOT / "observability" / "redaction-policy.yaml").read_text(
+            encoding="utf-8"
+        )
+    )
     attributes = {
         "http.request.header.authorization": SENSITIVE_AUTH,
         "plan.origin": SENSITIVE_ORIGIN,
@@ -85,7 +90,9 @@ def test_collector_config_validates_in_contrib_image() -> None:
 
 
 def test_compose_observability_file_declares_profile() -> None:
-    compose = yaml.safe_load((REPO_ROOT / "docker-compose.observability.yml").read_text(encoding="utf-8"))
+    compose = yaml.safe_load(
+        (REPO_ROOT / "docker-compose.observability.yml").read_text(encoding="utf-8")
+    )
     services = compose["services"]
     assert "otel-collector" in services
     assert services["otel-collector"]["profiles"] == ["observability"]

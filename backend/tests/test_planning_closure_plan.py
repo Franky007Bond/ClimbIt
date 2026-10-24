@@ -125,7 +125,9 @@ def test_expired_closure_turns_green_inputs_into_critical_gap() -> None:
     )
     weather = _ideal_weather()
     avalanche = _ideal_avalanche()
-    thunder = assess_thunderstorm_risk(weather.forecast, exposure="moderate", start_hour_local=8)
+    thunder = assess_thunderstorm_risk(
+        weather.forecast, exposure="moderate", start_hour_local=8
+    )
 
     before_closure = build_plan_closure_input(route, before)
     after_closure = build_plan_closure_input(route, after)

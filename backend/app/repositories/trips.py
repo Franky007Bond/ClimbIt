@@ -102,7 +102,9 @@ def list_trips_for_capability(
     return [trip for trip in trips if not trip_expired(trip.last_activity_at, now=now)]
 
 
-def soft_delete_trip(session: Session, trip: TripRecord, *, deleted_at: datetime) -> None:
+def soft_delete_trip(
+    session: Session, trip: TripRecord, *, deleted_at: datetime
+) -> None:
     trip.deleted_at = deleted_at
     session.flush()
 

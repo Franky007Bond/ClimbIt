@@ -93,7 +93,9 @@ class Region(BaseModel):
     @classmethod
     def country_iso_alpha2(cls, value: str) -> str:
         if len(value) != 2 or not value.isalpha() or value != value.upper():
-            raise ValueError("country must be ISO 3166-1 alpha-2 (two uppercase letters)")
+            raise ValueError(
+                "country must be ISO 3166-1 alpha-2 (two uppercase letters)"
+            )
         return value
 
 
@@ -174,7 +176,9 @@ class Route(BaseModel):
             and self.elevation_max_m is not None
             and self.elevation_max_m < self.elevation_min_m
         ):
-            raise ValueError("elevation_max_m must be greater than or equal to elevation_min_m")
+            raise ValueError(
+                "elevation_max_m must be greater than or equal to elevation_min_m"
+            )
 
         value_set = self.original_difficulty_value is not None
         scale_set = self.original_difficulty_scale is not None
@@ -189,11 +193,17 @@ class Route(BaseModel):
             if self.linestring is None:
                 raise ValueError("linestring is required when publication is published")
             if self.elevation_min_m is None:
-                raise ValueError("elevation_min_m is required when publication is published")
+                raise ValueError(
+                    "elevation_min_m is required when publication is published"
+                )
             if self.elevation_max_m is None:
-                raise ValueError("elevation_max_m is required when publication is published")
+                raise ValueError(
+                    "elevation_max_m is required when publication is published"
+                )
             if self.duration_minutes is None:
-                raise ValueError("duration_minutes is required when publication is published")
+                raise ValueError(
+                    "duration_minutes is required when publication is published"
+                )
 
         if (
             self.route_type == RouteType.KLETTERSTEIG

@@ -26,7 +26,9 @@ class PlanRunRecord(Base):
         ForeignKey("routes.id", ondelete="RESTRICT"),
         nullable=False,
     )
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )
     input_snapshot: Mapped[dict] = mapped_column(JSONB, nullable=False)
     source_timestamps: Mapped[dict] = mapped_column(JSONB, nullable=False)
     rules_version: Mapped[str] = mapped_column(Text, nullable=False)

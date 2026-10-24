@@ -44,10 +44,7 @@ def test_tyrol_launch_slug_inventory() -> None:
 
 def test_build_seed_routes_tyrol_launch_invariants() -> None:
     fixtures = dict(build_seed_routes())
-    launch = [
-        fixtures[seed_route_id(slug)]
-        for slug in TYROL_LAUNCH_SLUGS
-    ]
+    launch = [fixtures[seed_route_id(slug)] for slug in TYROL_LAUNCH_SLUGS]
     assert len(launch) == TYROL_LAUNCH_PUBLISHED_COUNT
 
     type_counts = Counter(route.route_type for route in launch)
@@ -78,9 +75,7 @@ def test_build_seed_routes_tyrol_launch_invariants() -> None:
             assert route.technical_minutes is not None
             assert route.descent_minutes is not None
             assert route.duration_minutes == (
-                route.approach_minutes
-                + route.technical_minutes
-                + route.descent_minutes
+                route.approach_minutes + route.technical_minutes + route.descent_minutes
             )
 
 

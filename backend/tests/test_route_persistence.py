@@ -265,7 +265,9 @@ def test_upgrade_head_creates_routes_table_only(migrated_test_database: str) -> 
     engine = create_engine_from_database_url(_operator_url(migrated_test_database))
     try:
         with engine.connect() as connection:
-            routes = connection.execute(text("SELECT to_regclass('public.routes')")).scalar()
+            routes = connection.execute(
+                text("SELECT to_regclass('public.routes')")
+            ).scalar()
             assert str(routes) == "routes"
             route_revisions = connection.execute(
                 text("SELECT to_regclass('public.route_revisions')")
@@ -279,13 +281,18 @@ def test_upgrade_head_creates_routes_table_only(migrated_test_database: str) -> 
                 text("SELECT to_regclass('public.trip_capabilities')")
             ).scalar()
             assert str(trip_capabilities) == "trip_capabilities"
-            trips = connection.execute(text("SELECT to_regclass('public.trips')")).scalar()
+            trips = connection.execute(
+                text("SELECT to_regclass('public.trips')")
+            ).scalar()
             assert str(trips) == "trips"
             for relation in _MISSING_RELATIONS:
-                assert connection.execute(
-                    text("SELECT to_regclass(:name)"),
-                    {"name": relation},
-                ).scalar() is None
+                assert (
+                    connection.execute(
+                        text("SELECT to_regclass(:name)"),
+                        {"name": relation},
+                    ).scalar()
+                    is None
+                )
             connection.execute(text("SELECT PostGIS_Version()"))
             safety = connection.execute(
                 text(

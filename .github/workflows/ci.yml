@@ -15,10 +15,44 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  backend-test:
-    name: backend-test
+  backend-lint:
+    name: backend-lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          working-directory: backend
+          enable-cache: false
+
+      - name: Ruff check and format
+        working-directory: backend
+        run: |
+          uv run --frozen ruff check .
+          uv run --frozen ruff format --check .
+
+  backend-unit:
+    name: backend-unit
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          working-directory: backend
+          enable-cache: false
+
+      - name: Unit tests
+        working-directory: backend
+        run: uv run --frozen pytest -m "not integration and not contract"
+
+  backend-integration:
+    name: backend-integration
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
     services:
       postgis:
         image: postgis/postgis:17-3.5
@@ -38,13 +72,100 @@ jobs:
 
       - uses: astral-sh/setup-uv@v7
         with:
-          working-directory: backend # backend/.python-version
+          working-directory: backend
           enable-cache: false
 
-      - working-directory: backend
+      - name: Integration tests
+        working-directory: backend
         env:
           DATABASE_URL: postgresql://climbit:climbit@127.0.0.1:5432/climbit
-        run: uv run --frozen pytest
+        run: uv run --frozen pytest -m integration
+
+  backend-contract:
+    name: backend-contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgis:
+        image: postgis/postgis:17-3.5
+        env:
+          POSTGRES_USER: climbit
+          POSTGRES_PASSWORD: climbit
+          POSTGRES_DB: climbit
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U climbit -d climbit"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          working-directory: backend
+          enable-cache: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: frontend/.nvmrc
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend toolchain (OpenAPI lint)
+        working-directory: frontend
+        run: npm ci
+
+      - name: OpenAPI export matches committed contract
+        working-directory: backend
+        run: |
+          uv run --frozen python -m app.export_openapi
+          git diff --exit-code ../contracts/openapi.json
+
+      - name: OpenAPI document lint
+        working-directory: frontend
+        run: npm run openapi:lint
+
+      - name: Contract tests
+        working-directory: backend
+        env:
+          DATABASE_URL: postgresql://climbit:climbit@127.0.0.1:5432/climbit
+        run: uv run --frozen pytest -m contract
+
+  frontend:
+    name: frontend
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: frontend/.nvmrc
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Lint, test, and build
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run lint
+          npm run test
+          npm run build
+
+  image-build:
+    name: image-build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Build API image (Dockerfile)
+        run: docker build -t climbit-api:ci -f backend/Dockerfile backend
+
+      - name: Build API service (Compose)
+        run: docker compose build api
 
   security-scan:
     name: security-scan

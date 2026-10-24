@@ -45,7 +45,9 @@ EXPECTED_SEED_IDS = {
     PUBLISHED_OUTDOOR_CLIMBING_SLUG: uuid.UUID("3348fe91-e057-5e17-8cdf-ce8e1443f759"),
     QUARANTINED_KLETTERSTEIG_SLUG: uuid.UUID("b27a3ca0-e679-5625-bb2c-46e4862a44a4"),
     QUARANTINED_ALPINE_HIKE_SLUG: uuid.UUID("ba5221a5-db02-58c7-a4af-189a9381d3fd"),
-    QUARANTINED_OUTDOOR_CLIMBING_SLUG: uuid.UUID("4118b2d0-b41d-58f6-a1ad-43d860a5445e"),
+    QUARANTINED_OUTDOOR_CLIMBING_SLUG: uuid.UUID(
+        "4118b2d0-b41d-58f6-a1ad-43d860a5445e"
+    ),
 }
 
 
@@ -193,14 +195,16 @@ def test_seed_row_contents(session) -> None:
     seed(session)
     session.commit()
 
-    closure_statuses = session.execute(
-        text("SELECT closure_status FROM routes")
-    ).scalars().all()
+    closure_statuses = (
+        session.execute(text("SELECT closure_status FROM routes")).scalars().all()
+    )
     assert closure_statuses == [None] * len(SEED_SLUGS)
 
-    estimated_flags = session.execute(
-        text("SELECT duration_is_estimated FROM routes")
-    ).scalars().all()
+    estimated_flags = (
+        session.execute(text("SELECT duration_is_estimated FROM routes"))
+        .scalars()
+        .all()
+    )
     assert estimated_flags == [True] * len(SEED_SLUGS)
 
     published = get_route(session, EXPECTED_SEED_IDS[PUBLISHED_KLETTERSTEIG_SLUG])
@@ -229,9 +233,10 @@ def test_seed_row_contents(session) -> None:
         + published.technical_minutes
         + published.descent_minutes
     )
-    assert published.difficulty == fixtures[
-        EXPECTED_SEED_IDS[PUBLISHED_KLETTERSTEIG_SLUG]
-    ].difficulty
+    assert (
+        published.difficulty
+        == fixtures[EXPECTED_SEED_IDS[PUBLISHED_KLETTERSTEIG_SLUG]].difficulty
+    )
 
     alpine = get_route(session, EXPECTED_SEED_IDS[PUBLISHED_ALPINE_HIKE_SLUG])
     assert alpine is not None
@@ -244,18 +249,20 @@ def test_seed_row_contents(session) -> None:
     assert alpine.trailhead is not None
     assert alpine.linestring is not None
     assert alpine.duration_minutes is not None
-    assert alpine.difficulty == fixtures[
-        EXPECTED_SEED_IDS[PUBLISHED_ALPINE_HIKE_SLUG]
-    ].difficulty
+    assert (
+        alpine.difficulty
+        == fixtures[EXPECTED_SEED_IDS[PUBLISHED_ALPINE_HIKE_SLUG]].difficulty
+    )
 
     outdoor = get_route(session, EXPECTED_SEED_IDS[PUBLISHED_OUTDOOR_CLIMBING_SLUG])
     assert outdoor is not None
     assert outdoor.route_type is RouteType.OUTDOOR_CLIMBING
     assert outdoor.publication is Publication.PUBLISHED
     assert outdoor.region.coverage is RegionCoverage.SUPPORTED
-    assert outdoor.difficulty == fixtures[
-        EXPECTED_SEED_IDS[PUBLISHED_OUTDOOR_CLIMBING_SLUG]
-    ].difficulty
+    assert (
+        outdoor.difficulty
+        == fixtures[EXPECTED_SEED_IDS[PUBLISHED_OUTDOOR_CLIMBING_SLUG]].difficulty
+    )
 
     for slug in (
         QUARANTINED_KLETTERSTEIG_SLUG,

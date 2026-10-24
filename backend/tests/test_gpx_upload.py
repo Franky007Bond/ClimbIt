@@ -14,8 +14,6 @@ from sqlalchemy import select
 from app.db import create_sessionmaker
 from app.domain.route import Assessment
 from app.domain.route import Completeness
-from app.domain.route import Provenance
-from app.domain.route import Publication
 from app.domain.route import RegionCoverage
 from app.domain.route import TransitAccessibility
 from app.gpx.process import GPX_DEFAULT_DESCRIPTION

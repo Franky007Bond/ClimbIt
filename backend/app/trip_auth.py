@@ -92,7 +92,9 @@ def issue_trip_capability(session: Session) -> tuple[TripCapability, str]:
     return TripCapability(id=capability_id), token
 
 
-def set_trip_capability_cookie(response: Response, request: Request, token: str) -> None:
+def set_trip_capability_cookie(
+    response: Response, request: Request, token: str
+) -> None:
     response.set_cookie(
         key=TRIP_CAPABILITY_COOKIE_NAME,
         value=token,

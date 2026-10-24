@@ -19,7 +19,9 @@ def ensure_revision_base(
     if current is None:
         raise HTTPException(status_code=500, detail="route has no applied revision")
     if base_revision_number > current:
-        raise HTTPException(status_code=422, detail="base_revision_number is ahead of applied head")
+        raise HTTPException(
+            status_code=422, detail="base_revision_number is ahead of applied head"
+        )
     if base_revision_number < current:
         record = get_published_route_by_id(session, route_id)
         if record is None:

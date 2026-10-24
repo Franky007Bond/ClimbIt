@@ -3,6 +3,7 @@ ClimbIt is a web app for planning Klettersteig, alpine hiking, and selected outd
 Documents
 
 - `_docs/process.md` - how work is organized
+- `_docs/ci.md` - pull-request CI jobs and reading failed checks
 
 Commands
 

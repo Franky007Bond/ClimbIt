@@ -11,7 +11,6 @@ from alembic.config import Config
 from alembic.script import ScriptDirectory
 from psycopg import sql
 from sqlalchemy import select
-from sqlalchemy import text
 
 from app.db import create_sessionmaker
 from app.db import sqlalchemy_url
@@ -152,7 +151,9 @@ def _route(**overrides) -> Route:
     return Route(**payload)
 
 
-def test_single_alembic_head_includes_route_revisions(migrated_test_database: str) -> None:
+def test_single_alembic_head_includes_route_revisions(
+    migrated_test_database: str,
+) -> None:
     script = ScriptDirectory.from_config(_alembic_config())
     heads = script.get_heads()
     assert len(heads) == 1

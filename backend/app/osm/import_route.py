@@ -11,7 +11,6 @@ from app.domain.route import Publication
 from app.domain.route import Region
 from app.domain.route import RegionCoverage
 from app.domain.route import Route
-from app.domain.route import RouteType
 from app.domain.route import TransitAccessibility
 from app.osm.geometry import ParsedOsmGeometry
 from app.osm.manifest import ManifestEntry
@@ -31,7 +30,9 @@ def osm_object_url(osm_type: str, osm_id: int) -> str:
 
 def format_import_description(imported_at: datetime) -> str:
     timestamp = imported_at.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    return f"Imported from OpenStreetMap at {timestamp} UTC. © OpenStreetMap contributors"
+    return (
+        f"Imported from OpenStreetMap at {timestamp} UTC. © OpenStreetMap contributors"
+    )
 
 
 def build_osm_import_route(

@@ -158,7 +158,9 @@ def list_pending_revisions(session: Session) -> list[PendingRevisionSummary]:
     return summaries
 
 
-def get_revision_record(session: Session, revision_id: uuid.UUID) -> RouteRevisionRecord:
+def get_revision_record(
+    session: Session, revision_id: uuid.UUID
+) -> RouteRevisionRecord:
     revision = session.get(RouteRevisionRecord, revision_id)
     if revision is None:
         raise RevisionNotFound

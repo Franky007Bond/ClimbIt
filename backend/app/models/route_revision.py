@@ -35,7 +35,9 @@ class RouteRevisionRecord(Base):
         nullable=False,
     )
     revision_number: Mapped[int] = mapped_column(Integer, nullable=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )
     author_kind: Mapped[str] = mapped_column(Text, nullable=False)
     author_ref: Mapped[str | None] = mapped_column(Text, nullable=True)
     before_snapshot: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
@@ -47,13 +49,18 @@ _APPEND_ONLY_ERROR = "route revision rows are append-only"
 
 
 @event.listens_for(RouteRevisionRecord, "before_update")
-def _reject_route_revision_update(_mapper, _connection, target: RouteRevisionRecord) -> None:
+def _reject_route_revision_update(
+    _mapper, _connection, target: RouteRevisionRecord
+) -> None:
     state = inspect(target)
     changed = {attr.key for attr in state.attrs if attr.history.has_changes()}
     if changed == {"application_status"}:
         history = state.attrs.application_status.history
         previous = history.deleted[0] if history.deleted else None
-        if previous == "pending" and target.application_status in {"rejected", "superseded"}:
+        if previous == "pending" and target.application_status in {
+            "rejected",
+            "superseded",
+        }:
             return
     raise RuntimeError(_APPEND_ONLY_ERROR)
 

@@ -193,9 +193,13 @@ def reevaluate_trip(
 
     plan_date = date.fromisoformat(plan_date_raw)
     start_raw = previous_run.input_snapshot.get("start_time_local")
-    start_time = time_type.fromisoformat(start_raw) if isinstance(start_raw, str) else None
+    start_time = (
+        time_type.fromisoformat(start_raw) if isinstance(start_raw, str) else None
+    )
     origin_region = previous_run.result.get("origin_region")
-    origin = origin_region if isinstance(origin_region, str) and origin_region else "unknown"
+    origin = (
+        origin_region if isinstance(origin_region, str) and origin_region else "unknown"
+    )
     _new_run, payload = build_plan(
         session,
         route=route,

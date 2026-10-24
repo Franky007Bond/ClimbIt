@@ -1,7 +1,6 @@
 import os
 import uuid
 from datetime import datetime
-from datetime import timezone
 
 import pytest
 from fastapi.testclient import TestClient
@@ -117,9 +116,11 @@ def test_plan_response_transit_matches_persisted_run(
     assert body["transit_summary"] == stored.result.get("transit_summary")
     assert body["origin_region"] == stored.result.get("origin_region")
     assert stored.source_timestamps.get("transit") is not None
-    assert body["components"]["transit"]["live_available"] == stored.result["components"][
-        "transit"
-    ]["live_available"]
-    assert body["components"]["transit"]["journey_planner_url"] == stored.result[
-        "components"
-    ]["transit"]["journey_planner_url"]
+    assert (
+        body["components"]["transit"]["live_available"]
+        == stored.result["components"]["transit"]["live_available"]
+    )
+    assert (
+        body["components"]["transit"]["journey_planner_url"]
+        == stored.result["components"]["transit"]["journey_planner_url"]
+    )

@@ -7,7 +7,9 @@ from uuid import uuid4
 
 def test_climbing_gear_does_not_recommend_technical_protection() -> None:
     climbing = next(
-        route for _id, route in build_seed_routes() if route.route_type is RouteType.OUTDOOR_CLIMBING
+        route
+        for _id, route in build_seed_routes()
+        if route.route_type is RouteType.OUTDOOR_CLIMBING
     )
     forecast = MockWeatherAdapter().fetch_forecast(
         route_id=uuid4(),

@@ -46,10 +46,7 @@ def test_dolomites_launch_slug_inventory() -> None:
 
 def test_build_seed_routes_dolomites_launch_invariants() -> None:
     fixtures = dict(build_seed_routes())
-    launch = [
-        fixtures[seed_route_id(slug)]
-        for slug in DOLOMITES_LAUNCH_SLUGS
-    ]
+    launch = [fixtures[seed_route_id(slug)] for slug in DOLOMITES_LAUNCH_SLUGS]
     assert len(launch) == DOLOMITES_LAUNCH_PUBLISHED_COUNT
 
     type_counts = Counter(route.route_type for route in launch)
@@ -80,18 +77,13 @@ def test_build_seed_routes_dolomites_launch_invariants() -> None:
             assert route.technical_minutes is not None
             assert route.descent_minutes is not None
             assert route.duration_minutes == (
-                route.approach_minutes
-                + route.technical_minutes
-                + route.descent_minutes
+                route.approach_minutes + route.technical_minutes + route.descent_minutes
             )
 
 
 def test_dolomites_hiking_and_klettersteig_scales_differ() -> None:
     fixtures = dict(build_seed_routes())
-    launch = [
-        fixtures[seed_route_id(slug)]
-        for slug in DOLOMITES_LAUNCH_SLUGS
-    ]
+    launch = [fixtures[seed_route_id(slug)] for slug in DOLOMITES_LAUNCH_SLUGS]
     hike_scales = {
         route.original_difficulty_scale
         for route in launch

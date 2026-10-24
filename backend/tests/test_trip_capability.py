@@ -112,8 +112,9 @@ def test_delete_invalidates_and_clears_cookie(
         old_token = issued.cookies[TRIP_CAPABILITY_COOKIE_NAME]
         deleted = client.delete("/trips/capability")
         assert deleted.status_code == 204
-        assert TRIP_CAPABILITY_COOKIE_NAME not in deleted.cookies or not deleted.cookies.get(
-            TRIP_CAPABILITY_COOKIE_NAME
+        assert (
+            TRIP_CAPABILITY_COOKIE_NAME not in deleted.cookies
+            or not deleted.cookies.get(TRIP_CAPABILITY_COOKIE_NAME)
         )
         stale = client.get("/trips/capability")
     assert stale.status_code == 200

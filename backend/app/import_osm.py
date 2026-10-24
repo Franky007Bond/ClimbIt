@@ -35,7 +35,9 @@ class OsmImportConflictError(Exception):
         super().__init__(f"import conflict for {entry_label}")
 
 
-def _ensure_import_allowed(session: Session, route_id: uuid.UUID, entry_label: str) -> None:
+def _ensure_import_allowed(
+    session: Session, route_id: uuid.UUID, entry_label: str
+) -> None:
     existing = session.get(RouteRecord, route_id)
     if existing is None:
         return
@@ -76,8 +78,12 @@ def import_osm_routes(
 
 def main(argv: list[str] | None = None) -> int:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
-    parser = argparse.ArgumentParser(description="Import OpenStreetMap routes into quarantine")
-    parser.add_argument("--manifest", required=True, help="Path to JSON import manifest")
+    parser = argparse.ArgumentParser(
+        description="Import OpenStreetMap routes into quarantine"
+    )
+    parser.add_argument(
+        "--manifest", required=True, help="Path to JSON import manifest"
+    )
     args = parser.parse_args(argv)
 
     database_url = os.environ.get("DATABASE_URL")
@@ -106,7 +112,7 @@ def main(argv: list[str] | None = None) -> int:
         session.rollback()
         print(exc.entry_label, file=sys.stderr)
         return 1
-    except (OsmGeometryError, Exception):
+    except OsmGeometryError, Exception:
         session.rollback()
         logger.exception("OSM import failed")
         return 1

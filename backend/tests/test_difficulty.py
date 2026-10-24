@@ -240,8 +240,14 @@ def test_outdoor_climbing_french_and_uiaa_only() -> None:
     assert uiaa.structured_value == "V"
     assert uiaa.mapped_huebler is None
     assert uiaa.mapping_confidence is MappingConfidence.EXACT
-    assert map_difficulty(RouteType.OUTDOOR_CLIMBING, "6a", "French").structured_scale == "french"
-    assert map_difficulty(RouteType.OUTDOOR_CLIMBING, "V", "UIAA").structured_scale == "uiaa"
+    assert (
+        map_difficulty(RouteType.OUTDOOR_CLIMBING, "6a", "French").structured_scale
+        == "french"
+    )
+    assert (
+        map_difficulty(RouteType.OUTDOOR_CLIMBING, "V", "UIAA").structured_scale
+        == "uiaa"
+    )
 
 
 def test_no_cross_type_ranking() -> None:
@@ -299,7 +305,11 @@ def test_map_difficulty_does_not_mutate_route() -> None:
         original_difficulty_scale="k1_k6",
     )
     before = route.model_dump()
-    mapped = map_difficulty(route.route_type, route.original_difficulty_value, route.original_difficulty_scale)
+    mapped = map_difficulty(
+        route.route_type,
+        route.original_difficulty_value,
+        route.original_difficulty_scale,
+    )
     assert mapped.mapped_huebler == "C"
     assert route.difficulty is None
     assert route.model_dump() == before

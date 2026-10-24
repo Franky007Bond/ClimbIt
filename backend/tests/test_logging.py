@@ -70,9 +70,7 @@ def test_access_logs_are_json() -> None:
     assert openapi_logs[0]["status_code"] == 200
 
     missing_logs = [
-        item
-        for item in parsed
-        if item.get("path") == "/no-such-application-path"
+        item for item in parsed if item.get("path") == "/no-such-application-path"
     ]
     assert missing_logs
     assert missing_logs[0]["status_code"] == 404

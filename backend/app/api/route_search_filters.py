@@ -37,7 +37,9 @@ def parse_difficulty_filter(
         raise RouteSearchFilterError("difficulty_scale is not a known structured scale")
 
     if route_type is not None:
-        allowed = _load_mappings()["allowed_scales_by_route_type"].get(route_type.value, [])
+        allowed = _load_mappings()["allowed_scales_by_route_type"].get(
+            route_type.value, []
+        )
         if canonical not in allowed:
             raise RouteSearchFilterError(
                 "difficulty_scale is not valid for the requested route_type"
@@ -48,7 +50,9 @@ def parse_difficulty_filter(
     max_value = _normalize_difficulty_bound(difficulty_max, order, "difficulty_max")
     if min_value is not None and max_value is not None:
         if order.index(min_value) > order.index(max_value):
-            raise RouteSearchFilterError("difficulty_min cannot be harder than difficulty_max")
+            raise RouteSearchFilterError(
+                "difficulty_min cannot be harder than difficulty_max"
+            )
 
     return DifficultyFilter(
         structured_scale=canonical,
@@ -57,13 +61,23 @@ def parse_difficulty_filter(
     )
 
 
-def difficulty_values_in_filter(difficulty_filter: DifficultyFilter) -> list[str] | None:
-    order: list[str] = _load_mappings()["scales"][difficulty_filter.structured_scale]["order"]
+def difficulty_values_in_filter(
+    difficulty_filter: DifficultyFilter,
+) -> list[str] | None:
+    order: list[str] = _load_mappings()["scales"][difficulty_filter.structured_scale][
+        "order"
+    ]
     if difficulty_filter.min_value is None and difficulty_filter.max_value is None:
         return None
-    start = 0 if difficulty_filter.min_value is None else order.index(difficulty_filter.min_value)
-    end = len(order) - 1 if difficulty_filter.max_value is None else order.index(
-        difficulty_filter.max_value
+    start = (
+        0
+        if difficulty_filter.min_value is None
+        else order.index(difficulty_filter.min_value)
+    )
+    end = (
+        len(order) - 1
+        if difficulty_filter.max_value is None
+        else order.index(difficulty_filter.max_value)
     )
     return order[start : end + 1]
 
@@ -82,4 +96,6 @@ def _normalize_difficulty_bound(
     for candidate in order:
         if candidate.casefold() == folded:
             return candidate
-    raise RouteSearchFilterError(f"{field_name} is not a value on the requested difficulty_scale")
+    raise RouteSearchFilterError(
+        f"{field_name} is not a value on the requested difficulty_scale"
+    )

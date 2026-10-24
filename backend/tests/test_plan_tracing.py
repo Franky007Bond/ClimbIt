@@ -48,7 +48,9 @@ def memory_span_exporter(monkeypatch: pytest.MonkeyPatch) -> InMemorySpanExporte
     tracing_mod.reset_tracing_for_tests()
 
 
-def _json_log_lines(records: list[logging.LogRecord], logger_name: str) -> list[dict[str, object]]:
+def _json_log_lines(
+    records: list[logging.LogRecord], logger_name: str
+) -> list[dict[str, object]]:
     formatter = JsonFormatter()
     lines: list[dict[str, object]] = []
     for record in records:

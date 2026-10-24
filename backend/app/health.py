@@ -54,8 +54,10 @@ def ready_response() -> JSONResponse:
             try:
                 script = ScriptDirectory.from_config(_alembic_config())
                 heads = set(script.get_heads())
-                current = set(MigrationContext.configure(connection).get_current_heads())
-            except (OperationalError, InterfaceError, OSError, TimeoutError):
+                current = set(
+                    MigrationContext.configure(connection).get_current_heads()
+                )
+            except OperationalError, InterfaceError, OSError, TimeoutError:
                 return _unavailable()
             except Exception:
                 return _migrations_pending()

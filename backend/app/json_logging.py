@@ -50,7 +50,9 @@ def configure_logging() -> None:
     setattr(handler, _JSON_HANDLER_MARK, True)
 
     root = logging.getLogger()
-    if not any(getattr(existing, _JSON_HANDLER_MARK, False) for existing in root.handlers):
+    if not any(
+        getattr(existing, _JSON_HANDLER_MARK, False) for existing in root.handlers
+    ):
         root.addHandler(handler)
     if root.level == logging.NOTSET or root.level > logging.INFO:
         root.setLevel(logging.INFO)
@@ -94,7 +96,10 @@ async def log_http_access(request: Request, call_next) -> Response:
             method=request.method,
             status_code=response.status_code,
         )
-        if route_template == "/routes/{route_id}/plans" and request.method.upper() == "POST":
+        if (
+            route_template == "/routes/{route_id}/plans"
+            and request.method.upper() == "POST"
+        ):
             record_plan_request(status_code=response.status_code)
         wiki_operation = wiki_operation_for_request(request.method, path)
         if wiki_operation is not None:
