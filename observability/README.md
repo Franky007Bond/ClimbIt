@@ -22,7 +22,9 @@ Endpoints (localhost):
 
 Retention is **168 hours** (~7 days) in Loki and Tempo. Trace sampling is configured on the collector (`probabilistic_sampler`, default 100% for local dev).
 
-Sensitive fields are redacted **once** in the OpenTelemetry Collector (`processors.redaction` in `otel-collector-config.yaml`), including authorization headers, request bodies, and exact trip origins.
+Sensitive fields are redacted **once** in the OpenTelemetry Collector (`transform/redaction` in `otel-collector-config.yaml`), including authorization headers, request bodies, and exact trip origins.
+
+Grafana loads **dashboards and alerts from git** under `observability/grafana/` (API health, integrations, planning impact, wiki activity). The **trip plan failure rate** alert fires when failures stay above 5% for five minutes and carries service, environment, version, owner, and dashboard URL metadata.
 
 Validate collector config:
 

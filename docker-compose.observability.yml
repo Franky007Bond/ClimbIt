@@ -62,6 +62,7 @@ services:
       GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
     volumes:
       - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./observability/grafana/dashboards:/etc/grafana/dashboards:ro
       - climbit_grafana_data:/var/lib/grafana
     ports:
       - "127.0.0.1:3000:3000"

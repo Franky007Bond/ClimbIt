@@ -4,6 +4,11 @@ import sys
 
 from fastapi import Request, Response
 
+from app.telemetry.metrics import http_route_template
+from app.telemetry.metrics import record_http_request
+from app.telemetry.metrics import record_plan_request
+from app.telemetry.metrics import record_wiki_request
+from app.telemetry.metrics import wiki_operation_for_request
 from app.telemetry.tracing import current_trace_id
 
 ACCESS_LOGGER_NAME = "app.access"
@@ -83,4 +88,18 @@ async def log_http_access(request: Request, call_next) -> Response:
             "request",
             extra=extra,
         )
+        route_template = http_route_template(path)
+        record_http_request(
+            route=route_template,
+            method=request.method,
+            status_code=response.status_code,
+        )
+        if route_template == "/routes/{route_id}/plans" and request.method.upper() == "POST":
+            record_plan_request(status_code=response.status_code)
+        wiki_operation = wiki_operation_for_request(request.method, path)
+        if wiki_operation is not None:
+            record_wiki_request(
+                operation=wiki_operation,
+                status_code=response.status_code,
+            )
     return response

@@ -13,6 +13,7 @@ from app.api.routes import router as routes_router
 from app.health import health_body, ready_response
 from app.json_logging import configure_logging, log_http_access
 from app.telemetry.middleware import trace_plan_http_requests
+from app.telemetry.metrics import configure_metrics
 from app.telemetry.tracing import configure_tracing
 
 
@@ -20,6 +21,7 @@ from app.telemetry.tracing import configure_tracing
 async def lifespan(app: FastAPI):
     configure_logging()
     configure_tracing()
+    configure_metrics()
     yield
 
 

@@ -37,6 +37,8 @@ from app.planning.weather import assess_weather_freshness
 from app.repositories.plan_runs import create_plan_run
 from app.repositories.plan_runs import new_plan_run_id
 from app.repositories.plan_runs import plan_run_created_at
+from app.telemetry.metrics import component_status_to_outcome
+from app.telemetry.metrics import record_integration_call
 from app.telemetry.tracing import planning_step
 
 SAFETY_DISCLAIMER = (
@@ -134,6 +136,19 @@ def build_plan(
             transit=transit,
         )
 
+    weather_status = _weather_component_status(freshness).value
+    transit_status = transit.status.value
+    avalanche_status = str(avalanche_component_payload(avalanche).get("status", "unknown"))
+    for integration, status in (
+        ("weather", weather_status),
+        ("transit", transit_status),
+        ("avalanche", avalanche_status),
+    ):
+        record_integration_call(
+            integration=integration,
+            outcome=component_status_to_outcome(status),
+        )
+
     response_payload: dict[str, Any] = {
         "plan_run_id": None,
         "route_id": str(route_id),
@@ -144,7 +159,7 @@ def build_plan(
         "confidence": confidence_value,
         "components": {
             "weather": {
-                "status": _weather_component_status(freshness).value,
+                "status": weather_status,
                 "freshness": freshness.value,
             },
             "closure": {
@@ -155,7 +170,7 @@ def build_plan(
                 "effective_status": closure.effective_status,
             },
             "transit": {
-                "status": transit.status.value,
+                "status": transit_status,
                 "summary": transit.summary,
                 "last_return_feasible": transit.last_return_feasible,
                 "live_available": transit.live_available,
