@@ -62,7 +62,9 @@ class _TransitFallbackCacheEntry:
 
 
 # In-process per worker; lost on restart (issue #44).
-_TRANSIT_FALLBACK_CACHE: dict[tuple[str, str, str, str], _TransitFallbackCacheEntry] = {}
+_TRANSIT_FALLBACK_CACHE: dict[
+    tuple[str, str, str, str], _TransitFallbackCacheEntry
+] = {}
 
 
 @dataclass(frozen=True, slots=True)
@@ -630,7 +632,7 @@ class TransitousAdapter:
         try:
             response = self._client.get(url, headers=headers, timeout=self._timeout)
             response.raise_for_status()
-        except (httpx.TimeoutException, httpx.TransportError, httpx.HTTPStatusError):
+        except httpx.TimeoutException, httpx.TransportError, httpx.HTTPStatusError:
             return None
         try:
             payload = response.json()

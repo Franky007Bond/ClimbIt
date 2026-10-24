@@ -6,9 +6,29 @@ from pathlib import Path
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-ALERT_PATH = REPO_ROOT / "observability" / "grafana" / "provisioning" / "alerting" / "plan-failure-rate.yaml"
-DASHBOARD_PATH = REPO_ROOT / "observability" / "grafana" / "dashboards" / "climbit-planning-system.json"
-DASHBOARD_PROVISION = REPO_ROOT / "observability" / "grafana" / "provisioning" / "dashboards" / "default.yaml"
+ALERT_PATH = (
+    REPO_ROOT
+    / "observability"
+    / "grafana"
+    / "provisioning"
+    / "alerting"
+    / "plan-failure-rate.yaml"
+)
+DASHBOARD_PATH = (
+    REPO_ROOT
+    / "observability"
+    / "grafana"
+    / "dashboards"
+    / "climbit-planning-system.json"
+)
+DASHBOARD_PROVISION = (
+    REPO_ROOT
+    / "observability"
+    / "grafana"
+    / "provisioning"
+    / "dashboards"
+    / "default.yaml"
+)
 
 REQUIRED_ALERT_ANNOTATIONS = frozenset(
     {"service", "environment", "version", "owner", "dashboard_url"}
@@ -42,7 +62,9 @@ def test_dashboard_provisioned_with_planning_sections() -> None:
     assert provision["providers"][0]["options"]["path"] == "/etc/grafana/dashboards"
     dashboard = json.loads(DASHBOARD_PATH.read_text(encoding="utf-8"))
     assert dashboard["uid"] == "climbit-planning"
-    titles = {panel["title"] for panel in dashboard["panels"] if panel.get("type") == "row"}
+    titles = {
+        panel["title"] for panel in dashboard["panels"] if panel.get("type") == "row"
+    }
     assert titles >= {
         "API health",
         "Integrations",

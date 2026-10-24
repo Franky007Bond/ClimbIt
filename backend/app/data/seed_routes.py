@@ -273,7 +273,10 @@ def build_seed_routes() -> list[tuple[uuid.UUID, Route]]:
         (seed_route_id(PUBLISHED_OUTDOOR_CLIMBING_SLUG), published_outdoor_climbing),
         (seed_route_id(QUARANTINED_KLETTERSTEIG_SLUG), quarantined_klettersteig),
         (seed_route_id(QUARANTINED_ALPINE_HIKE_SLUG), quarantined_alpine_hike),
-        (seed_route_id(QUARANTINED_OUTDOOR_CLIMBING_SLUG), quarantined_outdoor_climbing),
+        (
+            seed_route_id(QUARANTINED_OUTDOOR_CLIMBING_SLUG),
+            quarantined_outdoor_climbing,
+        ),
     ]
     unsupported_pyrenees_demo = _base_route(
         name="Pic du Midi d'Ossau",

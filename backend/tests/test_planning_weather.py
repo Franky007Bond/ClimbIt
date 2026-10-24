@@ -19,7 +19,10 @@ def test_stale_forecast_becomes_stale() -> None:
     )
     old = datetime.now(timezone.utc) - timedelta(hours=7)
     stale_forecast = replace(forecast, source_time=old, max_age_seconds=6 * 3600)
-    assert assess_weather_freshness(stale_forecast, datetime.now(timezone.utc)) is WeatherFreshness.STALE
+    assert (
+        assess_weather_freshness(stale_forecast, datetime.now(timezone.utc))
+        is WeatherFreshness.STALE
+    )
 
 
 def test_mock_weather_can_be_substituted_via_cache_boundary() -> None:

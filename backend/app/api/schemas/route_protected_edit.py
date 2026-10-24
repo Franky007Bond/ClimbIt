@@ -2,13 +2,10 @@ from pydantic import BaseModel, ConfigDict, model_validator
 
 from app.domain.closure import ClosureAssessment
 from app.domain.difficulty import Difficulty
-from app.domain.route import Assessment
-from app.domain.route import Completeness
 from app.domain.route import LineString
 from app.domain.route import NonNegativeMeters
 from app.domain.route import Point
 from app.domain.route import PositiveMinutes
-from app.domain.route import Provenance
 from app.domain.route import Publication
 from app.domain.route import Region
 from app.domain.route import Route

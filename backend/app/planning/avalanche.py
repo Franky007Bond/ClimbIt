@@ -16,7 +16,9 @@ from app.domain.route import Route
 from app.planning.versions import AVALANCHE_MAX_AGE_SECONDS
 from app.planning.versions import MOCK_AVALANCHE_ADAPTER_VERSION
 
-_REGISTRY_PATH = Path(__file__).resolve().parent.parent / "data" / "avalanche_regions.json"
+_REGISTRY_PATH = (
+    Path(__file__).resolve().parent.parent / "data" / "avalanche_regions.json"
+)
 
 
 class AvalancheFreshness(StrEnum):
@@ -97,7 +99,9 @@ def resolve_avalanche_region(route: Route) -> AvalancheRegionConfig | None:
     return load_avalanche_registry().get(_registry_lookup_key(route))
 
 
-def assess_avalanche_freshness(bulletin: AvalancheBulletin, now: datetime) -> AvalancheFreshness:
+def assess_avalanche_freshness(
+    bulletin: AvalancheBulletin, now: datetime
+) -> AvalancheFreshness:
     if now.tzinfo is None or now.utcoffset() != timedelta(0):
         raise ValueError("now must be UTC-aware")
     age = (now - bulletin.source_time).total_seconds()
@@ -121,7 +125,11 @@ class MockAvalancheAdapter:
         key = hash((str(route_id), region_key, plan_date)) % 1000
         registry = load_avalanche_registry()
         label = next(
-            (cfg.region_label for cfg in registry.values() if cfg.region_key == region_key),
+            (
+                cfg.region_label
+                for cfg in registry.values()
+                if cfg.region_key == region_key
+            ),
             region_key,
         )
         url = next(
@@ -216,7 +224,10 @@ def avalanche_component_payload(input_: AvalanchePlanningInput) -> dict[str, Any
         "region_key": input_.region_key,
         "official_bulletin_url": input_.official_bulletin_url,
     }
-    if input_.bulletin is not None and input_.assessment is AvalancheAssessmentKind.ASSESSED:
+    if (
+        input_.bulletin is not None
+        and input_.assessment is AvalancheAssessmentKind.ASSESSED
+    ):
         payload["source_time"] = input_.bulletin.source_time.isoformat()
         payload["max_age_seconds"] = input_.bulletin.max_age_seconds
     return payload

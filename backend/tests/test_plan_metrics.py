@@ -7,6 +7,7 @@ from opentelemetry.sdk.metrics.export import InMemoryMetricReader
 
 from app.telemetry import metrics as metrics_mod
 
+
 @pytest.fixture
 def metric_reader(monkeypatch: pytest.MonkeyPatch) -> InMemoryMetricReader:
     metrics_mod.reset_metrics_for_tests()

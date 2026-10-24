@@ -21,6 +21,7 @@ def _current_base(migrated_test_database: str, route_id) -> int:
     assert current is not None
     return current
 
+
 pytestmark = pytest.mark.skipif(
     not os.environ.get("DATABASE_URL"),
     reason="DATABASE_URL is unset",
@@ -32,14 +33,17 @@ pytest_plugins = ["tests.test_route_search"]
 def _pending_count(migrated_test_database: str, route_id) -> int:
     Session = create_sessionmaker(_operator_url(migrated_test_database))
     with Session() as session:
-        return session.scalar(
-            select(func.count())
-            .select_from(RouteRevisionRecord)
-            .where(
-                RouteRevisionRecord.route_id == route_id,
-                RouteRevisionRecord.application_status == "pending",
+        return (
+            session.scalar(
+                select(func.count())
+                .select_from(RouteRevisionRecord)
+                .where(
+                    RouteRevisionRecord.route_id == route_id,
+                    RouteRevisionRecord.application_status == "pending",
+                )
             )
-        ) or 0
+            or 0
+        )
 
 
 def test_pending_revision_leaves_get_detail_unchanged(

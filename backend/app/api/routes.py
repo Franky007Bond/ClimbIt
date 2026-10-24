@@ -3,7 +3,17 @@ from __future__ import annotations
 import os
 import uuid
 
-from fastapi import APIRouter, Depends, File, Form, Header, HTTPException, Query, Request, UploadFile
+from fastapi import (
+    APIRouter,
+    Depends,
+    File,
+    Form,
+    Header,
+    HTTPException,
+    Query,
+    Request,
+    UploadFile,
+)
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
@@ -62,7 +72,9 @@ def _normalize_gpx_form_description(description: str | None) -> str:
         return GPX_DEFAULT_DESCRIPTION
     stripped = sanitize_free_text(description)
     if not stripped:
-        raise HTTPException(status_code=422, detail="description must be non-empty after strip")
+        raise HTTPException(
+            status_code=422, detail="description must be non-empty after strip"
+        )
     return stripped
 
 
@@ -87,12 +99,16 @@ async def post_gpx_upload(
     region_country: str = Form(...),
     description: str | None = Form(default=None),
     session: Session = Depends(get_db_session),
-    x_climbit_anonymous_id: str | None = Header(default=None, alias="X-ClimbIt-Anonymous-Id"),
+    x_climbit_anonymous_id: str | None = Header(
+        default=None, alias="X-ClimbIt-Anonymous-Id"
+    ),
 ) -> GpxUploadResponse:
     enforce_wiki_anonymous_rate_limit(request)
     raw = await file.read()
     if len(raw) > _max_gpx_upload_bytes():
-        raise HTTPException(status_code=413, detail="GPX file exceeds maximum upload size")
+        raise HTTPException(
+            status_code=413, detail="GPX file exceeds maximum upload size"
+        )
 
     try:
         processed = process_gpx_upload(raw)
@@ -101,7 +117,9 @@ async def post_gpx_upload(
 
     route_name = name.strip()
     if not route_name:
-        raise HTTPException(status_code=422, detail="name must be non-empty after strip")
+        raise HTTPException(
+            status_code=422, detail="name must be non-empty after strip"
+        )
 
     region = _normalize_gpx_form_region(region_name, region_country)
     stored_description = _normalize_gpx_form_description(description)
@@ -238,7 +256,9 @@ def _elevation_profile_response(profile: object):
     return ElevationProfile(
         synthesized=profile.synthesized,
         points=[
-            ElevationProfilePoint(distance_m=point.distance_m, elevation_m=point.elevation_m)
+            ElevationProfilePoint(
+                distance_m=point.distance_m, elevation_m=point.elevation_m
+            )
             for point in profile.points
         ],
     )
@@ -246,7 +266,9 @@ def _elevation_profile_response(profile: object):
 
 def _trailhead_transit_response(connection: object):
     from app.api.schemas.route_visualization import TrailheadTransitConnection
-    from app.routes.trailhead_transit import TrailheadTransitConnection as DomainConnection
+    from app.routes.trailhead_transit import (
+        TrailheadTransitConnection as DomainConnection,
+    )
 
     if not isinstance(connection, DomainConnection):
         return None
@@ -259,14 +281,18 @@ def _trailhead_transit_response(connection: object):
     )
 
 
-def _normalize_descriptive_edit(body: DescriptiveEditRequest) -> tuple[str | None, str | None, bool, bool]:
+def _normalize_descriptive_edit(
+    body: DescriptiveEditRequest,
+) -> tuple[str | None, str | None, bool, bool]:
     update_description = "description" in body.model_fields_set
     update_season_note = "season_note" in body.model_fields_set
     description: str | None = None
     season_note: str | None = None
     if update_description:
         if body.description is None:
-            raise HTTPException(status_code=422, detail="description must be a non-empty string")
+            raise HTTPException(
+                status_code=422, detail="description must be a non-empty string"
+            )
         description = sanitize_free_text(body.description)
         if not description:
             raise HTTPException(
@@ -295,7 +321,9 @@ def patch_route_descriptive(
     body: DescriptiveEditRequest,
     request: Request,
     session: Session = Depends(get_db_session),
-    x_climbit_anonymous_id: str | None = Header(default=None, alias="X-ClimbIt-Anonymous-Id"),
+    x_climbit_anonymous_id: str | None = Header(
+        default=None, alias="X-ClimbIt-Anonymous-Id"
+    ),
 ) -> DescriptiveEditResponse:
     enforce_wiki_anonymous_rate_limit(request)
     try:
@@ -313,14 +341,16 @@ def patch_route_descriptive(
         author_ref = stripped or None
 
     try:
-        revision_number, stored_description, stored_season_note = apply_descriptive_edit(
-            session,
-            route_id,
-            description=description,
-            season_note=season_note,
-            update_description=update_description,
-            update_season_note=update_season_note,
-            author_ref=author_ref,
+        revision_number, stored_description, stored_season_note = (
+            apply_descriptive_edit(
+                session,
+                route_id,
+                description=description,
+                season_note=season_note,
+                update_description=update_description,
+                update_season_note=update_season_note,
+                author_ref=author_ref,
+            )
         )
     except LookupError as exc:
         raise HTTPException(status_code=404, detail="Route not found") from exc
@@ -343,7 +373,9 @@ def post_route_protected_edit(
     body: ProtectedEditRequest,
     request: Request,
     session: Session = Depends(get_db_session),
-    x_climbit_anonymous_id: str | None = Header(default=None, alias="X-ClimbIt-Anonymous-Id"),
+    x_climbit_anonymous_id: str | None = Header(
+        default=None, alias="X-ClimbIt-Anonymous-Id"
+    ),
 ) -> ProtectedEditResponse:
     enforce_wiki_anonymous_rate_limit(request)
     record = get_published_route_by_id(session, route_id)
@@ -356,7 +388,9 @@ def post_route_protected_edit(
     except ValidationError as exc:
         raise HTTPException(
             status_code=422,
-            detail=[{"type": error["type"], "msg": error["msg"]} for error in exc.errors()],
+            detail=[
+                {"type": error["type"], "msg": error["msg"]} for error in exc.errors()
+            ],
         ) from exc
 
     author_ref = None

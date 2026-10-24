@@ -100,7 +100,9 @@ def build_plan(
             exposure="high" if route.route_type.value == "klettersteig" else "moderate",
             start_hour_local=start_hour,
         )
-        daylight = calculate_daylight_window(route, plan_date, start_time_local=start_time_local)
+        daylight = calculate_daylight_window(
+            route, plan_date, start_time_local=start_time_local
+        )
         daylight_calculable = daylight.latest_safe_start_local is not None
         recommendation = judge_recommendation(
             route,
@@ -111,7 +113,9 @@ def build_plan(
             daylight_calculable=daylight_calculable,
         )
     with planning_step("gear"):
-        gear = build_gear_guidance(route, forecast if freshness is WeatherFreshness.OK else None)
+        gear = build_gear_guidance(
+            route, forecast if freshness is WeatherFreshness.OK else None
+        )
     inner_transit = transit_port or get_transit_port()
     transit_boundary = CachedTransitBoundary(inner_transit, route_id=route_id)
     with planning_step("transit"):
@@ -123,22 +127,28 @@ def build_plan(
             query_time=now,
         )
     with planning_step("recommendation"):
-        recommendation_value, confidence_value, explanation = apply_last_return_recommendation(
-            recommendation=recommendation.recommendation.value,
-            confidence=recommendation.confidence.value,
-            explanation=list(recommendation.explanation) + daylight.explanation,
-            transit=transit,
+        recommendation_value, confidence_value, explanation = (
+            apply_last_return_recommendation(
+                recommendation=recommendation.recommendation.value,
+                confidence=recommendation.confidence.value,
+                explanation=list(recommendation.explanation) + daylight.explanation,
+                transit=transit,
+            )
         )
-        recommendation_value, confidence_value, explanation = apply_transit_recommendation(
-            recommendation=recommendation_value,
-            confidence=confidence_value,
-            explanation=explanation,
-            transit=transit,
+        recommendation_value, confidence_value, explanation = (
+            apply_transit_recommendation(
+                recommendation=recommendation_value,
+                confidence=confidence_value,
+                explanation=explanation,
+                transit=transit,
+            )
         )
 
     weather_status = _weather_component_status(freshness).value
     transit_status = transit.status.value
-    avalanche_status = str(avalanche_component_payload(avalanche).get("status", "unknown"))
+    avalanche_status = str(
+        avalanche_component_payload(avalanche).get("status", "unknown")
+    )
     for integration, status in (
         ("weather", weather_status),
         ("transit", transit_status),

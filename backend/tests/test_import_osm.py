@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import os
-import uuid
 from datetime import datetime
 from datetime import timezone
 from pathlib import Path
@@ -194,9 +193,13 @@ def test_reimport_upserts_osm_quarantined_route(migrated_test_database: str) -> 
     overpass = _stub_for_manifest(manifest)
     Session = create_sessionmaker(_operator_url(migrated_test_database))
     with Session() as session:
-        import_osm_routes(session, manifest, overpass=overpass, imported_at=_FIXED_IMPORT_TIME)
+        import_osm_routes(
+            session, manifest, overpass=overpass, imported_at=_FIXED_IMPORT_TIME
+        )
         session.commit()
-        import_osm_routes(session, manifest, overpass=overpass, imported_at=_FIXED_IMPORT_TIME)
+        import_osm_routes(
+            session, manifest, overpass=overpass, imported_at=_FIXED_IMPORT_TIME
+        )
         session.commit()
 
     Session = create_sessionmaker(_operator_url(migrated_test_database))
@@ -264,7 +267,9 @@ def test_import_conflict_when_existing_route_not_osm_quarantined(
             )
         ]
     )
-    overpass = _StubOverpassClient({("way", 1001): _read_json("way_with_elevation.json")})
+    overpass = _StubOverpassClient(
+        {("way", 1001): _read_json("way_with_elevation.json")}
+    )
     Session = create_sessionmaker(_operator_url(migrated_test_database))
     with Session() as session:
         with pytest.raises(OsmImportConflictError, match="way/1001"):
@@ -344,7 +349,9 @@ def test_urllib_overpass_client_retries_429_without_network(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setenv("OVERPASS_API_URL", "http://overpass.test/interpreter")
-    client = UrllibOverpassClient(api_url="http://overpass.test/interpreter", min_interval_seconds=0)
+    client = UrllibOverpassClient(
+        api_url="http://overpass.test/interpreter", min_interval_seconds=0
+    )
 
     class _FakeHTTPError(Exception):
         def __init__(self, code: int) -> None:
@@ -383,9 +390,12 @@ def test_urllib_overpass_client_retries_429_without_network(
         def __exit__(self, *args: object) -> None:
             return None
 
-    with patch("app.osm.overpass.time.sleep"), patch(
-        "urllib.request.urlopen",
-        side_effect=fake_urlopen,
+    with (
+        patch("app.osm.overpass.time.sleep"),
+        patch(
+            "urllib.request.urlopen",
+            side_effect=fake_urlopen,
+        ),
     ):
         payload = client.fetch_element(OsmElementType.WAY, 1001)
 
@@ -394,12 +404,17 @@ def test_urllib_overpass_client_retries_429_without_network(
 
 def test_overpass_client_enforces_min_interval(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("OVERPASS_API_URL", "http://overpass.test/interpreter")
-    client = UrllibOverpassClient(api_url="http://overpass.test/interpreter", min_interval_seconds=2)
+    client = UrllibOverpassClient(
+        api_url="http://overpass.test/interpreter", min_interval_seconds=2
+    )
     payload = {"elements": []}
 
-    with patch("app.osm.overpass.time.sleep") as sleep, patch(
-        "urllib.request.urlopen",
-        return_value=_FakeUrlopenResponse(json.dumps(payload).encode("utf-8")),
+    with (
+        patch("app.osm.overpass.time.sleep") as sleep,
+        patch(
+            "urllib.request.urlopen",
+            return_value=_FakeUrlopenResponse(json.dumps(payload).encode("utf-8")),
+        ),
     ):
         client.fetch_element(OsmElementType.WAY, 1)
         client.fetch_element(OsmElementType.WAY, 2)

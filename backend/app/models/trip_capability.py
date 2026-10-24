@@ -15,7 +15,9 @@ class TripCapabilityRecord(Base):
     __tablename__ = "trip_capabilities"
 
     id: Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )
     invalidated_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True),
         nullable=True,

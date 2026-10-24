@@ -138,5 +138,7 @@ def clear_maintainer_cookie(response: Response, request: Request) -> None:
 def require_maintainer(request: Request) -> MaintainerSession:
     session = read_maintainer_session(request)
     if session is None:
-        raise HTTPException(status_code=401, detail="Maintainer authentication required")
+        raise HTTPException(
+            status_code=401, detail="Maintainer authentication required"
+        )
     return session

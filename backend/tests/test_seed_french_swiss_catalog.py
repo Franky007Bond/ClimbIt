@@ -80,9 +80,7 @@ def test_build_seed_routes_french_swiss_launch_invariants() -> None:
             assert route.technical_minutes is not None
             assert route.descent_minutes is not None
             assert route.duration_minutes == (
-                route.approach_minutes
-                + route.technical_minutes
-                + route.descent_minutes
+                route.approach_minutes + route.technical_minutes + route.descent_minutes
             )
 
 
@@ -104,7 +102,9 @@ def test_french_swiss_hiking_and_klettersteig_scales_differ() -> None:
     assert hike_scales.isdisjoint(klettersteig_scales)
 
 
-def test_search_region_filter_returns_sample_coverage(seeded_client: TestClient) -> None:
+def test_search_region_filter_returns_sample_coverage(
+    seeded_client: TestClient,
+) -> None:
     for region_name in ("Chamonix", "Zermatt", "Grimsel"):
         response = seeded_client.get("/routes", params={"region": region_name})
         assert response.status_code == 200

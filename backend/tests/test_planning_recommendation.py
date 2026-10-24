@@ -35,7 +35,9 @@ def _assessed_avalanche(**overrides: object) -> AvalanchePlanningInput:
 
 def _climbing_route():
     return next(
-        route for _id, route in build_seed_routes() if route.route_type is RouteType.OUTDOOR_CLIMBING
+        route
+        for _id, route in build_seed_routes()
+        if route.route_type is RouteType.OUTDOOR_CLIMBING
     )
 
 
@@ -60,7 +62,9 @@ def test_missing_closure_cannot_be_green() -> None:
         source_timestamp=None,
         hard_blocker=False,
     )
-    thunder = assess_thunderstorm_risk(weather.forecast, exposure="moderate", start_hour_local=8)
+    thunder = assess_thunderstorm_risk(
+        weather.forecast, exposure="moderate", start_hour_local=8
+    )
     result = judge_recommendation(
         route,
         weather=weather,
@@ -166,7 +170,9 @@ def test_climbing_plan_explanation_mentions_no_technical_suitability() -> None:
         source_timestamp=datetime.now(timezone.utc),
         hard_blocker=False,
     )
-    thunder = assess_thunderstorm_risk(weather.forecast, exposure="moderate", start_hour_local=8)
+    thunder = assess_thunderstorm_risk(
+        weather.forecast, exposure="moderate", start_hour_local=8
+    )
     result = judge_recommendation(
         route,
         weather=weather,

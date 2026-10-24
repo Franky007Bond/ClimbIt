@@ -29,7 +29,9 @@ def test_health_ok_with_invalid_database_url(monkeypatch) -> None:
 
 
 def test_health_body_has_no_secrets(monkeypatch) -> None:
-    monkeypatch.setenv("DATABASE_URL", "postgresql://climbit:secret@db-host:5432/climbit")
+    monkeypatch.setenv(
+        "DATABASE_URL", "postgresql://climbit:secret@db-host:5432/climbit"
+    )
     with TestClient(app) as client:
         response = client.get("/health")
     raw = response.text

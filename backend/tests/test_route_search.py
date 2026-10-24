@@ -125,7 +125,9 @@ def test_default_search_lists_only_published_routes(seeded_client: TestClient) -
     assert publications == {"published"}
 
 
-def test_search_includes_route_state_and_region_coverage(seeded_client: TestClient) -> None:
+def test_search_includes_route_state_and_region_coverage(
+    seeded_client: TestClient,
+) -> None:
     response = seeded_client.get("/routes")
     assert response.status_code == 200
     alpine = next(
@@ -189,7 +191,9 @@ def test_search_rejects_unknown_difficulty_scale(seeded_client: TestClient) -> N
     assert "difficulty_scale" in response.json()["detail"]
 
 
-def test_search_rejects_difficulty_min_harder_than_max(seeded_client: TestClient) -> None:
+def test_search_rejects_difficulty_min_harder_than_max(
+    seeded_client: TestClient,
+) -> None:
     response = seeded_client.get(
         "/routes",
         params={
@@ -237,7 +241,9 @@ def test_search_rejects_difficulty_scale_for_wrong_route_type(
     assert "route_type" in response.json()["detail"]
 
 
-def test_search_filters_by_difficulty_scale_and_bounds(seeded_client: TestClient) -> None:
+def test_search_filters_by_difficulty_scale_and_bounds(
+    seeded_client: TestClient,
+) -> None:
     response = seeded_client.get(
         "/routes",
         params={
@@ -258,7 +264,9 @@ def test_search_filters_by_difficulty_scale_and_bounds(seeded_client: TestClient
         assert item["difficulty"]["structured_value"] == "6a"
 
 
-def test_search_filters_by_season_month_and_transit(migrated_test_database: str) -> None:
+def test_search_filters_by_season_month_and_transit(
+    migrated_test_database: str,
+) -> None:
     Session = create_sessionmaker(_operator_url(migrated_test_database))
     route_id = seed_route_id(PUBLISHED_KLETTERSTEIG_SLUG)
     with Session() as session:

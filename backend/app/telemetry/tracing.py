@@ -28,7 +28,9 @@ def configure_tracing() -> None:
     global _CONFIGURED
     if _CONFIGURED:
         return
-    service_name = os.environ.get("OTEL_SERVICE_NAME", "climbit-api").strip() or "climbit-api"
+    service_name = (
+        os.environ.get("OTEL_SERVICE_NAME", "climbit-api").strip() or "climbit-api"
+    )
     service_version = os.environ.get("OTEL_SERVICE_VERSION", "dev").strip() or "dev"
     resource = Resource.create(
         {

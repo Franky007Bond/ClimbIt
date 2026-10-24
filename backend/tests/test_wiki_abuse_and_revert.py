@@ -20,7 +20,9 @@ pytest_plugins = ["tests.test_route_search"]
 
 TEST_USERNAME = "operator"
 TEST_PASSWORD = "test-password"
-TEST_HASH = bcrypt.hashpw(TEST_PASSWORD.encode("utf-8"), bcrypt.gensalt(rounds=4)).decode()
+TEST_HASH = bcrypt.hashpw(
+    TEST_PASSWORD.encode("utf-8"), bcrypt.gensalt(rounds=4)
+).decode()
 
 
 @pytest.fixture(autouse=True)
@@ -91,7 +93,9 @@ def test_approved_revert_restores_prior_description(
         from sqlalchemy import select
 
         anchor = session.scalar(
-            select(RouteRevisionRecord.id).where(RouteRevisionRecord.route_id == route_id)
+            select(RouteRevisionRecord.id).where(
+                RouteRevisionRecord.route_id == route_id
+            )
         )
     assert anchor is not None
     _login(seeded_client)

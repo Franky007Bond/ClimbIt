@@ -2,7 +2,14 @@ from datetime import datetime, timedelta
 from enum import StrEnum
 from typing import TYPE_CHECKING, Literal, Self
 
-from pydantic import BaseModel, ConfigDict, HttpUrl, TypeAdapter, field_validator, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    HttpUrl,
+    TypeAdapter,
+    field_validator,
+    model_validator,
+)
 
 if TYPE_CHECKING:
     from app.domain.route import Route
@@ -61,7 +68,9 @@ class ClosureAssessment(BaseModel):
 
     @field_validator("reviewed_at")
     @classmethod
-    def reviewed_at_must_be_utc_when_set(cls, value: datetime | None) -> datetime | None:
+    def reviewed_at_must_be_utc_when_set(
+        cls, value: datetime | None
+    ) -> datetime | None:
         if value is None:
             return value
         return _require_aware_utc(value)
@@ -74,7 +83,9 @@ class ClosureAssessment(BaseModel):
             raise ValueError("expires_at must be after created_at")
         if self.review_status is ClosureReviewStatus.REVIEWED:
             if self.reviewed_at is None:
-                raise ValueError("reviewed_at is required when review_status is reviewed")
+                raise ValueError(
+                    "reviewed_at is required when review_status is reviewed"
+                )
             if self.reviewed_at < self.created_at:
                 raise ValueError("reviewed_at must not be before created_at")
             if self.reviewed_at > self.updated_at:
@@ -82,11 +93,15 @@ class ClosureAssessment(BaseModel):
             if self.expires_at <= self.reviewed_at:
                 raise ValueError("expires_at must be after reviewed_at")
         elif self.reviewed_at is not None:
-            raise ValueError("reviewed_at must be None when review_status is unreviewed")
+            raise ValueError(
+                "reviewed_at must be None when review_status is unreviewed"
+            )
         return self
 
 
-def effective_closure_status(assessment: ClosureAssessment, now: datetime) -> EffectiveStatus:
+def effective_closure_status(
+    assessment: ClosureAssessment, now: datetime
+) -> EffectiveStatus:
     _require_aware_utc(now)
     if now >= assessment.expires_at:
         return "expired"

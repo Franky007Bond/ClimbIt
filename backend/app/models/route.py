@@ -66,7 +66,9 @@ class RouteRecord(Base):
     difficulty_structured_scale: Mapped[str | None] = mapped_column(Text, nullable=True)
     difficulty_structured_value: Mapped[str | None] = mapped_column(Text, nullable=True)
     difficulty_mapped_huebler: Mapped[str | None] = mapped_column(Text, nullable=True)
-    difficulty_mapping_confidence: Mapped[str | None] = mapped_column(Text, nullable=True)
+    difficulty_mapping_confidence: Mapped[str | None] = mapped_column(
+        Text, nullable=True
+    )
     difficulty_mapping_source: Mapped[str | None] = mapped_column(Text, nullable=True)
     difficulty_mapping_citation: Mapped[str | None] = mapped_column(Text, nullable=True)
     difficulty_mapping_version: Mapped[str | None] = mapped_column(Text, nullable=True)

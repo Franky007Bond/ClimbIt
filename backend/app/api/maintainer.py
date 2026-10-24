@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException, Request, Response
+from fastapi import APIRouter, HTTPException, Request, Response
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.maintainer_auth import clear_maintainer_cookie
@@ -49,5 +49,7 @@ def delete_maintainer_session(request: Request, response: Response) -> Response:
 def get_maintainer_session(request: Request) -> MaintainerSessionResponse:
     session = read_maintainer_session(request)
     if session is None:
-        raise HTTPException(status_code=401, detail="Maintainer authentication required")
+        raise HTTPException(
+            status_code=401, detail="Maintainer authentication required"
+        )
     return MaintainerSessionResponse(username=session.username)

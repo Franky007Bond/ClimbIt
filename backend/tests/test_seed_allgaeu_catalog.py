@@ -17,6 +17,7 @@ from app.data.seed_routes_allgaeu import ALLGAEU_CATALOG_SLUGS
 from app.data.seed_routes_allgaeu import ALLGAEU_LAUNCH_PUBLISHED_COUNT
 from app.domain.route import Publication
 from app.domain.route import RouteType
+
 pytestmark = pytest.mark.skipif(
     not os.environ.get("DATABASE_URL"),
     reason="DATABASE_URL is unset",
@@ -28,7 +29,8 @@ def test_allgaeu_launch_slug_inventory() -> None:
     assert len(ALLGAEU_LAUNCH_SLUGS) == ALLGAEU_LAUNCH_PUBLISHED_COUNT
     assert ALLGAEU_LAUNCH_PUBLISHED_COUNT == 20
     assert set(ALLGAEU_LAUNCH_SLUGS).isdisjoint(
-        set(SEED_FIXTURE_SLUGS) - {
+        set(SEED_FIXTURE_SLUGS)
+        - {
             "published-klettersteig",
             "published-outdoor-climbing",
         }
@@ -37,10 +39,7 @@ def test_allgaeu_launch_slug_inventory() -> None:
 
 def test_build_seed_routes_allgaeu_launch_invariants() -> None:
     fixtures = dict(build_seed_routes())
-    launch = [
-        fixtures[seed_route_id(slug)]
-        for slug in ALLGAEU_LAUNCH_SLUGS
-    ]
+    launch = [fixtures[seed_route_id(slug)] for slug in ALLGAEU_LAUNCH_SLUGS]
     assert len(launch) == ALLGAEU_LAUNCH_PUBLISHED_COUNT
 
     type_counts = Counter(route.route_type for route in launch)
@@ -74,9 +73,7 @@ def test_build_seed_routes_allgaeu_launch_invariants() -> None:
             assert route.technical_minutes is not None
             assert route.descent_minutes is not None
             assert route.duration_minutes == (
-                route.approach_minutes
-                + route.technical_minutes
-                + route.descent_minutes
+                route.approach_minutes + route.technical_minutes + route.descent_minutes
             )
 
 

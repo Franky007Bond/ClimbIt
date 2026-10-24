@@ -85,7 +85,8 @@ def search_routes(session: Session, criteria: RouteSearchCriteria) -> list[Route
         )
     if criteria.difficulty_structured_scale is not None:
         statement = statement.where(
-            RouteRecord.difficulty_structured_scale == criteria.difficulty_structured_scale
+            RouteRecord.difficulty_structured_scale
+            == criteria.difficulty_structured_scale
         )
         if criteria.difficulty_structured_values is not None:
             statement = statement.where(
@@ -97,7 +98,9 @@ def search_routes(session: Session, criteria: RouteSearchCriteria) -> list[Route
     return list(session.scalars(statement).all())
 
 
-def get_published_route_by_id(session: Session, route_id: uuid.UUID) -> RouteRecord | None:
+def get_published_route_by_id(
+    session: Session, route_id: uuid.UUID
+) -> RouteRecord | None:
     statement = select(RouteRecord).where(
         RouteRecord.id == route_id,
         RouteRecord.publication == Publication.PUBLISHED.value,
@@ -206,7 +209,9 @@ def apply_descriptive_edit(
     return latest.revision_number, updated.description, updated.season_note
 
 
-def current_applied_revision_number(session: Session, route_id: uuid.UUID) -> int | None:
+def current_applied_revision_number(
+    session: Session, route_id: uuid.UUID
+) -> int | None:
     return session.scalar(
         select(func.max(RouteRevisionRecord.revision_number)).where(
             RouteRevisionRecord.route_id == route_id,
@@ -389,18 +394,36 @@ def route_to_record(route: Route, route_id: uuid.UUID) -> RouteRecord:
         duration_is_estimated=route.duration_is_estimated,
         original_difficulty_value=route.original_difficulty_value,
         original_difficulty_scale=route.original_difficulty_scale,
-        difficulty_route_type=None if difficulty is None else difficulty.route_type.value,
-        difficulty_original_value=None if difficulty is None else difficulty.original_value,
-        difficulty_original_scale=None if difficulty is None else difficulty.original_scale,
-        difficulty_structured_scale=None if difficulty is None else difficulty.structured_scale,
-        difficulty_structured_value=None if difficulty is None else difficulty.structured_value,
-        difficulty_mapped_huebler=None if difficulty is None else difficulty.mapped_huebler,
+        difficulty_route_type=None
+        if difficulty is None
+        else difficulty.route_type.value,
+        difficulty_original_value=None
+        if difficulty is None
+        else difficulty.original_value,
+        difficulty_original_scale=None
+        if difficulty is None
+        else difficulty.original_scale,
+        difficulty_structured_scale=None
+        if difficulty is None
+        else difficulty.structured_scale,
+        difficulty_structured_value=None
+        if difficulty is None
+        else difficulty.structured_value,
+        difficulty_mapped_huebler=None
+        if difficulty is None
+        else difficulty.mapped_huebler,
         difficulty_mapping_confidence=(
             None if difficulty is None else difficulty.mapping_confidence.value
         ),
-        difficulty_mapping_source=None if difficulty is None else difficulty.mapping_source,
-        difficulty_mapping_citation=None if difficulty is None else difficulty.mapping_citation,
-        difficulty_mapping_version=None if difficulty is None else difficulty.mapping_version,
+        difficulty_mapping_source=None
+        if difficulty is None
+        else difficulty.mapping_source,
+        difficulty_mapping_citation=None
+        if difficulty is None
+        else difficulty.mapping_citation,
+        difficulty_mapping_version=None
+        if difficulty is None
+        else difficulty.mapping_version,
         closure_status=None if closure is None else closure.status.value,
         closure_source_url=None if closure is None else closure.source_url,
         closure_owner=None if closure is None else closure.owner,

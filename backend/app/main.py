@@ -31,7 +31,9 @@ app = FastAPI(title="ClimbIt", lifespan=lifespan)
 _default_cors_origins = "http://127.0.0.1:5173,http://localhost:5173"
 _cors_origins = [
     origin.strip()
-    for origin in os.environ.get("CORS_ALLOWED_ORIGINS", _default_cors_origins).split(",")
+    for origin in os.environ.get("CORS_ALLOWED_ORIGINS", _default_cors_origins).split(
+        ","
+    )
     if origin.strip()
 ]
 app.add_middleware(

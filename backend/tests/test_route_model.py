@@ -161,7 +161,9 @@ def test_extra_fields_are_forbidden() -> None:
     with pytest.raises(ValidationError):
         _route(safety_buffer=30)
     with pytest.raises(ValidationError):
-        Region(name="Allgäu", country="DE", coverage=RegionCoverage.SUPPORTED, extra="no")
+        Region(
+            name="Allgäu", country="DE", coverage=RegionCoverage.SUPPORTED, extra="no"
+        )
 
 
 def test_published_alpine_hike_without_component_minutes() -> None:
@@ -211,7 +213,9 @@ def test_published_klettersteig_with_component_minutes() -> None:
         "duration_minutes",
     ],
 )
-def test_published_alpine_hike_requires_each_published_field(missing_field: str) -> None:
+def test_published_alpine_hike_requires_each_published_field(
+    missing_field: str,
+) -> None:
     payload = _published_geometry()
     payload[missing_field] = None
     with pytest.raises(ValidationError) as exc_info:
@@ -586,4 +590,6 @@ def test_attached_closure_keeps_difficulty() -> None:
     assert route.difficulty.mapped_huebler == "C"
     assert route.closure_assessment is not None
     assert route.closure_assessment.status is ClosureStatus.ACTIVE
-    assert route.closure_assessment.source_url == "https://example.invalid/closure-notice"
+    assert (
+        route.closure_assessment.source_url == "https://example.invalid/closure-notice"
+    )

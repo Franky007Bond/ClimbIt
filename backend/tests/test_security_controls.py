@@ -85,15 +85,21 @@ def test_repository_modules_avoid_interpolated_sql() -> None:
 
 
 def test_threat_model_covers_accepted_wiki_vandalism() -> None:
-    doc = (REPO_ROOT / "_docs" / "security" / "threat-model.md").read_text(encoding="utf-8")
+    doc = (REPO_ROOT / "_docs" / "security" / "threat-model.md").read_text(
+        encoding="utf-8"
+    )
     lowered = doc.lower()
     assert "wiki vandalism" in lowered
     assert "accepted risk" in lowered
     assert "abuse case" in lowered or "abuse cases" in lowered
 
 
-def test_health_and_ready_responses_exclude_env_secrets(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("DATABASE_URL", "postgresql://climbit:top-secret@db:5432/climbit")
+def test_health_and_ready_responses_exclude_env_secrets(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv(
+        "DATABASE_URL", "postgresql://climbit:top-secret@db:5432/climbit"
+    )
     monkeypatch.setenv("TRIP_CAPABILITY_SECRET", "trip-secret-value")
     with TestClient(app) as client:
         health = client.get("/health")

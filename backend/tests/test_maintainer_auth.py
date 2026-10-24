@@ -1,6 +1,5 @@
 import json
 import logging
-import os
 
 import bcrypt
 import pytest
@@ -10,7 +9,9 @@ from app.main import app
 
 TEST_USERNAME = "operator"
 TEST_PASSWORD = "test-password"
-TEST_HASH = bcrypt.hashpw(TEST_PASSWORD.encode("utf-8"), bcrypt.gensalt(rounds=4)).decode()
+TEST_HASH = bcrypt.hashpw(
+    TEST_PASSWORD.encode("utf-8"), bcrypt.gensalt(rounds=4)
+).decode()
 
 
 @pytest.fixture(autouse=True)
@@ -71,7 +72,9 @@ def test_session_endpoint_returns_username_after_login(client: TestClient) -> No
     assert session.json() == {"username": TEST_USERNAME}
 
 
-def test_failed_login_does_not_log_password(client: TestClient, caplog: pytest.LogCaptureFixture) -> None:
+def test_failed_login_does_not_log_password(
+    client: TestClient, caplog: pytest.LogCaptureFixture
+) -> None:
     caplog.set_level(logging.INFO)
     response = client.post(
         "/maintainer/sessions",

@@ -7,9 +7,7 @@ from app.domain.route import LineString
 from app.domain.route import Point
 
 GPX_NS = "http://www.topografix.com/GPX/1/1"
-GPX_DEFAULT_DESCRIPTION = (
-    "No description was provided for this GPX upload."
-)
+GPX_DEFAULT_DESCRIPTION = "No description was provided for this GPX upload."
 
 
 class GpxValidationError(Exception):
@@ -57,7 +55,9 @@ def _parse_trkpt(trkpt: ET.Element) -> tuple[float, float, float | None]:
             try:
                 elevation = float(_text_content(child))
             except ValueError as exc:
-                raise GpxValidationError("track point elevation is not numeric") from exc
+                raise GpxValidationError(
+                    "track point elevation is not numeric"
+                ) from exc
             break
     return longitude, latitude, elevation
 

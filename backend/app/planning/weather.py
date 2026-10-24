@@ -50,7 +50,9 @@ class WeatherPort(Protocol):
     ) -> WeatherForecast: ...
 
 
-def assess_weather_freshness(forecast: WeatherForecast, now: datetime) -> WeatherFreshness:
+def assess_weather_freshness(
+    forecast: WeatherForecast, now: datetime
+) -> WeatherFreshness:
     if now.tzinfo is None or now.utcoffset() != timedelta(0):
         raise ValueError("now must be UTC-aware")
     age = (now - forecast.source_time).total_seconds()

@@ -36,7 +36,9 @@ def trailhead_timezone(route: Route) -> str:
     return "UTC"
 
 
-def _sunrise_sunset_utc(plan_date: date, latitude: float, longitude: float) -> tuple[datetime, datetime]:
+def _sunrise_sunset_utc(
+    plan_date: date, latitude: float, longitude: float
+) -> tuple[datetime, datetime]:
     """NOAA-style approximate solar times (UTC)."""
     day_of_year = plan_date.timetuple().tm_yday
     lng_hour = longitude / 15.0
@@ -45,7 +47,12 @@ def _sunrise_sunset_utc(plan_date: date, latitude: float, longitude: float) -> t
     def _calc(is_sunrise: bool) -> datetime:
         t = day_of_year + ((6 - lng_hour) / 24 if is_sunrise else (18 - lng_hour) / 24)
         m = (0.9856 * t) - 3.289
-        l = m + (1.916 * math.sin(math.radians(m))) + (0.020 * math.sin(math.radians(2 * m))) + 282.634
+        l = (
+            m
+            + (1.916 * math.sin(math.radians(m)))
+            + (0.020 * math.sin(math.radians(2 * m)))
+            + 282.634
+        )
         l = (l + 360) % 360
         ra = math.degrees(math.atan(0.91764 * math.tan(math.radians(l))))
         ra = (ra + 360) % 360
@@ -59,7 +66,11 @@ def _sunrise_sunset_utc(plan_date: date, latitude: float, longitude: float) -> t
             cos_dec * math.cos(math.radians(latitude))
         )
         cos_h = min(1.0, max(-1.0, cos_h))
-        h = (360 - math.degrees(math.acos(cos_h))) if is_sunrise else math.degrees(math.acos(cos_h))
+        h = (
+            (360 - math.degrees(math.acos(cos_h)))
+            if is_sunrise
+            else math.degrees(math.acos(cos_h))
+        )
         h /= 15
         t_local = h + ra - (0.06571 * t) - 6.622
         ut = (t_local - lng_hour) % 24
@@ -87,7 +98,9 @@ def calculate_daylight_window(
 ) -> DaylightWindow:
     explanations: list[str] = []
     if route.duration_minutes is None:
-        explanations.append("Route duration is missing; daylight window not calculated.")
+        explanations.append(
+            "Route duration is missing; daylight window not calculated."
+        )
         return DaylightWindow(
             latest_safe_start_local=None,
             be_off_by_local=None,
@@ -107,7 +120,9 @@ def calculate_daylight_window(
             explanation=explanations,
         )
     if route.trailhead is None:
-        explanations.append("Trailhead coordinates missing; daylight window not calculated.")
+        explanations.append(
+            "Trailhead coordinates missing; daylight window not calculated."
+        )
         return DaylightWindow(
             latest_safe_start_local=None,
             be_off_by_local=None,
@@ -120,11 +135,12 @@ def calculate_daylight_window(
         plan_date, route.trailhead.latitude, route.trailhead.longitude
     )
     sunset_local = sunset_utc.astimezone(tz)
-    total_minutes = route.duration_minutes + SAFETY_BUFFER_MINUTES
     be_off_dt = sunset_local - timedelta(minutes=SAFETY_BUFFER_MINUTES)
     latest_start_dt = be_off_dt - timedelta(minutes=route.duration_minutes)
     if start_time_local is not None:
-        explanations.append(f"Requested start time {start_time_local.isoformat()} noted.")
+        explanations.append(
+            f"Requested start time {start_time_local.isoformat()} noted."
+        )
     explanations.append(
         f"Applied {SAFETY_BUFFER_MINUTES} minute safety buffer ({SAFETY_BUFFER_RULES_VERSION})."
     )

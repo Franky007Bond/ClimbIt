@@ -41,12 +41,18 @@ def build_gear_guidance(route: Route, forecast: WeatherForecast | None) -> GearG
         items.extend(
             [
                 GearItem(name="Sturdy hiking boots", reason="Alpine hike baseline."),
-                GearItem(name="Water and food", reason="Route duration requires self-sufficiency."),
+                GearItem(
+                    name="Water and food",
+                    reason="Route duration requires self-sufficiency.",
+                ),
             ]
         )
         if forecast is not None and forecast.precipitation_mm >= 1:
             items.append(
-                GearItem(name="Waterproof shell", reason="Forecast precipitation on the route.")
+                GearItem(
+                    name="Waterproof shell",
+                    reason="Forecast precipitation on the route.",
+                )
             )
     else:
         items.extend(

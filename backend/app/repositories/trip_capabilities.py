@@ -46,7 +46,9 @@ def invalidate_trip_capability(
 
 
 def count_active_trip_capabilities(session: Session) -> int:
-    statement = select(func.count()).select_from(TripCapabilityRecord).where(
-        TripCapabilityRecord.invalidated_at.is_(None)
+    statement = (
+        select(func.count())
+        .select_from(TripCapabilityRecord)
+        .where(TripCapabilityRecord.invalidated_at.is_(None))
     )
     return int(session.scalar(statement) or 0)

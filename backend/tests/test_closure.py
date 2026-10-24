@@ -58,7 +58,9 @@ def _route(**overrides) -> Route:
     payload = {
         "name": "Hindelanger Klettersteig",
         "route_type": RouteType.ALPINE_HIKE,
-        "region": Region(name="Allgäu", country="DE", coverage=RegionCoverage.SUPPORTED),
+        "region": Region(
+            name="Allgäu", country="DE", coverage=RegionCoverage.SUPPORTED
+        ),
         "publication": Publication.QUARANTINED,
         "duration_is_estimated": True,
         "season_months": set(),
@@ -109,7 +111,10 @@ def test_closure_enums_are_not_route_enums() -> None:
     assert ClosureStatus is not Completeness
     assert ClosureReviewStatus is not Assessment
     assert {member.value for member in ClosureStatus} == {"none_known", "active"}
-    assert {member.value for member in ClosureReviewStatus} == {"unreviewed", "reviewed"}
+    assert {member.value for member in ClosureReviewStatus} == {
+        "unreviewed",
+        "reviewed",
+    }
 
 
 def test_assessment_forbids_extra_fields() -> None:
@@ -134,13 +139,17 @@ def test_owner_rejects_empty_or_whitespace() -> None:
         _assessment(owner="   ")
 
 
-@pytest.mark.parametrize("field", ["created_at", "updated_at", "expires_at", "reviewed_at"])
+@pytest.mark.parametrize(
+    "field", ["created_at", "updated_at", "expires_at", "reviewed_at"]
+)
 def test_naive_datetime_is_rejected(field: str) -> None:
     with pytest.raises(ValidationError):
         _assessment(**{field: NAIVE})
 
 
-@pytest.mark.parametrize("field", ["created_at", "updated_at", "expires_at", "reviewed_at"])
+@pytest.mark.parametrize(
+    "field", ["created_at", "updated_at", "expires_at", "reviewed_at"]
+)
 def test_non_utc_offset_is_rejected(field: str) -> None:
     shifted = datetime(2026, 7, 15, 12, 0, 0, tzinfo=BERLIN_OFFSET)
     with pytest.raises(ValidationError):
@@ -257,37 +266,57 @@ def test_absence_is_not_none_known() -> None:
     [
         (None, JUST_BEFORE, "unknown"),
         (
-            dict(status=ClosureStatus.NONE_KNOWN, review_status=ClosureReviewStatus.UNREVIEWED, reviewed_at=None),
+            dict(
+                status=ClosureStatus.NONE_KNOWN,
+                review_status=ClosureReviewStatus.UNREVIEWED,
+                reviewed_at=None,
+            ),
             JUST_BEFORE,
             "unknown",
         ),
         (
-            dict(status=ClosureStatus.ACTIVE, review_status=ClosureReviewStatus.UNREVIEWED, reviewed_at=None),
+            dict(
+                status=ClosureStatus.ACTIVE,
+                review_status=ClosureReviewStatus.UNREVIEWED,
+                reviewed_at=None,
+            ),
             JUST_BEFORE,
             "unknown",
         ),
         (
-            dict(status=ClosureStatus.NONE_KNOWN, review_status=ClosureReviewStatus.REVIEWED),
+            dict(
+                status=ClosureStatus.NONE_KNOWN,
+                review_status=ClosureReviewStatus.REVIEWED,
+            ),
             JUST_BEFORE,
             "none_known",
         ),
         (
-            dict(status=ClosureStatus.ACTIVE, review_status=ClosureReviewStatus.REVIEWED),
+            dict(
+                status=ClosureStatus.ACTIVE, review_status=ClosureReviewStatus.REVIEWED
+            ),
             JUST_BEFORE,
             "active",
         ),
         (
-            dict(status=ClosureStatus.NONE_KNOWN, review_status=ClosureReviewStatus.REVIEWED),
+            dict(
+                status=ClosureStatus.NONE_KNOWN,
+                review_status=ClosureReviewStatus.REVIEWED,
+            ),
             AT_EXPIRY,
             "unknown",
         ),
         (
-            dict(status=ClosureStatus.ACTIVE, review_status=ClosureReviewStatus.REVIEWED),
+            dict(
+                status=ClosureStatus.ACTIVE, review_status=ClosureReviewStatus.REVIEWED
+            ),
             AT_EXPIRY,
             "unknown",
         ),
         (
-            dict(status=ClosureStatus.ACTIVE, review_status=ClosureReviewStatus.REVIEWED),
+            dict(
+                status=ClosureStatus.ACTIVE, review_status=ClosureReviewStatus.REVIEWED
+            ),
             JUST_AFTER,
             "unknown",
         ),

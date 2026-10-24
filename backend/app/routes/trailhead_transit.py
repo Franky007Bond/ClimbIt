@@ -25,12 +25,19 @@ def _haversine_m(a_lat: float, a_lon: float, b_lat: float, b_lon: float) -> floa
     lat2, lon2 = math.radians(b_lat), math.radians(b_lon)
     dlat = lat2 - lat1
     dlon = lon2 - lon1
-    h = math.sin(dlat / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
+    h = (
+        math.sin(dlat / 2) ** 2
+        + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
+    )
     return 2 * radius * math.asin(min(1.0, math.sqrt(h)))
 
 
-def _connection_from_hub(hub: TransitHub, trailhead: Point) -> TrailheadTransitConnection:
-    distance = _haversine_m(trailhead.latitude, trailhead.longitude, hub.latitude, hub.longitude)
+def _connection_from_hub(
+    hub: TransitHub, trailhead: Point
+) -> TrailheadTransitConnection:
+    distance = _haversine_m(
+        trailhead.latitude, trailhead.longitude, hub.latitude, hub.longitude
+    )
     return TrailheadTransitConnection(
         hub_id=hub.hub_id,
         stop_name=hub.name,
@@ -40,7 +47,9 @@ def _connection_from_hub(hub: TransitHub, trailhead: Point) -> TrailheadTransitC
     )
 
 
-def resolve_trailhead_transit_connection(route: Route) -> TrailheadTransitConnection | None:
+def resolve_trailhead_transit_connection(
+    route: Route,
+) -> TrailheadTransitConnection | None:
     if route.trailhead is None:
         return None
     trailhead = route.trailhead

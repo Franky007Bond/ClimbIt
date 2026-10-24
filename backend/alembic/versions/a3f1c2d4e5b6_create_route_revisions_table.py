@@ -28,8 +28,12 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("author_kind", sa.Text(), nullable=False),
         sa.Column("author_ref", sa.Text(), nullable=True),
-        sa.Column("before_snapshot", postgresql.JSONB(astext_type=sa.Text()), nullable=True),
-        sa.Column("after_snapshot", postgresql.JSONB(astext_type=sa.Text()), nullable=False),
+        sa.Column(
+            "before_snapshot", postgresql.JSONB(astext_type=sa.Text()), nullable=True
+        ),
+        sa.Column(
+            "after_snapshot", postgresql.JSONB(astext_type=sa.Text()), nullable=False
+        ),
         sa.Column("application_status", sa.Text(), nullable=False),
         sa.ForeignKeyConstraint(["route_id"], ["routes.id"], ondelete="RESTRICT"),
         sa.PrimaryKeyConstraint("id"),
