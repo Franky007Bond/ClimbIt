@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -11,8 +12,11 @@ from app.api.schemas.plan import PlanResponse
 from app.planning.service import build_plan
 from app.repositories.routes import get_published_route_by_id
 from app.repositories.routes import record_to_route
+from app.json_logging import PLANNING_LOGGER_NAME
+from app.telemetry.tracing import current_trace_id
 
 router = APIRouter(tags=["plans"])
+_planning_logger = logging.getLogger(PLANNING_LOGGER_NAME)
 
 
 @router.post("/routes/{route_id}/plans", response_model=PlanResponse)
@@ -34,8 +38,15 @@ def create_plan(
         start_time_local=body.start_time_local,
     )
     session.commit()
+    trace_id = current_trace_id()
+    if trace_id is not None:
+        _planning_logger.info(
+            "plan_completed",
+            extra={"event": "plan_completed", "trace_id": trace_id},
+        )
     return PlanResponse(
         plan_run_id=payload["plan_run_id"],
+        trace_id=trace_id,
         route_id=payload["route_id"],
         plan_date=payload["plan_date"],
         trailhead_timezone=payload["trailhead_timezone"],

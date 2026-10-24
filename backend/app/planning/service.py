@@ -37,6 +37,7 @@ from app.planning.weather import assess_weather_freshness
 from app.repositories.plan_runs import create_plan_run
 from app.repositories.plan_runs import new_plan_run_id
 from app.repositories.plan_runs import plan_run_created_at
+from app.telemetry.tracing import planning_step
 
 SAFETY_DISCLAIMER = (
     "ClimbIt provides planning assistance, not authorization to undertake a route. "
@@ -66,66 +67,72 @@ def build_plan(
     now = now or datetime.now(timezone.utc)
     plan_date_str = plan_date.isoformat()
     weather_port = CachedWeatherBoundary(MockWeatherAdapter())
-    forecast = None
-    freshness = WeatherFreshness.UNKNOWN
-    if route.elevation_min_m is not None and route.elevation_max_m is not None:
-        forecast = weather_port.fetch_forecast(
+    with planning_step("weather"):
+        forecast = None
+        freshness = WeatherFreshness.UNKNOWN
+        if route.elevation_min_m is not None and route.elevation_max_m is not None:
+            forecast = weather_port.fetch_forecast(
+                route_id=route_id,
+                plan_date=plan_date_str,
+                elevation_min_m=route.elevation_min_m,
+                elevation_max_m=route.elevation_max_m,
+            )
+            freshness = assess_weather_freshness(forecast, now)
+        weather = WeatherAssessment(
+            freshness=freshness,
+            forecast=forecast,
+            adapter_version=weather_port.adapter_version,
+        )
+    closure = build_plan_closure_input(route, now)
+    with planning_step("avalanche"):
+        avalanche = build_avalanche_planning_input(
+            route,
             route_id=route_id,
             plan_date=plan_date_str,
-            elevation_min_m=route.elevation_min_m,
-            elevation_max_m=route.elevation_max_m,
+            now=now,
         )
-        freshness = assess_weather_freshness(forecast, now)
-    weather = WeatherAssessment(
-        freshness=freshness,
-        forecast=forecast,
-        adapter_version=weather_port.adapter_version,
-    )
-    closure = build_plan_closure_input(route, now)
-    avalanche = build_avalanche_planning_input(
-        route,
-        route_id=route_id,
-        plan_date=plan_date_str,
-        now=now,
-    )
     start_hour = start_time_local.hour if start_time_local else None
-    thunderstorm = assess_thunderstorm_risk(
-        forecast if freshness is WeatherFreshness.OK else None,
-        exposure="high" if route.route_type.value == "klettersteig" else "moderate",
-        start_hour_local=start_hour,
-    )
-    daylight = calculate_daylight_window(route, plan_date, start_time_local=start_time_local)
-    daylight_calculable = daylight.latest_safe_start_local is not None
-    recommendation = judge_recommendation(
-        route,
-        weather=weather,
-        avalanche=avalanche,
-        closure=closure,
-        thunderstorm=thunderstorm,
-        daylight_calculable=daylight_calculable,
-    )
-    gear = build_gear_guidance(route, forecast if freshness is WeatherFreshness.OK else None)
+    with planning_step("recommendation"):
+        thunderstorm = assess_thunderstorm_risk(
+            forecast if freshness is WeatherFreshness.OK else None,
+            exposure="high" if route.route_type.value == "klettersteig" else "moderate",
+            start_hour_local=start_hour,
+        )
+        daylight = calculate_daylight_window(route, plan_date, start_time_local=start_time_local)
+        daylight_calculable = daylight.latest_safe_start_local is not None
+        recommendation = judge_recommendation(
+            route,
+            weather=weather,
+            avalanche=avalanche,
+            closure=closure,
+            thunderstorm=thunderstorm,
+            daylight_calculable=daylight_calculable,
+        )
+    with planning_step("gear"):
+        gear = build_gear_guidance(route, forecast if freshness is WeatherFreshness.OK else None)
     inner_transit = transit_port or get_transit_port()
     transit_boundary = CachedTransitBoundary(inner_transit, route_id=route_id)
-    transit = transit_boundary.plan_transit(
-        origin=origin,
-        route=route,
-        plan_date=plan_date,
-        start_time_local=start_time_local,
-        query_time=now,
-    )
-    recommendation_value, confidence_value, explanation = apply_last_return_recommendation(
-        recommendation=recommendation.recommendation.value,
-        confidence=recommendation.confidence.value,
-        explanation=list(recommendation.explanation) + daylight.explanation,
-        transit=transit,
-    )
-    recommendation_value, confidence_value, explanation = apply_transit_recommendation(
-        recommendation=recommendation_value,
-        confidence=confidence_value,
-        explanation=explanation,
-        transit=transit,
-    )
+    with planning_step("transit"):
+        transit = transit_boundary.plan_transit(
+            origin=origin,
+            route=route,
+            plan_date=plan_date,
+            start_time_local=start_time_local,
+            query_time=now,
+        )
+    with planning_step("recommendation"):
+        recommendation_value, confidence_value, explanation = apply_last_return_recommendation(
+            recommendation=recommendation.recommendation.value,
+            confidence=recommendation.confidence.value,
+            explanation=list(recommendation.explanation) + daylight.explanation,
+            transit=transit,
+        )
+        recommendation_value, confidence_value, explanation = apply_transit_recommendation(
+            recommendation=recommendation_value,
+            confidence=confidence_value,
+            explanation=explanation,
+            transit=transit,
+        )
 
     response_payload: dict[str, Any] = {
         "plan_run_id": None,
@@ -227,23 +234,24 @@ def build_plan(
     }
     stored_result.pop("plan_run_id", None)
 
-    run = PlanRun(
-        id=new_plan_run_id(),
-        route_id=route_id,
-        created_at=plan_run_created_at(),
-        input_snapshot=stored_input,
-        source_timestamps=source_timestamps,
-        rules_version=PLANNING_RULES_VERSION,
-        mapping_version=mapping_version,
-        adapter_versions={
-            "weather": weather_port.adapter_version,
-            "avalanche": avalanche.adapter_version,
-            "transit": inner_transit.adapter_version,
-        },
-        explanation=explanation,
-        result=stored_result,
-    )
-    create_plan_run(session, run)
-    session.flush()
-    response_payload["plan_run_id"] = str(run.id)
+    with planning_step("database"):
+        run = PlanRun(
+            id=new_plan_run_id(),
+            route_id=route_id,
+            created_at=plan_run_created_at(),
+            input_snapshot=stored_input,
+            source_timestamps=source_timestamps,
+            rules_version=PLANNING_RULES_VERSION,
+            mapping_version=mapping_version,
+            adapter_versions={
+                "weather": weather_port.adapter_version,
+                "avalanche": avalanche.adapter_version,
+                "transit": inner_transit.adapter_version,
+            },
+            explanation=explanation,
+            result=stored_result,
+        )
+        create_plan_run(session, run)
+        session.flush()
+        response_payload["plan_run_id"] = str(run.id)
     return run, response_payload

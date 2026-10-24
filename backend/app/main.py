@@ -12,11 +12,14 @@ from app.api.maintainer_revisions import router as maintainer_revisions_router
 from app.api.routes import router as routes_router
 from app.health import health_body, ready_response
 from app.json_logging import configure_logging, log_http_access
+from app.telemetry.middleware import trace_plan_http_requests
+from app.telemetry.tracing import configure_tracing
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     configure_logging()
+    configure_tracing()
     yield
 
 
@@ -38,6 +41,7 @@ app.add_middleware(
 )
 
 app.middleware("http")(log_http_access)
+app.middleware("http")(trace_plan_http_requests)
 app.include_router(routes_router)
 app.include_router(plans_router)
 app.include_router(trips_router)

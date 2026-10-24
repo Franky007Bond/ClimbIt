@@ -19,6 +19,7 @@ class PlanResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     plan_run_id: str
+    trace_id: str | None
     route_id: str
     plan_date: str
     trailhead_timezone: str

@@ -358,6 +358,10 @@ export type PlanResponse = {
      */
     plan_run_id: string;
     /**
+     * Trace Id
+     */
+    trace_id: string | null;
+    /**
      * Recommendation
      */
     recommendation: string;
