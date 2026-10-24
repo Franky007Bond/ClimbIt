@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from app.api.schemas.route_search import RouteSearchItem
+from app.api.schemas.route_visualization import ElevationProfile
+from app.api.schemas.route_visualization import TrailheadTransitConnection
 from app.domain.closure import ClosureAssessment
 from app.domain.closure import EffectiveStatus
 from app.domain.route import LineString
@@ -25,3 +27,5 @@ class RouteDetail(RouteSearchItem):
     official_source_links: list[str]
     closure_assessment: ClosureAssessment | None
     closure_effective_status: EffectiveStatus | None = None
+    elevation_profile: ElevationProfile | None = None
+    trailhead_transit_connection: TrailheadTransitConnection | None = None

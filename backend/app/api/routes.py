@@ -195,6 +195,8 @@ def _record_to_detail(session: Session, record: RouteRecord) -> RouteDetail:
     from datetime import timezone
 
     from app.domain.closure import effective_closure_status
+    from app.routes.elevation_profile import build_elevation_profile
+    from app.routes.trailhead_transit import resolve_trailhead_transit_connection
 
     item = _record_to_search_item(session, record)
     route = record_to_route(session, record)
@@ -218,6 +220,41 @@ def _record_to_detail(session: Session, record: RouteRecord) -> RouteDetail:
         official_source_links=route.official_source_links,
         closure_assessment=route.closure_assessment,
         closure_effective_status=closure_effective,
+        elevation_profile=_elevation_profile_response(build_elevation_profile(route)),
+        trailhead_transit_connection=_trailhead_transit_response(
+            resolve_trailhead_transit_connection(route)
+        ),
+    )
+
+
+def _elevation_profile_response(profile: object):
+    from app.api.schemas.route_visualization import ElevationProfile
+    from app.api.schemas.route_visualization import ElevationProfilePoint
+    from app.routes.elevation_profile import ElevationProfile as DomainProfile
+
+    if not isinstance(profile, DomainProfile):
+        return None
+    return ElevationProfile(
+        synthesized=profile.synthesized,
+        points=[
+            ElevationProfilePoint(distance_m=point.distance_m, elevation_m=point.elevation_m)
+            for point in profile.points
+        ],
+    )
+
+
+def _trailhead_transit_response(connection: object):
+    from app.api.schemas.route_visualization import TrailheadTransitConnection
+    from app.routes.trailhead_transit import TrailheadTransitConnection as DomainConnection
+
+    if not isinstance(connection, DomainConnection):
+        return None
+    return TrailheadTransitConnection(
+        hub_id=connection.hub_id,
+        stop_name=connection.stop_name,
+        latitude=connection.latitude,
+        longitude=connection.longitude,
+        distance_m=connection.distance_m,
     )
 
 

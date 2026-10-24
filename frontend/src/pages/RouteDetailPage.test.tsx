@@ -70,6 +70,16 @@ function mockRouteDetail(overrides: Partial<RouteDetail> = {}): RouteDetail {
     season_note: null,
     technical_minutes: null,
     transit_accessibility: 'unknown',
+    closure_effective_status: null,
+    elevation_profile: {
+      synthesized: true,
+      points: [
+        { distance_m: 0, elevation_m: 1200 },
+        { distance_m: 2500, elevation_m: 1800 },
+        { distance_m: 5000, elevation_m: 1200 },
+      ],
+    },
+    trailhead_transit_connection: null,
     ...overrides,
   }
 }
@@ -113,6 +123,18 @@ describe('RouteDetailPage', () => {
         path: { route_id: routeId },
       }),
     )
+  })
+
+  it('renders elevation profile when transit connection is absent', async () => {
+    renderRouteDetail()
+
+    expect(await screen.findByRole('heading', { name: 'Test Klettersteig' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('img', {
+        name: 'Elevation profile from 1200 to 1800 meters',
+      }),
+    ).toBeInTheDocument()
+    expect(screen.queryByText(en['routeDetail.section.transitConnection'])).not.toBeInTheDocument()
   })
 
   it('shows a distinct not-found message for HTTP 404', async () => {

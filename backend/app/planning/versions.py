@@ -19,6 +19,7 @@ AVALANCHE_MAX_AGE_SECONDS = 24 * 3600
 TRANSIT_TIMETABLE_MAX_AGE_SECONDS = 6 * 3600
 # Prior successful outbound summaries may be reused for this long when live lookup fails.
 TRANSIT_FALLBACK_CACHE_MAX_AGE_SECONDS = 24 * 3600
+TRAILHEAD_TRANSIT_MAX_DISTANCE_M = 35_000
 
 # Shared buffer for daylight planning and last-return transit departure (finish + buffer).
 SAFETY_BUFFER_MINUTES = 60
