@@ -1,0 +1,15 @@
+{
+  "version": 0.6,
+  "generator": "ClimbIt test fixture",
+  "elements": [
+    {
+      "type": "way",
+      "id": 1001,
+      "geometry": [
+        { "lat": 47.35, "lon": 10.25, "ele": 1200 },
+        { "lat": 47.36, "lon": 10.26, "ele": 1225 },
+        { "lat": 47.37, "lon": 10.27, "ele": 1250 }
+      ]
+    }
+  ]
+}
