@@ -340,7 +340,10 @@ def test_imported_routes_hidden_from_search_and_detail(
         assert detail.status_code == 404
 
 
-def test_urllib_overpass_client_retries_429_without_network() -> None:
+def test_urllib_overpass_client_retries_429_without_network(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("OVERPASS_API_URL", "http://overpass.test/interpreter")
     client = UrllibOverpassClient(api_url="http://overpass.test/interpreter", min_interval_seconds=0)
 
     class _FakeHTTPError(Exception):
@@ -389,7 +392,8 @@ def test_urllib_overpass_client_retries_429_without_network() -> None:
     assert payload == {"elements": []}
 
 
-def test_overpass_client_enforces_min_interval() -> None:
+def test_overpass_client_enforces_min_interval(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("OVERPASS_API_URL", "http://overpass.test/interpreter")
     client = UrllibOverpassClient(api_url="http://overpass.test/interpreter", min_interval_seconds=2)
     payload = {"elements": []}
 

@@ -25,6 +25,7 @@ from app.planning.versions import SAFETY_BUFFER_MINUTES
 from app.planning.versions import TRANSIT_FALLBACK_CACHE_MAX_AGE_SECONDS
 from app.planning.versions import TRANSIT_TIMETABLE_MAX_AGE_SECONDS
 from app.planning.versions import TRANSITOUS_ADAPTER_VERSION
+from app.security.outbound import assert_allowed_outbound_url
 
 DEFAULT_OUTBOUND_DEPARTURE_LOCAL = time(7, 0)
 TRANSIT_HTTP_TIMEOUT_SECONDS = 5
@@ -624,6 +625,7 @@ class TransitousAdapter:
             "numItineraries": "3",
         }
         url = f"{self._plan_url}?{urlencode(params)}"
+        assert_allowed_outbound_url(url)
         headers = {"User-Agent": self._user_agent, "Accept": "application/json"}
         try:
             response = self._client.get(url, headers=headers, timeout=self._timeout)
