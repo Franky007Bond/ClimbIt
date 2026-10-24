@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { useSearchParams } from 'react-router-dom'
 import { createPlanRoutesRouteIdPlansPost } from '../api/generated/sdk.gen'

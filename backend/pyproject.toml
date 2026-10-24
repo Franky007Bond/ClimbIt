@@ -33,4 +33,5 @@ markers = [
 extend-exclude = ["alembic/versions"]
 
 [tool.ruff.lint]
+select = ["E", "F"]
 ignore = ["E402", "E501", "E741"]

@@ -31,6 +31,8 @@ describe('TripPlannerPage', () => {
         safety_disclaimer: 'Disclaimer text.',
         recommendation: 'unknown',
         confidence: 'low',
+        trace_id: null,
+        avalanche: null,
         components: {
           closure: { status: 'unknown', planning_value: 'unknown' },
           weather: { status: 'ok', freshness: 'ok' },
