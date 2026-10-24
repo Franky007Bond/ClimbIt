@@ -1,0 +1,21 @@
+{
+  "entries": [
+    {
+      "osm_type": "way",
+      "osm_id": 1001,
+      "name": "Fixture Way With Elevation",
+      "route_type": "alpine_hike",
+      "region_name": "Fixture Alps",
+      "region_country": "AT"
+    },
+    {
+      "osm_type": "way",
+      "osm_id": 1002,
+      "name": "Fixture Way Without Elevation",
+      "route_type": "klettersteig",
+      "region_name": "Fixture Alps",
+      "region_country": "AT",
+      "duration_minutes": 240
+    }
+  ]
+}

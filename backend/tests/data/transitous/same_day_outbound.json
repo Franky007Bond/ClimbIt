@@ -1,0 +1,15 @@
+{
+  "itineraries": [
+    {
+      "duration": 12600,
+      "startTime": 1784091600000,
+      "endTime": 1784104200000,
+      "legs": [
+        {"mode": "RAIL", "duration": 9000},
+        {"mode": "WALK", "duration": 1200},
+        {"mode": "BUS", "duration": 1800},
+        {"mode": "WALK", "duration": 600}
+      ]
+    }
+  ]
+}

@@ -9,7 +9,6 @@ from app.api.deps import get_db_session
 from app.api.schemas.plan import PlanRequest
 from app.api.schemas.plan import PlanResponse
 from app.planning.service import build_plan
-from app.planning.transit import mock_transit_summary
 from app.repositories.routes import get_published_route_by_id
 from app.repositories.routes import record_to_route
 
@@ -34,7 +33,6 @@ def create_plan(
         origin=body.origin,
         start_time_local=body.start_time_local,
     )
-    transit = mock_transit_summary(body.origin)
     session.commit()
     return PlanResponse(
         plan_run_id=payload["plan_run_id"],
@@ -50,6 +48,6 @@ def create_plan(
         daylight=payload["daylight"],
         explanation=payload["explanation"],
         thunderstorm=payload["thunderstorm"],
-        transit_summary=transit.summary,
-        origin_region=transit.origin_region,
+        transit_summary=payload["transit_summary"],
+        origin_region=payload["origin_region"],
     )

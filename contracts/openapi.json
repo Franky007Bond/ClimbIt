@@ -10,6 +10,50 @@
         "title": "Assessment",
         "type": "string"
       },
+      "Body_post_gpx_upload_routes_gpx_upload_post": {
+        "properties": {
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "region_country": {
+            "title": "Region Country",
+            "type": "string"
+          },
+          "region_name": {
+            "title": "Region Name",
+            "type": "string"
+          },
+          "route_type": {
+            "$ref": "#/components/schemas/RouteType"
+          }
+        },
+        "required": [
+          "file",
+          "name",
+          "route_type",
+          "region_name",
+          "region_country"
+        ],
+        "title": "Body_post_gpx_upload_routes_gpx_upload_post",
+        "type": "object"
+      },
       "ClosureAssessment": {
         "additionalProperties": false,
         "properties": {
@@ -310,6 +354,29 @@
           "after"
         ],
         "title": "FieldDiffItem",
+        "type": "object"
+      },
+      "GpxUploadResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/Provenance"
+          },
+          "publication": {
+            "$ref": "#/components/schemas/Publication"
+          }
+        },
+        "required": [
+          "id",
+          "publication",
+          "provenance"
+        ],
+        "title": "GpxUploadResponse",
         "type": "object"
       },
       "HTTPValidationError": {
@@ -2160,6 +2227,65 @@
           }
         },
         "summary": "List Routes",
+        "tags": [
+          "routes"
+        ]
+      }
+    },
+    "/routes/gpx-upload": {
+      "post": {
+        "operationId": "post_gpx_upload_routes_gpx_upload_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-ClimbIt-Anonymous-Id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Climbit-Anonymous-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_post_gpx_upload_routes_gpx_upload_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GpxUploadResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Post Gpx Upload",
         "tags": [
           "routes"
         ]

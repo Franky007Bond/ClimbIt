@@ -60,6 +60,8 @@ Implementation: `MockWeatherAdapter` in tests; production adapter behind `Weathe
 
 Implementation: `mock_transit_summary` in MVP path; real adapter behind transit interface later.
 
+Spike (remote trailhead coverage on the public instance): [`_docs/spikes/transitous-remote-trailheads.md`](spikes/transitous-remote-trailheads.md) (issue #42).
+
 ## OpenStreetMap / Overpass (route import)
 
 | Topic | Record |
@@ -71,6 +73,8 @@ Implementation: `mock_transit_summary` in MVP path; real adapter behind transit 
 | Caching | One-off import jobs; no live Overpass on user requests |
 | Freshness | Import timestamp stored in route provenance |
 | Fallback | Import failure leaves route quarantined |
+| Env | `OVERPASS_API_URL` (default `https://overpass-api.de/api/interpreter`); `OVERPASS_MIN_INTERVAL_SECONDS` (default `2`) |
+| Maintainer CLI | From `backend/` with `DATABASE_URL` set: `uv run python -m app.import_osm --manifest <path>` — JSON manifest with an `entries` array (see `backend/tests/fixtures/osm/manifest.json`) |
 
 ## GPX upload (route import)
 

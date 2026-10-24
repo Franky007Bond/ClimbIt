@@ -14,6 +14,11 @@ from app.data.seed_routes import PUBLISHED_ALPINE_HIKE_SLUG
 from app.data.seed_routes import PUBLISHED_KLETTERSTEIG_SLUG
 from app.data.seed_routes import PUBLISHED_OUTDOOR_CLIMBING_SLUG
 from app.data.seed_routes import seed_route_id
+from app.data.seed_routes_allgaeu import ALLGAEU_LAUNCH_PUBLISHED_COUNT
+from app.data.seed_routes import UNSUPPORTED_PYRENEES_DEMO_SLUG
+from app.data.seed_routes_dolomites import DOLOMITES_LAUNCH_PUBLISHED_COUNT
+from app.data.seed_routes_french_swiss import FRENCH_SWISS_LAUNCH_PUBLISHED_COUNT
+from app.data.seed_routes_tyrol import TYROL_LAUNCH_PUBLISHED_COUNT
 from app.db import create_sessionmaker
 from app.db import sqlalchemy_url
 from app.main import app
@@ -106,7 +111,14 @@ def test_default_search_lists_only_published_routes(seeded_client: TestClient) -
     response = seeded_client.get("/routes")
     assert response.status_code == 200
     body = response.json()
-    assert len(body["routes"]) == 3
+    assert (
+        len(body["routes"])
+        == ALLGAEU_LAUNCH_PUBLISHED_COUNT
+        + TYROL_LAUNCH_PUBLISHED_COUNT
+        + DOLOMITES_LAUNCH_PUBLISHED_COUNT
+        + FRENCH_SWISS_LAUNCH_PUBLISHED_COUNT
+        + 1
+    )
     names = {item["name"] for item in body["routes"]}
     assert "Seed Quarantined Klettersteig" not in names
     publications = {item["publication"] for item in body["routes"]}
@@ -127,9 +139,24 @@ def test_search_includes_route_state_and_region_coverage(seeded_client: TestClie
     assert alpine["region"]["coverage"] == "sample"
     assert alpine["region"]["name"] == "Chamonix"
     assert alpine["region"]["country"] == "FR"
+    assert alpine["name"] == "Grand Balcon Sud"
     trailhead = alpine["trailhead"]
     assert trailhead is not None
     assert "longitude" in trailhead and "latitude" in trailhead
+
+
+def test_search_includes_unsupported_region_coverage(seeded_client: TestClient) -> None:
+    response = seeded_client.get("/routes")
+    assert response.status_code == 200
+    demo = next(
+        item
+        for item in response.json()["routes"]
+        if item["id"] == str(seed_route_id(UNSUPPORTED_PYRENEES_DEMO_SLUG))
+    )
+    assert demo["region"]["coverage"] == "unsupported"
+    assert demo["region"]["name"] == "Pyrenees"
+    assert demo["region"]["country"] == "FR"
+    assert demo["publication"] == "published"
 
 
 def test_search_region_filter_requires_exact_spelling_and_casing(
@@ -137,7 +164,7 @@ def test_search_region_filter_requires_exact_spelling_and_casing(
 ) -> None:
     matching = seeded_client.get("/routes", params={"region": "Allgäu"})
     assert matching.status_code == 200
-    assert len(matching.json()["routes"]) == 2
+    assert len(matching.json()["routes"]) == ALLGAEU_LAUNCH_PUBLISHED_COUNT
 
     wrong_casing = seeded_client.get("/routes", params={"region": "allgäu"})
     assert wrong_casing.status_code == 200
@@ -222,8 +249,13 @@ def test_search_filters_by_difficulty_scale_and_bounds(seeded_client: TestClient
     )
     assert response.status_code == 200
     routes = response.json()["routes"]
-    assert len(routes) == 1
-    assert routes[0]["id"] == str(seed_route_id(PUBLISHED_OUTDOOR_CLIMBING_SLUG))
+    route_ids = {item["id"] for item in routes}
+    assert str(seed_route_id(PUBLISHED_OUTDOOR_CLIMBING_SLUG)) in route_ids
+    assert len(routes) == 5
+    for item in routes:
+        assert item["route_type"] == "outdoor_climbing"
+        assert item["difficulty"]["structured_scale"] == "french"
+        assert item["difficulty"]["structured_value"] == "6a"
 
 
 def test_search_filters_by_season_month_and_transit(migrated_test_database: str) -> None:
@@ -241,7 +273,7 @@ def test_search_filters_by_season_month_and_transit(migrated_test_database: str)
                 """
             ),
             {
-                "months": "[6, 7, 8]",
+                "months": "[4]",
                 "transit": "transit_friendly",
                 "id": route_id,
             },
@@ -251,7 +283,7 @@ def test_search_filters_by_season_month_and_transit(migrated_test_database: str)
     with TestClient(app) as client:
         response = client.get(
             "/routes",
-            params={"season_month": 7, "transit_accessibility": "transit_friendly"},
+            params={"season_month": 4, "transit_accessibility": "transit_friendly"},
         )
     assert response.status_code == 200
     routes = response.json()["routes"]

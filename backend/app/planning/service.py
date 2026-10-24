@@ -17,8 +17,12 @@ from app.planning.daylight import trailhead_timezone
 from app.planning.gear import build_gear_guidance
 from app.planning.recommendation import judge_recommendation
 from app.planning.thunderstorm import assess_thunderstorm_risk
+from app.planning.transit import CachedTransitBoundary
 from app.planning.transit import ComponentStatus
-from app.planning.transit import mock_transit_summary
+from app.planning.transit import TransitPort
+from app.planning.transit import apply_last_return_recommendation
+from app.planning.transit import apply_transit_recommendation
+from app.planning.transit import get_transit_port
 from app.planning.versions import DEFAULT_DIFFICULTY_MAPPING_VERSION
 from app.planning.versions import PLANNING_RULES_VERSION
 from app.planning.weather import CachedWeatherBoundary
@@ -53,6 +57,7 @@ def build_plan(
     origin: str,
     start_time_local: time | None,
     now: datetime | None = None,
+    transit_port: TransitPort | None = None,
 ) -> tuple[PlanRun, dict[str, Any]]:
     now = now or datetime.now(timezone.utc)
     plan_date_str = plan_date.isoformat()
@@ -89,7 +94,27 @@ def build_plan(
         daylight_calculable=daylight_calculable,
     )
     gear = build_gear_guidance(route, forecast if freshness is WeatherFreshness.OK else None)
-    transit = mock_transit_summary(origin)
+    inner_transit = transit_port or get_transit_port()
+    transit_boundary = CachedTransitBoundary(inner_transit, route_id=route_id)
+    transit = transit_boundary.plan_transit(
+        origin=origin,
+        route=route,
+        plan_date=plan_date,
+        start_time_local=start_time_local,
+        query_time=now,
+    )
+    recommendation_value, confidence_value, explanation = apply_last_return_recommendation(
+        recommendation=recommendation.recommendation.value,
+        confidence=recommendation.confidence.value,
+        explanation=list(recommendation.explanation) + daylight.explanation,
+        transit=transit,
+    )
+    recommendation_value, confidence_value, explanation = apply_transit_recommendation(
+        recommendation=recommendation_value,
+        confidence=confidence_value,
+        explanation=explanation,
+        transit=transit,
+    )
 
     response_payload: dict[str, Any] = {
         "plan_run_id": None,
@@ -97,8 +122,8 @@ def build_plan(
         "plan_date": plan_date_str,
         "trailhead_timezone": trailhead_timezone(route),
         "safety_disclaimer": SAFETY_DISCLAIMER,
-        "recommendation": recommendation.recommendation.value,
-        "confidence": recommendation.confidence.value,
+        "recommendation": recommendation_value,
+        "confidence": confidence_value,
         "components": {
             "weather": {
                 "status": _weather_component_status(freshness).value,
@@ -114,6 +139,8 @@ def build_plan(
                 "status": transit.status.value,
                 "summary": transit.summary,
                 "last_return_feasible": transit.last_return_feasible,
+                "live_available": transit.live_available,
+                "journey_planner_url": transit.journey_planner_url,
             },
             "thunderstorm": {
                 "status": ComponentStatus.OK.value,
@@ -146,7 +173,9 @@ def build_plan(
             else None,
             "explanation": daylight.explanation,
         },
-        "explanation": recommendation.explanation + daylight.explanation,
+        "explanation": explanation,
+        "transit_summary": transit.summary,
+        "origin_region": transit.origin_region,
         "thunderstorm": {
             "risk": thunderstorm.risk.value,
             "factors": thunderstorm.factors,
@@ -169,6 +198,7 @@ def build_plan(
     source_timestamps = {
         "weather": forecast.source_time if forecast is not None else None,
         "closure": closure.source_timestamp,
+        "transit": transit.source_time,
     }
     stored_result = {
         **response_payload,
@@ -187,9 +217,9 @@ def build_plan(
         mapping_version=mapping_version,
         adapter_versions={
             "weather": weather_port.adapter_version,
-            "transit": transit.adapter_version,
+            "transit": inner_transit.adapter_version,
         },
-        explanation=list(recommendation.explanation),
+        explanation=explanation,
         result=stored_result,
     )
     create_plan_run(session, run)
