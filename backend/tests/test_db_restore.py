@@ -44,7 +44,10 @@ def restore_drill_databases() -> tuple[str, str]:
     os.environ["DATABASE_URL"] = _operator_url(source_db)
     try:
         command.upgrade(_alembic_config(), "head")
-        seed()
+        Session = create_sessionmaker(_operator_url(source_db))
+        with Session() as session:
+            seed(session)
+            session.commit()
         yield source_db, target_db
     finally:
         os.environ["DATABASE_URL"] = admin_url
