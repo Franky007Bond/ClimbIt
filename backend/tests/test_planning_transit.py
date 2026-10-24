@@ -42,11 +42,13 @@ def _load_fixture(name: str) -> dict:
 
 
 def _chamonix_route():
-    return next(
+    route = next(
         route
         for route_id, route in build_seed_routes()
         if route_id == seed_route_id(PUBLISHED_ALPINE_HIKE_SLUG)
     )
+    # Transitous fixtures assume a 240-minute activity window for last-return math.
+    return route.model_copy(update={"duration_minutes": 240})
 
 
 def _frozen_query_time() -> datetime:
