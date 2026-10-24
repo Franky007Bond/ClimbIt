@@ -191,8 +191,17 @@ def _record_to_search_item(session: Session, record: RouteRecord) -> RouteSearch
 
 
 def _record_to_detail(session: Session, record: RouteRecord) -> RouteDetail:
+    from datetime import datetime
+    from datetime import timezone
+
+    from app.domain.closure import effective_closure_status
+
     item = _record_to_search_item(session, record)
     route = record_to_route(session, record)
+    now = datetime.now(timezone.utc)
+    closure_effective = None
+    if route.closure_assessment is not None:
+        closure_effective = effective_closure_status(route.closure_assessment, now)
     return RouteDetail(
         **item.model_dump(),
         linestring=route.linestring,
@@ -208,6 +217,7 @@ def _record_to_detail(session: Session, record: RouteRecord) -> RouteDetail:
         description=route.description,
         official_source_links=route.official_source_links,
         closure_assessment=route.closure_assessment,
+        closure_effective_status=closure_effective,
     )
 
 

@@ -54,7 +54,12 @@ def test_missing_closure_cannot_be_green() -> None:
         ),
         adapter_version="mock",
     )
-    closure = PlanClosureInput(planning_value="unknown", source_timestamp=None, hard_blocker=False)
+    closure = PlanClosureInput(
+        planning_value="unknown",
+        effective_status=None,
+        source_timestamp=None,
+        hard_blocker=False,
+    )
     thunder = assess_thunderstorm_risk(weather.forecast, exposure="moderate", start_hour_local=8)
     result = judge_recommendation(
         route,
@@ -76,6 +81,7 @@ def test_stale_weather_cannot_be_green() -> None:
     )
     closure = PlanClosureInput(
         planning_value="none_known",
+        effective_status="none_known",
         source_timestamp=datetime.now(timezone.utc),
         hard_blocker=False,
     )
@@ -113,6 +119,7 @@ def test_stale_avalanche_cannot_be_green() -> None:
     )
     closure = PlanClosureInput(
         planning_value="none_known",
+        effective_status="none_known",
         source_timestamp=datetime.now(timezone.utc),
         hard_blocker=False,
     )
@@ -155,6 +162,7 @@ def test_climbing_plan_explanation_mentions_no_technical_suitability() -> None:
     )
     closure = PlanClosureInput(
         planning_value="none_known",
+        effective_status="none_known",
         source_timestamp=datetime.now(timezone.utc),
         hard_blocker=False,
     )

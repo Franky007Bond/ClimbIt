@@ -145,6 +145,7 @@ def build_plan(
                 if closure.planning_value != "unknown"
                 else ComponentStatus.UNKNOWN.value,
                 "planning_value": closure.planning_value,
+                "effective_status": closure.effective_status,
             },
             "transit": {
                 "status": transit.status.value,
