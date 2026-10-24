@@ -19,6 +19,7 @@ from app.data.seed_routes import SEED_NAMESPACE
 from app.data.seed_routes import SEED_SLUGS
 from app.data.seed_routes import build_seed_routes
 from app.data.seed_routes_allgaeu import ALLGAEU_LAUNCH_PUBLISHED_COUNT
+from app.data.seed_routes_dolomites import DOLOMITES_LAUNCH_PUBLISHED_COUNT
 from app.data.seed_routes_tyrol import TYROL_LAUNCH_PUBLISHED_COUNT
 from app.data.seed_routes import seed_route_id
 from app.db import create_sessionmaker
@@ -305,6 +306,24 @@ def test_seed_published_tyrol_count(session) -> None:
         )
     ).scalar_one()
     assert rows == TYROL_LAUNCH_PUBLISHED_COUNT
+
+
+def test_seed_published_dolomites_count(session) -> None:
+    seed(session)
+    session.commit()
+    rows = session.execute(
+        text(
+            """
+            SELECT count(*)
+            FROM routes
+            WHERE publication = 'published'
+              AND region_name = 'Dolomites'
+              AND region_country = 'IT'
+              AND region_coverage = 'supported'
+            """
+        )
+    ).scalar_one()
+    assert rows == DOLOMITES_LAUNCH_PUBLISHED_COUNT
 
 
 def test_save_route_still_assigns_new_uuid(session) -> None:

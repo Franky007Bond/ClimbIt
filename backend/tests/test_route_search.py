@@ -15,6 +15,7 @@ from app.data.seed_routes import PUBLISHED_KLETTERSTEIG_SLUG
 from app.data.seed_routes import PUBLISHED_OUTDOOR_CLIMBING_SLUG
 from app.data.seed_routes import seed_route_id
 from app.data.seed_routes_allgaeu import ALLGAEU_LAUNCH_PUBLISHED_COUNT
+from app.data.seed_routes_dolomites import DOLOMITES_LAUNCH_PUBLISHED_COUNT
 from app.data.seed_routes_tyrol import TYROL_LAUNCH_PUBLISHED_COUNT
 from app.db import create_sessionmaker
 from app.db import sqlalchemy_url
@@ -110,7 +111,10 @@ def test_default_search_lists_only_published_routes(seeded_client: TestClient) -
     body = response.json()
     assert (
         len(body["routes"])
-        == ALLGAEU_LAUNCH_PUBLISHED_COUNT + TYROL_LAUNCH_PUBLISHED_COUNT + 1
+        == ALLGAEU_LAUNCH_PUBLISHED_COUNT
+        + TYROL_LAUNCH_PUBLISHED_COUNT
+        + DOLOMITES_LAUNCH_PUBLISHED_COUNT
+        + 1
     )
     names = {item["name"] for item in body["routes"]}
     assert "Seed Quarantined Klettersteig" not in names
@@ -229,7 +233,7 @@ def test_search_filters_by_difficulty_scale_and_bounds(seeded_client: TestClient
     routes = response.json()["routes"]
     route_ids = {item["id"] for item in routes}
     assert str(seed_route_id(PUBLISHED_OUTDOOR_CLIMBING_SLUG)) in route_ids
-    assert len(routes) == 3
+    assert len(routes) == 4
     for item in routes:
         assert item["route_type"] == "outdoor_climbing"
         assert item["difficulty"]["structured_scale"] == "french"
