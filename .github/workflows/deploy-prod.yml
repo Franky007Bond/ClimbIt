@@ -1,0 +1,30 @@
+name: Deploy production
+
+on:
+  workflow_dispatch:
+    inputs:
+      git_sha:
+        description: Git SHA to deploy
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-prod:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Promote to production over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_PROD_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd /opt/climbit-prod
+            git fetch origin "${{ inputs.git_sha }}"
+            git checkout "${{ inputs.git_sha }}"
+            ./scripts/deploy-compose.sh "${{ inputs.git_sha }}"

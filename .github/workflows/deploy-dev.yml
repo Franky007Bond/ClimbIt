@@ -1,0 +1,29 @@
+name: Deploy dev
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-dev:
+    if: ${{ vars.DEPLOY_DEV_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd /opt/climbit
+            git fetch origin main
+            git checkout main
+            git pull --ff-only
+            ./scripts/deploy-compose.sh "${{ github.sha }}"
