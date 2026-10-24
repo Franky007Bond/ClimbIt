@@ -9,12 +9,7 @@ from app.telemetry import metrics as metrics_mod
 
 @pytest.fixture
 def metric_reader(monkeypatch: pytest.MonkeyPatch) -> InMemoryMetricReader:
-    metrics_mod._CONFIGURED = False  # noqa: SLF001
-    metrics_mod._meter = None  # noqa: SLF001
-    metrics_mod._http_requests = None  # noqa: SLF001
-    metrics_mod._plan_requests = None  # noqa: SLF001
-    metrics_mod._wiki_requests = None  # noqa: SLF001
-    metrics_mod._integration_calls = None  # noqa: SLF001
+    metrics_mod.reset_metrics_for_tests()
     reader = InMemoryMetricReader()
     provider = MeterProvider(metric_readers=[reader])
     metrics.set_meter_provider(provider)
@@ -35,6 +30,7 @@ def test_plan_request_counter(metric_reader: InMemoryMetricReader) -> None:
     metrics_mod.record_plan_request(status_code=500)
     metric_reader.force_flush()
     payloads = metric_reader.get_metrics_data()
+    assert payloads is not None
     data_points: list[tuple[str, int]] = []
     for resource in payloads.resource_metrics:
         for scope in resource.scope_metrics:

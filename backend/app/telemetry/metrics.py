@@ -35,6 +35,21 @@ def _service_resource() -> Resource:
     )
 
 
+def reset_metrics_for_tests() -> None:
+    """Allow tests to install a custom MeterProvider."""
+    global _CONFIGURED, _meter, _http_requests, _plan_requests, _wiki_requests, _integration_calls
+    _CONFIGURED = False
+    _meter = None
+    _http_requests = None
+    _plan_requests = None
+    _wiki_requests = None
+    _integration_calls = None
+    from opentelemetry.metrics import _internal as metrics_internal
+
+    metrics_internal._METER_PROVIDER_SET_ONCE._done = False  # noqa: SLF001
+    metrics_internal._METER_PROVIDER = None  # noqa: SLF001
+
+
 def configure_metrics() -> None:
     global _CONFIGURED, _meter
     if _CONFIGURED:
