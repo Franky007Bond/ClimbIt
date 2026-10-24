@@ -33,6 +33,9 @@ jobs:
           uv run --frozen ruff check .
           uv run --frozen ruff format --check .
 
+      - name: Safety-logic coupling guardrail
+        run: python scripts/check-safety-logic-coupling.py origin/main
+
   backend-unit:
     name: backend-unit
     runs-on: ubuntu-latest
