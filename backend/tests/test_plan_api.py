@@ -1,11 +1,16 @@
 import os
 import uuid
+from datetime import datetime
+from datetime import timezone
 
 import pytest
 from fastapi.testclient import TestClient
 
 from app.data.seed_routes import PUBLISHED_ALPINE_HIKE_SLUG
 from app.data.seed_routes import seed_route_id
+from app.planning.transit import ComponentStatus
+from app.planning.transit import TransitSummary
+from app.planning.versions import TRANSITOUS_ADAPTER_VERSION
 from app.repositories.plan_runs import get_plan_run
 from app.db import create_sessionmaker
 from tests.test_route_search import _operator_url
@@ -51,3 +56,57 @@ def test_unavailable_transit_component_is_degraded(seeded_client: TestClient) ->
     )
     assert response.status_code == 200
     assert response.json()["components"]["transit"]["status"] == "degraded"
+
+
+def test_missed_last_return_yields_red_recommendation(
+    seeded_client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    class _MissedReturnPort:
+        adapter_version = TRANSITOUS_ADAPTER_VERSION
+
+        def plan_transit(self, **_kwargs: object) -> TransitSummary:
+            return TransitSummary(
+                status=ComponentStatus.OK,
+                adapter_version=self.adapter_version,
+                summary="Synthetic ok outbound with missed return.",
+                origin_region="DE-BY",
+                last_return_feasible=False,
+                source_time=datetime(2026, 6, 1, 12, 0, tzinfo=timezone.utc),
+            )
+
+    monkeypatch.setattr(
+        "app.planning.service.get_transit_port",
+        lambda: _MissedReturnPort(),
+    )
+    route_id = seed_route_id(PUBLISHED_ALPINE_HIKE_SLUG)
+    response = seeded_client.post(
+        f"/routes/{route_id}/plans",
+        json={"plan_date": "2026-07-15", "origin": "munich"},
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["recommendation"] == "red"
+    assert body["components"]["transit"]["last_return_feasible"] is False
+    assert body["transit_summary"] == "Synthetic ok outbound with missed return."
+    joined = " ".join(body["explanation"]).lower()
+    assert "return connection" in joined
+
+
+def test_plan_response_transit_matches_persisted_run(
+    seeded_client: TestClient, migrated_test_database: str
+) -> None:
+    route_id = seed_route_id(PUBLISHED_ALPINE_HIKE_SLUG)
+    response = seeded_client.post(
+        f"/routes/{route_id}/plans",
+        json={"plan_date": "2026-07-15", "origin": "Munich Hauptbahnhof"},
+    )
+    assert response.status_code == 200
+    body = response.json()
+    run_id = body["plan_run_id"]
+    Session = create_sessionmaker(_operator_url(migrated_test_database))
+    with Session() as session:
+        stored = get_plan_run(session, uuid.UUID(run_id))
+    assert stored is not None
+    assert body["transit_summary"] == stored.result.get("transit_summary")
+    assert body["origin_region"] == stored.result.get("origin_region")
+    assert stored.source_timestamps.get("transit") is not None
