@@ -26,6 +26,8 @@ Sensitive fields are redacted **once** in the OpenTelemetry Collector (`transfor
 
 Grafana loads **dashboards and alerts from git** under `observability/grafana/` (API health, integrations, planning impact, wiki activity). The **trip plan failure rate** alert fires when failures stay above 5% for five minutes and carries service, environment, version, owner, and dashboard URL metadata.
 
+Run the **plan failure drill** (inject 503s, correlate trace + dashboard + alert): [`_docs/operations/plan-failure-drill.md`](../_docs/operations/plan-failure-drill.md).
+
 Validate collector config:
 
 ```bash

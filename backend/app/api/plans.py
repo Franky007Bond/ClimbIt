@@ -9,6 +9,8 @@ from sqlalchemy.orm import Session
 from app.api.deps import get_db_session
 from app.api.schemas.plan import PlanRequest
 from app.api.schemas.plan import PlanResponse
+from app.planning.plan_failure_drill import plan_failure_drill_detail
+from app.planning.plan_failure_drill import plan_failure_drill_enabled
 from app.planning.service import build_plan
 from app.repositories.routes import get_published_route_by_id
 from app.repositories.routes import record_to_route
@@ -29,6 +31,19 @@ def create_plan(
     if record is None:
         raise HTTPException(status_code=404, detail="Route not found")
     route = record_to_route(session, record)
+    if plan_failure_drill_enabled():
+        trace_id = current_trace_id()
+        _planning_logger.warning(
+            "plan_drill_injected_failure",
+            extra={
+                "event": "plan_drill_injected_failure",
+                "trace_id": trace_id,
+            },
+        )
+        raise HTTPException(
+            status_code=503,
+            detail=plan_failure_drill_detail(),
+        )
     _run, payload = build_plan(
         session,
         route=route,
