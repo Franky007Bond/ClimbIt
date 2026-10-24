@@ -14,6 +14,7 @@ from app.data.seed_routes import PUBLISHED_ALPINE_HIKE_SLUG
 from app.data.seed_routes import PUBLISHED_KLETTERSTEIG_SLUG
 from app.data.seed_routes import PUBLISHED_OUTDOOR_CLIMBING_SLUG
 from app.data.seed_routes import seed_route_id
+from app.data.seed_routes_allgaeu import ALLGAEU_LAUNCH_PUBLISHED_COUNT
 from app.db import create_sessionmaker
 from app.db import sqlalchemy_url
 from app.main import app
@@ -106,7 +107,7 @@ def test_default_search_lists_only_published_routes(seeded_client: TestClient) -
     response = seeded_client.get("/routes")
     assert response.status_code == 200
     body = response.json()
-    assert len(body["routes"]) == 3
+    assert len(body["routes"]) == ALLGAEU_LAUNCH_PUBLISHED_COUNT + 1
     names = {item["name"] for item in body["routes"]}
     assert "Seed Quarantined Klettersteig" not in names
     publications = {item["publication"] for item in body["routes"]}
@@ -137,7 +138,7 @@ def test_search_region_filter_requires_exact_spelling_and_casing(
 ) -> None:
     matching = seeded_client.get("/routes", params={"region": "Allgäu"})
     assert matching.status_code == 200
-    assert len(matching.json()["routes"]) == 2
+    assert len(matching.json()["routes"]) == ALLGAEU_LAUNCH_PUBLISHED_COUNT
 
     wrong_casing = seeded_client.get("/routes", params={"region": "allgäu"})
     assert wrong_casing.status_code == 200
@@ -241,7 +242,7 @@ def test_search_filters_by_season_month_and_transit(migrated_test_database: str)
                 """
             ),
             {
-                "months": "[6, 7, 8]",
+                "months": "[4]",
                 "transit": "transit_friendly",
                 "id": route_id,
             },
@@ -251,7 +252,7 @@ def test_search_filters_by_season_month_and_transit(migrated_test_database: str)
     with TestClient(app) as client:
         response = client.get(
             "/routes",
-            params={"season_month": 7, "transit_accessibility": "transit_friendly"},
+            params={"season_month": 4, "transit_accessibility": "transit_friendly"},
         )
     assert response.status_code == 200
     routes = response.json()["routes"]

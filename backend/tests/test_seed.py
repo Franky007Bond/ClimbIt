@@ -18,6 +18,7 @@ from app.data.seed_routes import QUARANTINED_OUTDOOR_CLIMBING_SLUG
 from app.data.seed_routes import SEED_NAMESPACE
 from app.data.seed_routes import SEED_SLUGS
 from app.data.seed_routes import build_seed_routes
+from app.data.seed_routes_allgaeu import ALLGAEU_LAUNCH_PUBLISHED_COUNT
 from app.data.seed_routes import seed_route_id
 from app.db import create_sessionmaker
 from app.db import sqlalchemy_url
@@ -139,11 +140,12 @@ def test_seed_uuid_v5_matches_issue_values() -> None:
         assert seed_route_id(slug) == expected
 
 
-def test_seed_twice_then_preserves_seventh_row(session) -> None:
+def test_seed_twice_then_preserves_extra_row(session) -> None:
     fixtures = dict(build_seed_routes())
+    expected_count = len(SEED_SLUGS)
     seed(session)
     session.commit()
-    assert _route_count(session) == 6
+    assert _route_count(session) == expected_count
 
     mutated_id = EXPECTED_SEED_IDS[PUBLISHED_KLETTERSTEIG_SLUG]
     session.execute(
@@ -154,22 +156,22 @@ def test_seed_twice_then_preserves_seventh_row(session) -> None:
 
     seed(session)
     session.commit()
-    assert _route_count(session) == 6
+    assert _route_count(session) == expected_count
     restored = get_route(session, mutated_id)
     assert restored is not None
     assert restored.name == fixtures[mutated_id].name
 
     extra = fixtures[mutated_id].model_copy(update={"name": "Operator extra route"})
-    seventh_id = save_route(session, extra)
+    extra_id = save_route(session, extra)
     session.commit()
-    assert seventh_id not in EXPECTED_SEED_IDS.values()
+    assert extra_id not in EXPECTED_SEED_IDS.values()
 
     seed(session)
     session.commit()
-    assert _route_count(session) == 7
-    assert get_route(session, seventh_id) is not None
+    assert _route_count(session) == expected_count + 1
+    assert get_route(session, extra_id) is not None
     remaining = session.execute(text("SELECT id FROM routes")).scalars().all()
-    assert set(remaining) == set(_seed_ids()) | {seventh_id}
+    assert set(remaining) == set(_seed_ids()) | {extra_id}
 
     for route_id, expected in fixtures.items():
         loaded = get_route(session, route_id)
@@ -190,12 +192,12 @@ def test_seed_row_contents(session) -> None:
     closure_statuses = session.execute(
         text("SELECT closure_status FROM routes")
     ).scalars().all()
-    assert closure_statuses == [None] * 6
+    assert closure_statuses == [None] * len(SEED_SLUGS)
 
     estimated_flags = session.execute(
         text("SELECT duration_is_estimated FROM routes")
     ).scalars().all()
-    assert estimated_flags == [True] * 6
+    assert estimated_flags == [True] * len(SEED_SLUGS)
 
     published = get_route(session, EXPECTED_SEED_IDS[PUBLISHED_KLETTERSTEIG_SLUG])
     assert published is not None
@@ -266,6 +268,24 @@ def test_seed_row_contents(session) -> None:
         assert loaded.duration_is_estimated is True
         assert loaded.closure_assessment is None
         assert loaded.provenance is Provenance.SEED
+
+
+def test_seed_published_allgaeu_count(session) -> None:
+    seed(session)
+    session.commit()
+    rows = session.execute(
+        text(
+            """
+            SELECT count(*)
+            FROM routes
+            WHERE publication = 'published'
+              AND region_name = 'Allgäu'
+              AND region_country = 'DE'
+              AND region_coverage = 'supported'
+            """
+        )
+    ).scalar_one()
+    assert rows == ALLGAEU_LAUNCH_PUBLISHED_COUNT
 
 
 def test_save_route_still_assigns_new_uuid(session) -> None:
