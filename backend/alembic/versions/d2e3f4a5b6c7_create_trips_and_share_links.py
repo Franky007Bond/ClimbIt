@@ -28,18 +28,10 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("last_activity_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True),
-        sa.Column(
-            "last_change_summary",
-            postgresql.JSONB(astext_type=sa.Text()),
-            nullable=True,
-        ),
-        sa.ForeignKeyConstraint(
-            ["capability_id"], ["trip_capabilities.id"], ondelete="RESTRICT"
-        ),
+        sa.Column("last_change_summary", postgresql.JSONB(astext_type=sa.Text()), nullable=True),
+        sa.ForeignKeyConstraint(["capability_id"], ["trip_capabilities.id"], ondelete="RESTRICT"),
         sa.ForeignKeyConstraint(["route_id"], ["routes.id"], ondelete="RESTRICT"),
-        sa.ForeignKeyConstraint(
-            ["latest_plan_run_id"], ["plan_runs.id"], ondelete="RESTRICT"
-        ),
+        sa.ForeignKeyConstraint(["latest_plan_run_id"], ["plan_runs.id"], ondelete="RESTRICT"),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_table(

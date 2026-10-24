@@ -24,20 +24,12 @@ def upgrade() -> None:
         sa.Column("id", sa.Uuid(), nullable=False),
         sa.Column("route_id", sa.Uuid(), nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
-        sa.Column(
-            "input_snapshot", postgresql.JSONB(astext_type=sa.Text()), nullable=False
-        ),
-        sa.Column(
-            "source_timestamps", postgresql.JSONB(astext_type=sa.Text()), nullable=False
-        ),
+        sa.Column("input_snapshot", postgresql.JSONB(astext_type=sa.Text()), nullable=False),
+        sa.Column("source_timestamps", postgresql.JSONB(astext_type=sa.Text()), nullable=False),
         sa.Column("rules_version", sa.Text(), nullable=False),
         sa.Column("mapping_version", sa.Text(), nullable=False),
-        sa.Column(
-            "adapter_versions", postgresql.JSONB(astext_type=sa.Text()), nullable=False
-        ),
-        sa.Column(
-            "explanation", postgresql.JSONB(astext_type=sa.Text()), nullable=False
-        ),
+        sa.Column("adapter_versions", postgresql.JSONB(astext_type=sa.Text()), nullable=False),
+        sa.Column("explanation", postgresql.JSONB(astext_type=sa.Text()), nullable=False),
         sa.Column("result", postgresql.JSONB(astext_type=sa.Text()), nullable=False),
         sa.ForeignKeyConstraint(["route_id"], ["routes.id"], ondelete="RESTRICT"),
         sa.PrimaryKeyConstraint("id"),

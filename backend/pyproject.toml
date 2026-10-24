@@ -29,5 +29,8 @@ markers = [
     "contract: OpenAPI contract and committed spec checks",
 ]
 
+[tool.ruff]
+extend-exclude = ["alembic/versions"]
+
 [tool.ruff.lint]
 ignore = ["E402", "E501", "E741"]
