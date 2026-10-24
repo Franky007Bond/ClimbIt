@@ -604,6 +604,18 @@
             "title": "Thunderstorm",
             "type": "object"
           },
+          "avalanche": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avalanche"
+          },
           "trailhead_timezone": {
             "title": "Trailhead Timezone",
             "type": "string"
@@ -639,6 +651,7 @@
           "daylight",
           "explanation",
           "thunderstorm",
+          "avalanche",
           "transit_summary",
           "origin_region"
         ],

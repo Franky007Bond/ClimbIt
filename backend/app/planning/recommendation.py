@@ -9,6 +9,9 @@ from app.planning.closure_input import PlanClosureInput
 from app.planning.thunderstorm import ThunderstormAssessment
 from app.planning.thunderstorm import ThunderstormRisk
 from app.planning.versions import PLANNING_RULES_VERSION
+from app.planning.avalanche import AvalancheAssessmentKind
+from app.planning.avalanche import AvalancheFreshness
+from app.planning.avalanche import AvalanchePlanningInput
 from app.planning.weather import WeatherAssessment
 from app.planning.weather import WeatherFreshness
 
@@ -40,6 +43,7 @@ def judge_recommendation(
     route: Route,
     *,
     weather: WeatherAssessment,
+    avalanche: AvalanchePlanningInput,
     closure: PlanClosureInput,
     thunderstorm: ThunderstormAssessment,
     daylight_calculable: bool,
@@ -67,6 +71,17 @@ def judge_recommendation(
     elif weather.freshness is WeatherFreshness.UNKNOWN or weather.forecast is None:
         critical_gaps.append("weather_missing")
         explanation.append("Weather forecast unavailable.")
+
+    if avalanche.assessment is AvalancheAssessmentKind.UNKNOWN:
+        if avalanche.freshness is AvalancheFreshness.STALE:
+            critical_gaps.append("avalanche_stale")
+            explanation.append("Avalanche bulletin is stale.")
+        else:
+            critical_gaps.append("avalanche_unknown")
+            explanation.append("Avalanche bulletin unavailable.")
+    elif avalanche.region_key == "unconfigured":
+        critical_gaps.append("avalanche_unconfigured")
+        explanation.append("Avalanche region is not configured.")
 
     if thunderstorm.risk is ThunderstormRisk.HIGH:
         explanation.append("Thunderstorm heuristic is high.")

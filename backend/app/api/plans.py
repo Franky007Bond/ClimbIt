@@ -48,6 +48,7 @@ def create_plan(
         daylight=payload["daylight"],
         explanation=payload["explanation"],
         thunderstorm=payload["thunderstorm"],
+        avalanche=payload.get("avalanche"),
         transit_summary=payload["transit_summary"],
         origin_region=payload["origin_region"],
     )

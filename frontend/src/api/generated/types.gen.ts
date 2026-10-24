@@ -10,6 +10,33 @@ export type ClientOptions = {
 export type Assessment = 'unassessed' | 'current' | 'stale';
 
 /**
+ * Body_post_gpx_upload_routes_gpx_upload_post
+ */
+export type BodyPostGpxUploadRoutesGpxUploadPost = {
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * File
+     */
+    file: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Region Country
+     */
+    region_country: string;
+    /**
+     * Region Name
+     */
+    region_name: string;
+    route_type: RouteType;
+};
+
+/**
  * ClosureAssessment
  */
 export type ClosureAssessment = {
@@ -168,6 +195,18 @@ export type FieldDiffItem = {
      * Field
      */
     field: string;
+};
+
+/**
+ * GpxUploadResponse
+ */
+export type GpxUploadResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    provenance: Provenance;
+    publication: Publication;
 };
 
 /**
@@ -331,6 +370,12 @@ export type PlanResponse = {
     thunderstorm: {
         [key: string]: unknown;
     };
+    /**
+     * Avalanche
+     */
+    avalanche: {
+        [key: string]: unknown;
+    } | null;
     /**
      * Trailhead Timezone
      */
@@ -1143,6 +1188,37 @@ export type ListRoutesRoutesGetResponses = {
 };
 
 export type ListRoutesRoutesGetResponse = ListRoutesRoutesGetResponses[keyof ListRoutesRoutesGetResponses];
+
+export type PostGpxUploadRoutesGpxUploadPostData = {
+    body: BodyPostGpxUploadRoutesGpxUploadPost;
+    headers?: {
+        /**
+         * X-Climbit-Anonymous-Id
+         */
+        'X-ClimbIt-Anonymous-Id'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/routes/gpx-upload';
+};
+
+export type PostGpxUploadRoutesGpxUploadPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type PostGpxUploadRoutesGpxUploadPostError = PostGpxUploadRoutesGpxUploadPostErrors[keyof PostGpxUploadRoutesGpxUploadPostErrors];
+
+export type PostGpxUploadRoutesGpxUploadPostResponses = {
+    /**
+     * Successful Response
+     */
+    201: GpxUploadResponse;
+};
+
+export type PostGpxUploadRoutesGpxUploadPostResponse = PostGpxUploadRoutesGpxUploadPostResponses[keyof PostGpxUploadRoutesGpxUploadPostResponses];
 
 export type GetRouteDetailRoutesRouteIdGetData = {
     body?: never;

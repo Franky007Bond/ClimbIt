@@ -11,6 +11,10 @@ from sqlalchemy.orm import Session
 
 from app.domain.plan_run import PlanRun
 from app.domain.route import Route
+from app.planning.avalanche import AvalancheAssessmentKind
+from app.planning.avalanche import avalanche_component_payload
+from app.planning.avalanche import avalanche_response_payload
+from app.planning.avalanche import build_avalanche_planning_input
 from app.planning.closure_input import build_plan_closure_input
 from app.planning.daylight import calculate_daylight_window
 from app.planning.daylight import trailhead_timezone
@@ -78,6 +82,12 @@ def build_plan(
         adapter_version=weather_port.adapter_version,
     )
     closure = build_plan_closure_input(route, now)
+    avalanche = build_avalanche_planning_input(
+        route,
+        route_id=route_id,
+        plan_date=plan_date_str,
+        now=now,
+    )
     start_hour = start_time_local.hour if start_time_local else None
     thunderstorm = assess_thunderstorm_risk(
         forecast if freshness is WeatherFreshness.OK else None,
@@ -89,6 +99,7 @@ def build_plan(
     recommendation = judge_recommendation(
         route,
         weather=weather,
+        avalanche=avalanche,
         closure=closure,
         thunderstorm=thunderstorm,
         daylight_calculable=daylight_calculable,
@@ -147,6 +158,7 @@ def build_plan(
                 "risk": thunderstorm.risk.value,
                 "label": thunderstorm.label,
             },
+            "avalanche": avalanche_component_payload(avalanche),
             "gear": {"status": ComponentStatus.OK.value},
             "daylight": {
                 "status": ComponentStatus.OK.value
@@ -182,6 +194,7 @@ def build_plan(
             "label": thunderstorm.label,
             "heuristic_version": thunderstorm.heuristic_version,
         },
+        "avalanche": avalanche_response_payload(avalanche),
     }
 
     mapping_version = (
@@ -197,6 +210,12 @@ def build_plan(
     }
     source_timestamps = {
         "weather": forecast.source_time if forecast is not None else None,
+        "avalanche": (
+            avalanche.bulletin.source_time
+            if avalanche.bulletin is not None
+            and avalanche.assessment is AvalancheAssessmentKind.ASSESSED
+            else None
+        ),
         "closure": closure.source_timestamp,
         "transit": transit.source_time,
     }
@@ -217,6 +236,7 @@ def build_plan(
         mapping_version=mapping_version,
         adapter_versions={
             "weather": weather_port.adapter_version,
+            "avalanche": avalanche.adapter_version,
             "transit": inner_transit.adapter_version,
         },
         explanation=explanation,

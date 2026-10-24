@@ -1,0 +1,51 @@
+{
+  "AT:Tyrol": {
+    "region_key": "at-tyrol",
+    "region_label": "Tyrol (Austria)",
+    "adapter_id": "mock-regional-at-tyrol",
+    "official_bulletin_url": "https://avalanche.report/alb/weather/en",
+    "permitted_feed": true
+  },
+  "DE:Allgäu": {
+    "region_key": "de-allgaeu",
+    "region_label": "Allgäu (Bavaria)",
+    "adapter_id": "mock-regional-de-allgaeu",
+    "official_bulletin_url": "https://www.lawine-bayern.de/",
+    "permitted_feed": true
+  },
+  "IT:Dolomites": {
+    "region_key": "it-dolomites",
+    "region_label": "Dolomites (Italy)",
+    "adapter_id": "mock-regional-it-dolomites",
+    "official_bulletin_url": "https://www.avalanche.report/bulletin/IT",
+    "permitted_feed": true
+  },
+  "FR:Chamonix": {
+    "region_key": "fr-chamonix",
+    "region_label": "Chamonix (France)",
+    "adapter_id": "mock-regional-fr-chamonix",
+    "official_bulletin_url": "https://meteo.fr/meteo-montagne/bulletin-avalanche",
+    "permitted_feed": true
+  },
+  "CH:Zermatt": {
+    "region_key": "ch-zermatt",
+    "region_label": "Zermatt (Switzerland)",
+    "adapter_id": "mock-regional-ch-zermatt",
+    "official_bulletin_url": "https://www.slf.ch/en/avalanche-bulletin-and-snow-situation.html",
+    "permitted_feed": true
+  },
+  "CH:Grimsel": {
+    "region_key": "ch-grimsel",
+    "region_label": "Grimsel (Switzerland)",
+    "adapter_id": "mock-regional-ch-grimsel",
+    "official_bulletin_url": "https://www.slf.ch/en/avalanche-bulletin-and-snow-situation.html",
+    "permitted_feed": true
+  },
+  "FR:Pyrenees": {
+    "region_key": "fr-pyrenees",
+    "region_label": "Pyrenees (France)",
+    "adapter_id": null,
+    "official_bulletin_url": "https://meteo.fr/meteo-montagne/bulletin-avalanche",
+    "permitted_feed": false
+  }
+}
