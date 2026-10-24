@@ -4,6 +4,8 @@ import uuid
 
 from app.data.seed_routes_allgaeu import ALLGAEU_CATALOG_SLUGS
 from app.data.seed_routes_allgaeu import build_allgaeu_catalog_routes
+from app.data.seed_routes_tyrol import TYROL_CATALOG_SLUGS
+from app.data.seed_routes_tyrol import build_tyrol_catalog_routes
 from app.domain.difficulty import map_difficulty
 from app.domain.route import Assessment
 from app.domain.route import Completeness
@@ -35,14 +37,17 @@ SEED_FIXTURE_SLUGS = (
     QUARANTINED_OUTDOOR_CLIMBING_SLUG,
 )
 
-SEED_SLUGS = SEED_FIXTURE_SLUGS + ALLGAEU_CATALOG_SLUGS
+SEED_SLUGS = SEED_FIXTURE_SLUGS + ALLGAEU_CATALOG_SLUGS + TYROL_CATALOG_SLUGS
 
 ALLGAEU_LAUNCH_SLUGS = (
     PUBLISHED_KLETTERSTEIG_SLUG,
     PUBLISHED_OUTDOOR_CLIMBING_SLUG,
 ) + ALLGAEU_CATALOG_SLUGS
 
+TYROL_LAUNCH_SLUGS = TYROL_CATALOG_SLUGS
+
 ALLGAEU = Region(name="Allgäu", country="DE", coverage=RegionCoverage.SUPPORTED)
+TYROL = Region(name="Tyrol", country="AT", coverage=RegionCoverage.SUPPORTED)
 CHAMONIX = Region(name="Chamonix", country="FR", coverage=RegionCoverage.SAMPLE)
 
 _ALPENVEREIN_LINK = "https://www.alpenverein.de/"
@@ -227,5 +232,6 @@ def build_seed_routes() -> list[tuple[uuid.UUID, Route]]:
         (seed_route_id(QUARANTINED_ALPINE_HIKE_SLUG), quarantined_alpine_hike),
         (seed_route_id(QUARANTINED_OUTDOOR_CLIMBING_SLUG), quarantined_outdoor_climbing),
     ]
-    catalog = build_allgaeu_catalog_routes(_base_route)
-    return fixtures + catalog
+    allgaeu_catalog = build_allgaeu_catalog_routes(_base_route)
+    tyrol_catalog = build_tyrol_catalog_routes(_base_route)
+    return fixtures + allgaeu_catalog + tyrol_catalog
