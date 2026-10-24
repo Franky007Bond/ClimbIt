@@ -17,9 +17,11 @@ from app.planning.daylight import trailhead_timezone
 from app.planning.gear import build_gear_guidance
 from app.planning.recommendation import judge_recommendation
 from app.planning.thunderstorm import assess_thunderstorm_risk
+from app.planning.transit import CachedTransitBoundary
 from app.planning.transit import ComponentStatus
 from app.planning.transit import TransitPort
 from app.planning.transit import apply_last_return_recommendation
+from app.planning.transit import apply_transit_recommendation
 from app.planning.transit import get_transit_port
 from app.planning.versions import DEFAULT_DIFFICULTY_MAPPING_VERSION
 from app.planning.versions import PLANNING_RULES_VERSION
@@ -92,7 +94,8 @@ def build_plan(
         daylight_calculable=daylight_calculable,
     )
     gear = build_gear_guidance(route, forecast if freshness is WeatherFreshness.OK else None)
-    transit_boundary = transit_port or get_transit_port()
+    inner_transit = transit_port or get_transit_port()
+    transit_boundary = CachedTransitBoundary(inner_transit, route_id=route_id)
     transit = transit_boundary.plan_transit(
         origin=origin,
         route=route,
@@ -104,6 +107,12 @@ def build_plan(
         recommendation=recommendation.recommendation.value,
         confidence=recommendation.confidence.value,
         explanation=list(recommendation.explanation) + daylight.explanation,
+        transit=transit,
+    )
+    recommendation_value, confidence_value, explanation = apply_transit_recommendation(
+        recommendation=recommendation_value,
+        confidence=confidence_value,
+        explanation=explanation,
         transit=transit,
     )
 
@@ -130,6 +139,8 @@ def build_plan(
                 "status": transit.status.value,
                 "summary": transit.summary,
                 "last_return_feasible": transit.last_return_feasible,
+                "live_available": transit.live_available,
+                "journey_planner_url": transit.journey_planner_url,
             },
             "thunderstorm": {
                 "status": ComponentStatus.OK.value,
@@ -206,7 +217,7 @@ def build_plan(
         mapping_version=mapping_version,
         adapter_versions={
             "weather": weather_port.adapter_version,
-            "transit": transit.adapter_version,
+            "transit": inner_transit.adapter_version,
         },
         explanation=explanation,
         result=stored_result,

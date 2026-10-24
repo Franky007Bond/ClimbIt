@@ -55,7 +55,11 @@ def test_unavailable_transit_component_is_degraded(seeded_client: TestClient) ->
         json={"plan_date": "2026-07-15", "origin": "unknown"},
     )
     assert response.status_code == 200
-    assert response.json()["components"]["transit"]["status"] == "degraded"
+    body = response.json()
+    assert body["components"]["transit"]["status"] == "degraded"
+    assert body["components"]["transit"]["live_available"] is False
+    assert body["components"]["transit"]["journey_planner_url"] is None
+    assert body["recommendation"] != "green"
 
 
 def test_missed_last_return_yields_red_recommendation(
@@ -65,13 +69,15 @@ def test_missed_last_return_yields_red_recommendation(
         adapter_version = TRANSITOUS_ADAPTER_VERSION
 
         def plan_transit(self, **_kwargs: object) -> TransitSummary:
+            query_time = _kwargs.get("query_time")
+            assert isinstance(query_time, datetime)
             return TransitSummary(
                 status=ComponentStatus.OK,
                 adapter_version=self.adapter_version,
                 summary="Synthetic ok outbound with missed return.",
                 origin_region="DE-BY",
                 last_return_feasible=False,
-                source_time=datetime(2026, 6, 1, 12, 0, tzinfo=timezone.utc),
+                source_time=query_time,
             )
 
     monkeypatch.setattr(
@@ -87,6 +93,7 @@ def test_missed_last_return_yields_red_recommendation(
     body = response.json()
     assert body["recommendation"] == "red"
     assert body["components"]["transit"]["last_return_feasible"] is False
+    assert body["components"]["transit"]["live_available"] is True
     assert body["transit_summary"] == "Synthetic ok outbound with missed return."
     joined = " ".join(body["explanation"]).lower()
     assert "return connection" in joined
@@ -110,3 +117,9 @@ def test_plan_response_transit_matches_persisted_run(
     assert body["transit_summary"] == stored.result.get("transit_summary")
     assert body["origin_region"] == stored.result.get("origin_region")
     assert stored.source_timestamps.get("transit") is not None
+    assert body["components"]["transit"]["live_available"] == stored.result["components"][
+        "transit"
+    ]["live_available"]
+    assert body["components"]["transit"]["journey_planner_url"] == stored.result[
+        "components"
+    ]["transit"]["journey_planner_url"]

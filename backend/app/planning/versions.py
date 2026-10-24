@@ -13,5 +13,10 @@ DEFAULT_DIFFICULTY_MAPPING_VERSION = "difficulty-map-2026.10.1"
 
 WEATHER_MAX_AGE_SECONDS = 6 * 3600
 
+# Live MOTIS timetable payloads older than this are treated as stale (same window as weather).
+TRANSIT_TIMETABLE_MAX_AGE_SECONDS = 6 * 3600
+# Prior successful outbound summaries may be reused for this long when live lookup fails.
+TRANSIT_FALLBACK_CACHE_MAX_AGE_SECONDS = 24 * 3600
+
 # Shared buffer for daylight planning and last-return transit departure (finish + buffer).
 SAFETY_BUFFER_MINUTES = 60
