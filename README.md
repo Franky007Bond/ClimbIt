@@ -14,6 +14,8 @@ docker compose up -d --build
 - Frontend: http://127.0.0.1:5173
 - PostGIS: `127.0.0.1:5432`
 
+**Live demo for friends:** step-by-step walkthrough in [`_docs/demo-flow.md`](_docs/demo-flow.md).
+
 Load seed routes (optional):
 
 ```powershell
