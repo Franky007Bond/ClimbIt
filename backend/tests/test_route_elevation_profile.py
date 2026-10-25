@@ -3,12 +3,18 @@ from app.data.seed_routes import build_seed_routes
 from app.data.seed_routes import seed_route_id
 from app.domain.route import LineString
 from app.domain.route import Point
+from app.routes.elevation_profile import ELEVATION_PROFILE_MAX_POINTS
 from app.routes.elevation_profile import build_elevation_profile
 from app.routes.trailhead_transit import resolve_trailhead_transit_connection
 
 
 def _published_alpine_hike():
     target = seed_route_id(PUBLISHED_ALPINE_HIKE_SLUG)
+    return next(r for rid, r in build_seed_routes() if rid == target)
+
+
+def _westliche_karwendelspitze():
+    target = seed_route_id("tyrol-westliche-karwendelspitze")
     return next(r for rid, r in build_seed_routes() if rid == target)
 
 
@@ -23,6 +29,30 @@ def test_seed_route_has_elevation_profile_with_distance_axis() -> None:
     elevations = [point.elevation_m for point in profile.points]
     assert min(elevations) >= route.elevation_min_m
     assert max(elevations) <= route.elevation_max_m
+
+
+def test_westliche_karwendelspitze_uses_gpx_elevations() -> None:
+    route = _westliche_karwendelspitze()
+    assert route.gpx is not None
+    profile = build_elevation_profile(route)
+    assert profile is not None
+    assert profile.synthesized is False
+    assert len(profile.points) >= 2
+    assert len(profile.points) <= ELEVATION_PROFILE_MAX_POINTS
+
+    elevations = [point.elevation_m for point in profile.points]
+    assert max(elevations) > 2300
+
+
+def test_gpx_profile_differs_from_synthesized_fallback() -> None:
+    route = _westliche_karwendelspitze()
+    gpx_profile = build_elevation_profile(route)
+    sine_profile = build_elevation_profile(route.model_copy(update={"gpx": None}))
+    assert gpx_profile is not None
+    assert sine_profile is not None
+    assert gpx_profile.synthesized is False
+    assert sine_profile.synthesized is True
+    assert gpx_profile.points[-1].elevation_m != sine_profile.points[-1].elevation_m
 
 
 def test_profile_null_without_elevation() -> None:

@@ -135,6 +135,14 @@ def _reject_unsafe_xml(raw: bytes) -> None:
         raise GpxValidationError("document type declarations are not allowed")
 
 
+def parse_gpx_track_points(gpx_xml: str) -> list[tuple[float, float, float | None]]:
+    try:
+        root = ET.fromstring(gpx_xml)
+    except ET.ParseError as exc:
+        raise GpxValidationError("malformed XML") from exc
+    return _choose_track(root)
+
+
 def process_gpx_upload(raw: bytes) -> ProcessedGpx:
     _reject_unsafe_xml(raw)
     try:

@@ -53,7 +53,11 @@ export function ElevationProfileChart({ profile }: ElevationProfileChartProps) {
         <p className="route-detail-elevation-note">
           <FormattedMessage id="routeDetail.elevationProfile.synthesized" />
         </p>
-      ) : null}
+      ) : (
+        <p className="route-detail-elevation-note">
+          <FormattedMessage id="routeDetail.elevationProfile.fromGpx" />
+        </p>
+      )}
       <svg
         className="route-detail-elevation-chart"
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}

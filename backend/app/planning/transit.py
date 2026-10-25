@@ -88,6 +88,14 @@ TRANSIT_HUBS: tuple[TransitHub, ...] = (
         aliases=("munich", "münchen", "muenchen"),
     ),
     TransitHub(
+        hub_id="de-mittenwald-bahnhof",
+        name="Mittenwald Bahnhof",
+        latitude=47.440047,
+        longitude=11.265450,
+        origin_region="DE-BY",
+        aliases=("mittenwald", "mittenwald bahnhof", "mittenwald station"),
+    ),
+    TransitHub(
         hub_id="ch-geneve",
         name="Genève Cornavin",
         latitude=46.210,

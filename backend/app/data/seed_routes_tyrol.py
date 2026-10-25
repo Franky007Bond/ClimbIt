@@ -12,7 +12,7 @@ from app.domain.route import Route
 from app.domain.route import RouteType
 from app.domain.route import TransitAccessibility
 
-TYROL_LAUNCH_PUBLISHED_COUNT = 15
+TYROL_LAUNCH_PUBLISHED_COUNT = 16
 
 TYROL_CATALOG_SLUGS: tuple[str, ...] = (
     "tyrol-innsbrucker-klettersteig",
@@ -30,6 +30,7 @@ TYROL_CATALOG_SLUGS: tuple[str, ...] = (
     "tyrol-schlick-klettergarten",
     "tyrol-karwendel-woerndle",
     "tyrol-meiler-platt",
+    "tyrol-westliche-karwendelspitze",
 )
 
 
@@ -91,6 +92,53 @@ def _klettersteig_entry(
         descent_minutes=descent,
         original_difficulty_value=diff_value,
         original_difficulty_scale=diff_scale,
+        difficulty=difficulty,
+        completeness=Completeness.COMPLETE,
+        season_months=season_months or _summer(),
+        description=description,
+        transit_accessibility=transit,
+        official_source_links=[link],
+    )
+    return seed_route_id(slug), route
+
+
+def _alpine_hike_gpx_entry(
+    base_route: Callable[..., Route],
+    *,
+    slug: str,
+    name: str,
+    diff_value: str,
+    gpx_name: str,
+    elev_min: int,
+    elev_max: int,
+    gain: int,
+    duration: int,
+    description: str,
+    transit: TransitAccessibility,
+    link: str,
+    season_months: set[int] | None = None,
+) -> tuple[uuid.UUID, Route]:
+    from app.data.seed_gpx import seed_gpx_geometry
+    from app.data.seed_routes import TYROL
+    from app.data.seed_routes import seed_route_id
+
+    trailhead, linestring, gpx = seed_gpx_geometry(gpx_name)
+    difficulty = map_difficulty(RouteType.ALPINE_HIKE, diff_value, "SAC")
+    route = base_route(
+        name=name,
+        route_type=RouteType.ALPINE_HIKE,
+        region=TYROL,
+        publication=Publication.PUBLISHED,
+        trailhead=trailhead,
+        linestring=linestring,
+        gpx=gpx,
+        elevation_min_m=elev_min,
+        elevation_max_m=elev_max,
+        elevation_gain_m=gain,
+        elevation_loss_m=gain,
+        duration_minutes=duration,
+        original_difficulty_value=diff_value,
+        original_difficulty_scale="SAC",
         difficulty=difficulty,
         completeness=Completeness.COMPLETE,
         season_months=season_months or _summer(),
@@ -512,6 +560,26 @@ def build_tyrol_catalog_routes(
             ),
             transit=TransitAccessibility.LIMITED,
             link=av_at_link,
+        ),
+        _alpine_hike_gpx_entry(
+            base_route,
+            slug="tyrol-westliche-karwendelspitze",
+            name="Westliche Karwendelspitze",
+            diff_value="T4",
+            gpx_name="westliche_karwendelspitze.gpx",
+            elev_min=910,
+            elev_max=2385,
+            gain=1512,
+            duration=525,
+            description=(
+                "Karwendel summit tour from Mittenwald Bahnhof via the "
+                "Mittenwalder Hütte and secured Karwendelsteig to the Karwendelbahn "
+                "area, then the exposed summit block; typical descent through the "
+                "Dammkar."
+            ),
+            transit=TransitAccessibility.TRANSIT_FRIENDLY,
+            link="https://www.hoehenrausch.de/berge/westliche-karwendelspitze/",
+            season_months={6, 7, 8, 9},
         ),
     ]
     assert len(entries) == len(TYROL_CATALOG_SLUGS)

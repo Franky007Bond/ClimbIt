@@ -29,6 +29,7 @@
   "routeDetail.map.ariaLabel": "Map of the route track and trailhead",
   "routeDetail.section.elevationProfile": "Elevation profile",
   "routeDetail.elevationProfile.synthesized": "Profile synthesized from track geometry and route elevation summary.",
+  "routeDetail.elevationProfile.fromGpx": "Profile from GPX track elevations along the stored route geometry.",
   "routeDetail.elevationProfile.ariaLabel": "Elevation profile from {min} to {max} meters",
   "routeDetail.elevationProfile.distanceKm": "{km} km",
   "routeDetail.section.transitConnection": "Trailhead transit",

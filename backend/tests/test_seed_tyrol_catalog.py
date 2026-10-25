@@ -30,15 +30,15 @@ TYROL_LON_MAX = 12.40
 
 TYROL_ROUTE_TYPE_COUNTS = {
     RouteType.KLETTERSTEIG: 5,
-    RouteType.ALPINE_HIKE: 5,
+    RouteType.ALPINE_HIKE: 6,
     RouteType.OUTDOOR_CLIMBING: 5,
 }
 
 
 def test_tyrol_launch_slug_inventory() -> None:
-    assert len(TYROL_CATALOG_SLUGS) == 15
+    assert len(TYROL_CATALOG_SLUGS) == 16
     assert len(TYROL_LAUNCH_SLUGS) == TYROL_LAUNCH_PUBLISHED_COUNT
-    assert TYROL_LAUNCH_PUBLISHED_COUNT == 15
+    assert TYROL_LAUNCH_PUBLISHED_COUNT == 16
     assert set(TYROL_LAUNCH_SLUGS).isdisjoint(set(SEED_FIXTURE_SLUGS))
 
 
@@ -94,7 +94,7 @@ def test_search_lists_fifteen_tyrol_routes(seeded_client: TestClient) -> None:
 def test_search_tyrol_route_type_counts(seeded_client: TestClient) -> None:
     for route_type, expected in (
         ("klettersteig", 5),
-        ("alpine_hike", 5),
+        ("alpine_hike", 6),
         ("outdoor_climbing", 5),
     ):
         response = seeded_client.get(
