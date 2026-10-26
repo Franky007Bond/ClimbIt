@@ -1,6 +1,19 @@
 # Optional observability stack (spec section 7). Use:
-#   docker compose -f docker-compose.yml -f docker-compose.observability.yml --profile observability up -d
+#   docker compose -f docker-compose.yml -f docker-compose.observability.yml --profile observability up -d --build
+# Recreate the API after enabling telemetry (or run `up -d` again) so OTEL env is applied.
 services:
+  api:
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+      OTEL_SERVICE_NAME: ${OTEL_SERVICE_NAME:-climbit-api}
+      OTEL_SERVICE_VERSION: ${OTEL_SERVICE_VERSION:-dev}
+      CLIMBIT_ENVIRONMENT: ${CLIMBIT_ENVIRONMENT:-local}
+    depends_on:
+      db:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started
+
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.114.0
     profiles: [observability]

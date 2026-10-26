@@ -1,10 +1,16 @@
 import { useState, type FormEvent } from 'react'
 import { FormattedMessage } from 'react-intl'
-import { useSearchParams } from 'react-router-dom'
-import { createPlanRoutesRouteIdPlansPost } from '../api/generated/sdk.gen'
+import { Link, useSearchParams } from 'react-router-dom'
+import {
+  createPlanRoutesRouteIdPlansPost,
+  ensureTripCapabilityTripsCapabilityGet,
+  saveTripTripsPost,
+} from '../api/generated/sdk.gen'
 import type { PlanResponse } from '../api/generated/types.gen'
 import '../api/client'
 import { recommendationClass } from '../features/trips/recommendationClass'
+
+type SaveState = 'idle' | 'saving' | 'saved' | 'error'
 
 export function TripPlannerPage() {
   const [searchParams] = useSearchParams()
@@ -14,11 +20,13 @@ export function TripPlannerPage() {
   const [plan, setPlan] = useState<PlanResponse | null>(null)
   const [errorMessageId, setErrorMessageId] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [saveState, setSaveState] = useState<SaveState>('idle')
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault()
     setLoading(true)
     setErrorMessageId(null)
+    setSaveState('idle')
     setPlan(null)
     const result = await createPlanRoutesRouteIdPlansPost({
       path: { route_id: routeId.trim() },
@@ -31,6 +39,23 @@ export function TripPlannerPage() {
       return
     }
     setPlan(result.data)
+  }
+
+  async function onSaveTrip() {
+    if (!plan) {
+      return
+    }
+    setSaveState('saving')
+    await ensureTripCapabilityTripsCapabilityGet({ throwOnError: false })
+    const result = await saveTripTripsPost({
+      body: { plan_run_id: plan.plan_run_id },
+      throwOnError: false,
+    })
+    if (!result.response.ok || !result.data) {
+      setSaveState('error')
+      return
+    }
+    setSaveState('saved')
   }
 
   return (
@@ -86,6 +111,38 @@ export function TripPlannerPage() {
 
       {plan ? (
         <div className="trip-planner-result">
+          <div className="trip-planner-save">
+            <button
+              type="button"
+              disabled={saveState === 'saving' || saveState === 'saved'}
+              onClick={() => void onSaveTrip()}
+            >
+              <FormattedMessage
+                id={
+                  saveState === 'saving'
+                    ? 'tripPlanner.save.saving'
+                    : saveState === 'saved'
+                      ? 'tripPlanner.save.saved'
+                      : 'tripPlanner.save.action'
+                }
+              />
+            </button>
+            {saveState === 'saved' ? (
+              <>
+                <p className="trip-planner-save-success" role="status">
+                  <FormattedMessage id="tripPlanner.save.success" />
+                </p>
+                <Link to="/trips" className="trip-planner-save-link">
+                  <FormattedMessage id="tripPlanner.save.viewMyTrips" />
+                </Link>
+              </>
+            ) : null}
+            {saveState === 'error' ? (
+              <p className="trip-planner-save-error" role="alert">
+                <FormattedMessage id="tripPlanner.save.error" />
+              </p>
+            ) : null}
+          </div>
           <div className={recommendationClass(plan.recommendation)} role="status">
             <FormattedMessage id="tripPlanner.result.recommendation" />:{' '}
             <span data-testid="recommendation-value">{plan.recommendation}</span>

@@ -34,9 +34,16 @@ export function AppShell() {
   return (
     <div className="app-shell">
       <header className="app-header">
-        <p className="app-brand">
-          <FormattedMessage id="app.name" />
-        </p>
+        <Link to="/" className="app-brand">
+          <img
+            src="/climbit-logo.svg"
+            alt={intl.formatMessage({ id: 'app.name' })}
+            className="app-brand-logo"
+            width={200}
+            height={240}
+            decoding="async"
+          />
+        </Link>
         <nav
           className="app-nav"
           aria-label={intl.formatMessage({ id: 'nav.ariaPrimary' })}

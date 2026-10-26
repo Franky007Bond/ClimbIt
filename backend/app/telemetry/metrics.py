@@ -63,9 +63,9 @@ def configure_metrics() -> None:
     if _CONFIGURED:
         return
     readers: list[PeriodicExportingMetricReader] = []
-    endpoint = os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT", "").strip()
-    if endpoint:
-        exporter = OTLPMetricExporter(endpoint=endpoint)
+    if os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT", "").strip():
+        # Let the exporter read OTEL_EXPORTER_OTLP_ENDPOINT and append /v1/metrics.
+        exporter = OTLPMetricExporter()
         readers.append(PeriodicExportingMetricReader(exporter))
     provider = MeterProvider(resource=_service_resource(), metric_readers=readers)
     metrics.set_meter_provider(provider)

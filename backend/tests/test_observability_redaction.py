@@ -98,3 +98,5 @@ def test_compose_observability_file_declares_profile() -> None:
     assert services["otel-collector"]["profiles"] == ["observability"]
     prometheus_retention = " ".join(services["prometheus"]["command"])
     assert "168h" in prometheus_retention
+    api_env = services["api"]["environment"]
+    assert api_env["OTEL_EXPORTER_OTLP_ENDPOINT"] == "http://otel-collector:4318"

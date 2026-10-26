@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 480" role="img" aria-label="ClimbIt">
+  <rect width="400" height="480" rx="24" fill="#0d233e"/>
+  <g fill="#fff">
+    <path d="M72 268 132 152l36 28 52-88 36 24 72-96v228H72V268z"/>
+    <path d="M118 248c-18-36-8-68 28-92 18-14 40-18 62-10-10 8-18 20-22 36s-2 32 8 44c-22-4-46 4-66 24-4 4-8 0-10-2z"/>
+    <path d="M152 220c12-20 28-32 48-36 16-4 32 0 44 12 8 6 14 16 16 28 2 12 0 24-6 36l-12 28H152v-68z"/>
+    <path d="M292 108l14 24-10 6-18-32 14 2z"/>
+    <circle cx="142" cy="252" r="6"/>
+    <circle cx="168" cy="232" r="5"/>
+    <circle cx="208" cy="212" r="5"/>
+    <circle cx="236" cy="192" r="4"/>
+    <circle cx="258" cy="176" r="4"/>
+  </g>
+  <text
+    x="200"
+    y="420"
+    text-anchor="middle"
+    fill="#fff"
+    font-family="system-ui, 'Segoe UI', Roboto, sans-serif"
+    font-size="72"
+    font-weight="700"
+    letter-spacing="-0.02em"
+  >ClimbIt</text>
+</svg>

@@ -1,16 +1,12 @@
 # Observability (Compose profile)
 
-Start the app with the observability stack:
+Start the app with the observability stack (from the repository root):
 
 ```bash
-docker compose --profile observability up -d --build
+docker compose -f docker-compose.yml -f docker-compose.observability.yml --profile observability up -d --build
 ```
 
-Set on the API (included when using the profile via `.env` or compose override):
-
-```bash
-OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
-```
+The observability compose file sets `OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318` on the **api** service. If Grafana panels stay empty after starting the stack, recreate the API container so that variable is applied, then generate traffic (for example `GET http://127.0.0.1:8000/health` or build a trip plan from the UI).
 
 Endpoints (localhost):
 

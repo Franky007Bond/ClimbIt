@@ -37,7 +37,9 @@ describe('AppShell navigation', () => {
     expect(
       screen.getByRole('link', { name: en['nav.routeWiki'] }),
     ).toBeInTheDocument()
-    expect(screen.getByText(en['app.name'])).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: en['app.name'] }),
+    ).toBeInTheDocument()
   })
 
   it('highlights the nav item for the current section', () => {

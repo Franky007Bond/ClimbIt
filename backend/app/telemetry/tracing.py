@@ -39,9 +39,9 @@ def configure_tracing() -> None:
         }
     )
     provider = TracerProvider(resource=resource)
-    endpoint = os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT", "").strip()
-    if endpoint:
-        exporter = OTLPSpanExporter(endpoint=endpoint)
+    if os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT", "").strip():
+        # Let the exporter read OTEL_EXPORTER_OTLP_ENDPOINT and append /v1/traces.
+        exporter = OTLPSpanExporter()
         provider.add_span_processor(BatchSpanProcessor(exporter))
     trace.set_tracer_provider(provider)
     _CONFIGURED = True
